@@ -31,7 +31,6 @@ CREATE TABLE `accounts` (
 -- ----------------------------
 -- Records of accounts
 -- ----------------------------
-INSERT INTO `accounts` VALUES ('23', 'test', '123', '0', '0', 'B5D767EFFB542805FE49564D79C68A54', '3');
 
 -- ----------------------------
 -- Table structure for `characters`
@@ -54,7 +53,6 @@ CREATE TABLE `characters` (
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('15', '23', 'test', '21.1298828125,8.0146484375,3.1171875,0,0', '18', '175', '65', '1', '170', '1000');
 
 -- ----------------------------
 -- Table structure for `items`
