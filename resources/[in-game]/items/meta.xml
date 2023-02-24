@@ -11,6 +11,8 @@
     <script src='ui/use.lua' type='server' />
 
     <file src='assets/audio/bag.wav' />
+    <file src='assets/images/null.png' />
+    <file src='assets/images/wallet.png' />
     <file src='assets/images/gun.png' />
     <file src='assets/images/key.png' />
     <file src='assets/images/pack.png' />

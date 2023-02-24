@@ -7,7 +7,7 @@ addEventHandler('load.items.client',root,function(data)
 end)
 
 function getItems(player)
-    return items
+    return items[player]
 end
 
 triggerServerEvent('load.items.server',localPlayer)

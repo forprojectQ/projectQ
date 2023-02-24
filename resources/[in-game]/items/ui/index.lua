@@ -1,7 +1,146 @@
 local ui = class("UI")
+local localPlayer = getLocalPlayer()
+local isCursorShowing = isCursorShowing
+local tonumber = tonumber
+local tocolor = tocolor
+local guiGetScreenSize = guiGetScreenSize
+local dxDrawCircle = dxDrawCircle
+local dxDrawImage = dxDrawImage
+local dxDrawRectangle = dxDrawRectangle
+local ipairs = ipairs
+local getCursorPosition = getCursorPosition
+local getKeyState = getKeyState
+local getTickCount = getTickCount
+local triggerServerEvent = triggerServerEvent
 
 function ui:init()
-    -- soon ..
+    self._function = {
+        open = function(...) self:open(...) end,
+        display = function(...) self:display(...) end,
+    }
+    self.categorys = {}
+    self:addCategory('Cüzdan', 'assets/images/wallet.png')
+    self:addCategory('Çanta', 'assets/images/pack.png')
+    self:addCategory('Anahtarlık', 'assets/images/key.png')
+    self:addCategory('Silahlar', 'assets/images/gun.png')
+    self.screen = Vector2(guiGetScreenSize())
+    self.itemImages = {}
+    self.current = 1
+    bindKey('i', 'down', self._function.open)
+end
+
+function ui:display()
+    local x,y,w,h = self.screen.x-70,self.screen.y/2-250/2,60,250
+    local boxX, boxY, boxW, boxH = x+5, y+20, 50, 50
+    local bgColor = tocolor(15, 15, 15, 235)
+    local hoverBgColor = tocolor(25, 25, 25, 235)
+    local newX,newY = 55,20
+    local cursorShowing = isCursorShowing()
+    local cursorX, cursorY
+    if cursorShowing then
+        cursorX, cursorY = getCursorPosition()
+        cursorX, cursorY = cursorX*self.screen.x, cursorY*self.screen.y
+    end
+    self:roundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
+    for index, value in ipairs(self.items) do
+        if cursorShowing and cursorX >= self.screen.x-1-newX and cursorX <= self.screen.x-1-newX+boxW and cursorY >= y+newY and cursorY <= y+newY+boxH then
+            dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,hoverBgColor)
+            if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                self.tick = getTickCount()
+                triggerServerEvent('use.item',localPlayer,value[1])
+                self:open()
+            end
+        else
+            dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,bgColor)
+        end
+        dxDrawImage(self.screen.x-1+10-newX,y+10+newY,30,30,value[2])
+        newY = newY + 52
+        if index % 4 == 0 then
+            newY = 20
+            newX = newX + 55
+        end
+    end
+    x, boxX = x - newX, boxX - newX
+    self:roundedRectangle(x,y,w,h,9,bgColor)
+    for i = 1, #self.categorys do
+        local category = self.categorys[i]
+        if self.current == i then
+            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
+        elseif cursorShowing and cursorX >= boxX and cursorX <= boxX+boxW and cursorY >= boxY and cursorY <= boxY+boxH then
+            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
+            if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                self.tick = getTickCount()
+                self.current = i
+                self:refresh()
+            end
+        else
+            dxDrawRectangle(boxX,boxY,boxW,boxH,bgColor)
+        end
+        dxDrawImage(boxX+7.5,boxY+7.5,35,35,category[2])
+        boxY=boxY+52
+    end
+end
+
+function ui:addCategory(name, image)
+    table.insert(self.categorys, {name, image})
+end
+
+function ui:open()
+    self.active = not self.active
+    self.items = {}
+    showCursor(self.active)
+    if self.active then
+        self.tick = 0
+        self:refresh()
+        Sound('assets/audio/bag.wav')
+        self.render = self.render or Timer(self._function.display, 0, 0)
+    else
+        if self.render and self.render.valid then
+            self.render:destroy()
+            self.render = nil
+        end
+    end
+end
+
+function ui:refresh()
+    local items = getItems(localPlayer)
+    local category = getItemCategory
+    local current = self.current
+    local size = 55
+    self.items = {}
+    for index, value in ipairs(getItems(localPlayer)) do
+        if category(value[1]) == current then
+            table.insert(self.items, {value[1], self:getImage(value[1])})
+            if index % 4 == 0 then
+                size = size + 55
+            end
+        end
+    end
+    self.size = size
+end
+
+function ui:getImage(itemID)
+    if not self.itemImages[itemID] then
+        local imagePath = 'assets/images/items/'..itemID..'.png'
+        self.itemImages[itemID] = File.exists(imagePath) and imagePath or 'assets/images/null.png'
+    end
+    return self.itemImages[itemID]
+end
+
+function ui:roundedRectangle(x, y, width, height, radius, color)
+    local radius = radius or 6
+    local color = color or tocolor(255, 255, 255, 255)
+    dxDrawRectangle(x+radius, y, width-(radius*2), height, color)
+    dxDrawRectangle(x, y+radius, radius, height-(radius*2), color)
+    dxDrawRectangle(x+width-radius, y+radius, radius, height-(radius*2), color)
+    local corners = {
+        { x+radius, y+radius },
+        { x+width-radius, y+radius },
+        { x+radius, y+height-radius },
+    }
+    for i, corner in ipairs(corners) do
+        dxDrawCircle(corner[1], corner[2], radius, 180*(i-1), 180*i, color, color, 32)
+    end
 end
 
 ui:new()
