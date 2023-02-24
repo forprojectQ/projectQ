@@ -1,0 +1,8 @@
+<meta>
+    <!-- @bekiroj projectQ realtime -->
+
+    <script src='libs/class.lua' type='client' cache='false'/>
+    <script src='index.lua' type='client' cache='false'/>
+
+    <oop>true</oop>
+</meta>

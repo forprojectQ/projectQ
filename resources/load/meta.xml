@@ -1,0 +1,6 @@
+<meta>
+    <!-- @bekiroj -->
+    <oop>true</oop>
+    <script src='libs/classes.lua' type='server'/>
+    <script src='load.lua' type='server'/>
+</meta>

@@ -1,0 +1,6 @@
+<meta>
+    <!-- @bekiroj projectQ save data -->
+    <oop>true</oop>
+    <script src='libs/class.lua' type='server'/>
+    <script src='save.lua' type='server'/>
+</meta>

@@ -1,0 +1,24 @@
+<meta>
+    <!-- @bekiroj projectQ auth -->
+    <oop>true</oop>
+    <script src='libs/classes.lua' type='client' cache='false'/>
+    <map src='assets/map/ball.map'/>
+    <script src='shared/client.lua' type='client' cache='false'/>
+    <script src='shared/server.lua' type='server'/>
+    <script src='assets/map/server.lua' type='server'/>
+    <script src='assets/map/client.lua' type='client' validate='false'/>
+    <script src='info/index.lua' type='client' cache='false'/>
+    <script src='login/index.lua' type='client' cache='false'/>
+    <script src='login/events.lua' type='server'/>
+    <script src='character/index.lua' type='client' cache='false'/>
+    <script src='character/events.lua' type='server'/>
+    <file src='assets/images/logo.png'/>
+    <file src='assets/images/eye.png'/>
+    <file src='assets/images/loading.png'/>
+    <file src='assets/images/male.png'/>
+    <file src='assets/images/female.png'/>
+    <file src='assets/fonts/RobotoB.ttf'/>
+    <file src='assets/fonts/Roboto.ttf'/>
+    <file src='assets/sounds/music.mp3'/>
+    <min_mta_version server='1.5.8-9.20957'></min_mta_version>
+</meta>

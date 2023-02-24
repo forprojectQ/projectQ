@@ -1,0 +1,12 @@
+<meta>
+    <!-- @bekiroj/mahlukat projectQ items -->
+    <oop>true</oop>
+    
+    <script src='libs/classlib.lua' type='client' cache='false'/>
+    <script src="items.lua" type="shared" />
+    <script src="src/server.lua" type="server" />
+    <script src="src/client.lua" type="client" cache="false" />
+    
+    <script src="ui/index.lua" type="client" cache="false" />
+    <script src="ui/use.lua" type="server" />
+</meta>

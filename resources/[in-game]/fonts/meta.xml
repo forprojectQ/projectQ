@@ -1,0 +1,13 @@
+<meta>
+    <!-- @bekiroj projectQ fonts -->
+
+    <script src='libs/class.lua' type='client' cache='false'/>
+    <script src='index.lua' type='client' cache='false'/>
+    
+    <file src='assets/RobotoB.ttf'/>
+    <file src='assets/Roboto.ttf'/>
+
+    <oop>true</oop>
+    <download_priority_group>10</download_priority_group>
+    <export function='get' type='client'/>
+</meta>

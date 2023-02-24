@@ -1,0 +1,6 @@
+<meta>
+    <!-- @bekiroj projectQ DB connection -->
+    <oop>true</oop>
+    <script src='connection.lua' type='server'/>
+    <export function='getConn' type='server'/>
+</meta>
