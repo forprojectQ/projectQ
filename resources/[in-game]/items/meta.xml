@@ -3,10 +3,24 @@
     <oop>true</oop>
     
     <script src='libs/classlib.lua' type='client' cache='false'/>
-    <script src="items.lua" type="shared" />
-    <script src="src/server.lua" type="server" />
-    <script src="src/client.lua" type="client" cache="false" />
+    <script src='items.lua' type='shared' />
+    <script src='src/server.lua' type='server' />
+    <script src='src/client.lua' type='client' cache='false' />
     
-    <script src="ui/index.lua" type="client" cache="false" />
-    <script src="ui/use.lua" type="server" />
+    <script src='ui/index.lua' type='client' cache='false' />
+    <script src='ui/use.lua' type='server' />
+
+    <file src='assets/audio/bag.wav' />
+    <file src='assets/images/gun.png' />
+    <file src='assets/images/key.png' />
+    <file src='assets/images/pack.png' />
+    <file src='assets/images/items/1.png' />
+    <file src='assets/images/items/2.png' />
+    <file src='assets/images/items/3.png' />
+    <file src='assets/images/items/4.png' />
+    <file src='assets/images/items/5.png' />
+    <file src='assets/images/items/6.png' />
+    <file src='assets/images/items/7.png' />
+    <file src='assets/images/items/8.png' />
+    <file src='assets/images/items/9.png' />
 </meta>
