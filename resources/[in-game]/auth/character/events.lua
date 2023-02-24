@@ -22,7 +22,7 @@ addEventHandler('auth.spawn', root, function(dbid)
                     local data = {}
                     if rows > 0 then
                         for index, row in ipairs(res) do
-                            local x,y,z,int,dim = split(row.pos,",")
+                            local x,y,z,int,dim = unpack(split(row.pos,","))
                             player:spawn(x,y,z)
                             player:setInterior(tonumber(int))
                             player:setDimension(tonumber(dim))
