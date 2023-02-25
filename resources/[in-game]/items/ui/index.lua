@@ -24,6 +24,7 @@ function ui:init()
     self:addCategory('Anahtarlık', 'assets/images/key.png')
     self:addCategory('Silahlar', 'assets/images/gun.png')
     self.screen = Vector2(guiGetScreenSize())
+    self.font = exports.fonts:get('RobotoB', 9)
     self.itemImages = {}
     self.current = 1
     bindKey('i', 'down', self._function.open)
@@ -53,6 +54,7 @@ function ui:display()
         else
             dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,bgColor)
         end
+        dxDrawText('x'..value[3],self.screen.x-1-newX,y+newY,nil,nil,tocolor(155,155,155,235),1,self.font)
         dxDrawImage(self.screen.x-1+10-newX,y+10+newY,30,30,value[2])
         newY = newY + 52
         if index % 4 == 0 then
@@ -110,7 +112,7 @@ function ui:refresh()
     self.items = {}
     for index, value in ipairs(getItems(localPlayer)) do
         if category(value[1]) == current then
-            table.insert(self.items, {value[1], self:getImage(value[1])})
+            table.insert(self.items, {value[1], self:getImage(value[1]), getItemCount(localPlayer, value[1])})
             if index % 4 == 0 then
                 size = size + 55
             end

@@ -131,15 +131,21 @@ function setItemCount(player,item,count)
     end
 end
 
-function getItemValue(player, item)
-    local _, _, itemValue, _ = hasItem(player, item) or {}
+function getItemValue(player,item,value)
+    local value = value or 0
+    local _, _, itemValue, _ = hasItem(player,item,value)
     return itemValue or 0
 end
 
-function getItemCount(player, item)
-    local _, _, _, itemCount = hasItem(player, item) or {}
+function getItemCount(player,item,value)
+    local value = value or 0
+    local _, _, _, itemCount = hasItem(player,item,value)
     return itemCount or 0
 end
+
+addCommandHandler('ff',function(player,command)
+    giveItem(player,6,nil,1)
+end)
 
 addEvent('load.items.server', true)
 addEventHandler('load.items.server', root, function()
