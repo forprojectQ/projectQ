@@ -131,6 +131,16 @@ function setItemCount(player,item,count)
     end
 end
 
+function getItemValue(player, item)
+    local _, _, itemValue, _ = hasItem(player, item) or {}
+    return itemValue or 0
+end
+
+function getItemCount(player, item)
+    local _, _, _, itemCount = hasItem(player, item) or {}
+    return itemCount or 0
+end
+
 addEvent('load.items.server', true)
 addEventHandler('load.items.server', root, function()
     loadItems(source)
