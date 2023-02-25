@@ -7,6 +7,8 @@
     "account.limit" --> Oyuncunun açabilcğei max hesap limiti. (sayı) (standart 3 sqlden ayarlanır.)
     "dbid" --> Oyuncunun karakterinin id. (sayı)
     "money" --> Oyuncunun karakterinin parası. (sayı)
+    "hunger" --> Oyuncunun karakterinin açlık seviyesi. (sayı)
+    "thirst" --> Oyuncunun karakterinin susuzluk seviyesi. (sayı)
     "characterDatas" --> Oyuncunu bazı karakter bilgileri. (tablo)
     characterDatas = {
         age=Oyuncunu karakterinin yaşı (sayı),
