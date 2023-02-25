@@ -3,6 +3,8 @@ list = {
     [5] = {'Kızartma', 2, 0.1, false, 'FOOD'},
     [6] = {'Hamburger', 2, 0.1, false, 'FOOD'},
     [7] = {'Sosisli', 2, 0.1, false, 'FOOD'},
+    [8] = {'Su', 2, 0.1, false, 'DRİNK'},
+    [9] = {'Kola', 2, 0.1, false, 'DRİNK'},
 }
 
 function getItemName(itemID)
