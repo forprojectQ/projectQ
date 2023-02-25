@@ -31,7 +31,6 @@ addEventHandler('auth.spawn', root, function(dbid)
                             player.model = tonumber(row.model)
                             player.name = tostring(row.name)
                             player:setData("characterDatas",{
-                                admin=tonumber(row.admin),
                                 age=tonumber(row.age),
                                 height=tonumber(row.height),
                                 weight=tonumber(row.weight),
