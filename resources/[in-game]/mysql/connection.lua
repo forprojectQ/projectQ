@@ -1,18 +1,18 @@
 -- MySQL sınıfı tanımlama
-MySQL = {}
-MySQL.__index = MySQL
+mysql = {}
+mysql.__index = mysql
 
 -- MYSQL BİLGİLERİ
-MySQL.database = 'roleplay'
-MySQL.username = 'root'
-MySQL.password = ''
-MySQL.hostname = '127.0.0.1'
-MySQL.port = 3306
+mysql.database = 'roleplay'
+mysql.username = 'root'
+mysql.password = ''
+mysql.hostname = '127.0.0.1'
+mysql.port = 3306
 
 -- Yeni bir MySQL nesnesi oluşturma işlevi
-function MySQL:new(database, username, password, hostname, port)
+function mysql:new(database, username, password, hostname, port)
     local obj = {}
-    setmetatable(obj, MySQL)
+    setmetatable(obj, mysql)
 
     -- Veritabanına bağlanma
     obj.connection = dbConnect("mysql", "dbname=" .. database .. ";host=" .. hostname .. ";port=" .. port, username, password)
@@ -28,7 +28,7 @@ function MySQL:new(database, username, password, hostname, port)
 end
 
 -- MySQL sorgusu çalıştırma işlevi
-function MySQL:query(sql, callback)
+function mysql:query(sql, callback)
     local query = dbQuery(self.connection, sql)
     local result, num_affected_rows, last_insert_id = dbPoll(query, -1)
 
@@ -45,8 +45,8 @@ function MySQL:query(sql, callback)
 end
 
 -- MySQL nesnesini kapatma işlevi
-function MySQL:close()
+function mysql:close()
     dbConnectionFree(self.connection)
 end
 
-MySQL:new(MySQL.database,MySQL.username,MySQL.password,MySQL.hostname,MySQL.port)
+mysql:new(mysql.database,mysql.username,mysql.password,mysql.hostname,mysql.port)

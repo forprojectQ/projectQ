@@ -39,6 +39,8 @@ addEventHandler('auth.spawn', root, function(dbid)
                             })
                             player:setData('dbid', tonumber(row.id))
                             player:setData('money', tonumber(row.money))
+                            player:setData('hunger', tonumber(row.hunger))
+                            player:setData('thirst', tonumber(row.thirst))
                         end
                         triggerEvent("onCharacterSpawn",player,res[1])
                     end
