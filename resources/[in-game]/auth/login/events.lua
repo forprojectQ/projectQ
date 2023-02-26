@@ -17,7 +17,6 @@ local login = function(player,username)
                         for index, row in ipairs(res) do
                             logined:setData('online', true)
                             logined:setData('admin', tonumber(row.admin))
-                            logined:setData('helper', tonumber(row.helper))
                             logined:setData('account.id', tonumber(row.id))
                             logined:setData('account.name', row.name)
                             logined:setData('account.limit', tonumber(row.limit))
