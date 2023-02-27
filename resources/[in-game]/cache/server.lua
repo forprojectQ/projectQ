@@ -2,24 +2,25 @@ All = class("All")
 Accounts = All:extend("Accounts")
 Characters = All:extend("Characters")
 Items = All:extend("Items")
+Interiors = All:extend("Interiors")
+Vehicles = All:extend("Vehicles")
 
 function All:init()
     local conn = exports.mysql:getConn()
     local tonumber = tonumber
     local ipairs = ipairs
+    local pairs = pairs
     local dbQuery = dbQuery
     local dbPoll = dbPoll
-
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
             if rows > 0 then
                 for index, row in ipairs(res) do
                     local dbid = tonumber(row.id)
-                    Accounts:set(dbid, "account.name", row.name)
-                    Accounts:set(dbid, "account.password", row.password)
-                    Accounts:set(dbid, "account.limit", tonumber(row.limit))
-                    Accounts:set(dbid, "admin", tonumber(row.admin))
+                    for column, value in pairs(row) do
+                        Accounts:set(dbid, column, value)
+                    end
                 end
             end
         end,
@@ -31,14 +32,9 @@ function All:init()
             if rows > 0 then
                 for index, row in ipairs(res) do
                     local dbid = tonumber(row.id)
-                    Characters:set(dbid, "age", tonumber(row.age))
-                    Characters:set(dbid, "height", tonumber(row.height))
-                    Characters:set(dbid, "weight", tonumber(row.weight))
-                    Characters:set(dbid, "gender", tonumber(row.gender))
-                    Characters:set(dbid, "model", tonumber(row.model))
-                    Characters:set(dbid, "money", tonumber(row.money))
-                    Characters:set(dbid, "hunger", tonumber(row.hunger))
-                    Characters:set(dbid, "thirst", tonumber(row.thirst))
+                    for column, value in pairs(row) do
+                        Characters:set(dbid, column, value)
+                    end
                 end
             end
         end,
@@ -50,13 +46,85 @@ function All:init()
             if rows > 0 then
                 for index, row in ipairs(res) do
                     local dbid = tonumber(row.id)
-                    Items:set(dbid, "id", tonumber(row.item))
-                    Items:set(dbid, "value", tonumber(row.value))
-                    Items:set(dbid, "count", tonumber(row.count))
+                    for column, value in pairs(row) do
+                        Items:set(dbid, column, value)
+                    end
                 end
             end
         end,
     conn, "SELECT * FROM items")
+
+
+    --// Interiors
+
+    --// Vehicles
+    
+
+    function getAccountData(target, key)
+        local app = Accounts:get(target, key)
+        return app
+    end
+
+    function setAccountData(target, key, value)
+        if Accounts:set(target, key, value) then
+            return true
+        else
+            return false
+        end
+    end
+
+    function getCharacterData(target, key)
+        local app = Characters:get(target, key)
+        return app
+    end
+
+    function setCharacterData(target, key, value)
+        if Characters:set(target, key, value) then
+            return true
+        else
+            return false
+        end
+    end
+
+    function getItemData(target, key)
+        local app = Items:get(target, key)
+        return app
+    end
+
+    function setItemData(target, key, value)
+        if Items:set(target, key, value) then
+            return true
+        else
+            return false
+        end
+    end
+
+    function getInteriorData(taget, key)
+        local app = Interiors:get(target, key)
+        return app
+    end
+
+    function setInteriorData(target, key, value)
+        if Interiors:set(target, key, value) then
+            return true
+        else
+            return false
+        end
+    end
+
+    function getVehicleData(target, key)
+        local app = Vehicles:get(target, key)
+        return app
+    end
+
+    function setVehicleData(target, key, value)
+        if Vehicles:set(target, key, value) then
+            return true
+        else
+            return false
+        end
+    end
+
 end
 
 All:new()
