@@ -1,9 +1,9 @@
 All = class("All")
-Accounts = All:extend("Accounts")
-Characters = All:extend("Characters")
-Items = All:extend("Items")
-Interiors = All:extend("Interiors")
-Vehicles = All:extend("Vehicles")
+Accounts = All:extend("accounts")
+Characters = All:extend("characters")
+Items = All:extend("items")
+Interiors = All:extend("interiors")
+Vehicles = All:extend("vehicles")
 
 function All:init()
     local conn = exports.mysql:getConn()
@@ -15,42 +15,45 @@ function All:init()
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
-            if rows > 0 then
-                for index, row in ipairs(res) do
-                    local dbid = tonumber(row.id)
-                    for column, value in pairs(row) do
-                        Accounts:set(dbid, column, value)
-                    end
+            for index, row in ipairs(res) do
+                local dbid = tonumber(row.id)
+                Accounts[dbid]={}
+                for column, value in pairs(row) do
+                    if not Accounts[0][column] then Accounts[0][column] = true end
+                    Accounts[dbid][column]=value
                 end
             end
+            Accounts.databaseLoaded=true
         end,
     conn, "SELECT * FROM accounts")
 
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
-            if rows > 0 then
-                for index, row in ipairs(res) do
-                    local dbid = tonumber(row.id)
-                    for column, value in pairs(row) do
-                        Characters:set(dbid, column, value)
-                    end
+            for index, row in ipairs(res) do
+                local dbid = tonumber(row.id)
+                Characters[dbid]={}
+                for column, value in pairs(row) do
+                    if not Characters[0][column] then Characters[0][column] = true end
+                    Characters[dbid][column]=value
                 end
             end
+            Characters.databaseLoaded=true
         end,
     conn, "SELECT * FROM characters")
 
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
-            if rows > 0 then
-                for index, row in ipairs(res) do
-                    local dbid = tonumber(row.id)
-                    for column, value in pairs(row) do
-                        Items:set(dbid, column, value)
-                    end
+            for index, row in ipairs(res) do
+                local dbid = tonumber(row.id)
+                Items[dbid]={}
+                for column, value in pairs(row) do
+                    if not Items[0][column] then Items[0][column] = true end
+                    Items[dbid][column]=value
                 end
             end
+            Items.databaseLoaded=true
         end,
     conn, "SELECT * FROM items")
 
