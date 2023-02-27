@@ -1,9 +1,0 @@
-<meta>
-    <oop>true</oop>
-    <script src="libs/class.lua" type="server"/>
-    <script src="client.lua" type="client" cache="false"/>
-    <script src="server.lua" type="server"/>
-
-    <export function="getAccountData" type="server"/>
-    <export function="setAccountData" type="server"/>
-</meta>
