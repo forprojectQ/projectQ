@@ -20,7 +20,8 @@ local resources = {
     launcher:new("mysql", 1),
     launcher:new("cache", 2),
     launcher:new("fonts", 3),
-    launcher:new("items", 4),
+    launcher:new("account", 4),
+    launcher:new("items", 5),
 }
 
 table.sort(resources, function(a,b) return a.priority < b.priority end)

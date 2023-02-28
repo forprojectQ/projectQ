@@ -24,6 +24,9 @@ function account:init()
         notifyRender = function(...) self:notifyRender(...) end,
         write = function(...) self:write(...) end,
         login = function(...) self:login(...) end,
+        listUp = function(...) self:listUp(...) end,
+        listDown = function(...) self:listDown(...) end,
+        step = function(...) self:next(...) end,
         remember = function(...) self:remember(...) end
     }
     self.icons = {
@@ -31,17 +34,24 @@ function account:init()
         user = exports.fonts:getIcon("user"),
         key = exports.fonts:getIcon("key"),
         arrow = exports.fonts:getIcon("arrow-right"),
-        plus = exports.fonts:getIcon("plus"),
+        plus = exports.fonts:getIcon("person-circle-plus"),
         login = exports.fonts:getIcon("login"),
         mail = exports.fonts:getIcon("mail"),
         eye = exports.fonts:getIcon("eye"),
         eyeslash = exports.fonts:getIcon("eye-slash"),
         male = exports.fonts:getIcon("person"),
         female = exports.fonts:getIcon("person-dress"),
+        list = exports.fonts:getIcon("hand-holding-heart"),
+        down = exports.fonts:getIcon("up-down"),
+        skull = exports.fonts:getIcon("skull"),
+        heart = exports.fonts:getIcon("heart"),
+        back = exports.fonts:getIcon("back"),
         location = exports.fonts:getIcon("location")
     }
     self.screen = Vector2(guiGetScreenSize())
     self.awesome = exports.fonts:getFont("AwesomeSolid", 9)
+    self.awesomeBig = exports.fonts:getFont("AwesomeSolid", 14)
+    self.awesomeVeryBig = exports.fonts:getFont("AwesomeSolid", 25)
     self.roboto = exports.fonts:getFont('Roboto', 10)
     self.robotoB = exports.fonts:getFont('RobotoB', 10)
 
@@ -87,7 +97,6 @@ function account:render()
             end
             dxDrawText(self.icons.user, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
             dxDrawText(self.texts.username, self.screen.x/2-240/2+30, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225), 1, self.roboto)
-
             local textSize
             local newY = newY + 33
             local order = 2
@@ -296,60 +305,187 @@ function account:render()
                 self.load = self.load + 5
                 dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
             else
-                self:roundedRectangle(self.screen.x/2-400/2, self.screen.y/2-300/2, 400, 300, 9, tocolor(55,55,55,245))
-                dxDrawText("Karakter", self.screen.x/2-400/2+15, self.screen.y/2-300/2+15, nil, nil, tocolor(175,175,175), 1, self.robotoB)
-                dxDrawText("Lokasyon", self.screen.x/2-400/2+200, self.screen.y/2-300/2+15, nil, nil, tocolor(175,175,175), 1, self.robotoB)
+                dxDrawText(self.icons.list, self.screen.x/2-200, self.screen.y/2-100, nil, nil, tocolor(175,175,175), 1, self.awesome)
+                dxDrawText(self.icons.down, self.screen.x/2-200+3, self.screen.y/2-50, nil, nil, tocolor(175,175,175), 1, self.awesome)
+                dxDrawText("Karakter", self.screen.x/2-150, self.screen.y/2-100, nil, nil, tocolor(175,175,175), 1, self.robotoB)
+                dxDrawText("Durum", self.screen.x/2, self.screen.y/2-100, nil, nil, tocolor(175,175,175), 1, self.robotoB)
+                dxDrawText("Lokasyon", self.screen.x/2+100, self.screen.y/2-100, nil, nil, tocolor(175,175,175), 1, self.robotoB)
 
                 local newY = 0
+                local current = 0
                 for index, value in ipairs(self.characters) do
-                    --// GENDER AND NAME
-                    local icon
-                    local color
-                    if value[3] == 1 then
-                        icon = self.icons.male
-                        color = tocolor(121,179,245)
-                    elseif value[3] == 2 then
-                        icon = self.icons.female
-                        color = tocolor(245,121,245)
-                    end
-                    dxDrawText(icon, self.screen.x/2-400/2+15, self.screen.y/2-300/2+45+newY, nil, nil, color, 1, self.awesome)
-                    local width = dxGetTextWidth(icon, 1, self.awesome)
-                    dxDrawText(value[2]:gsub("_", " "), self.screen.x/2-400/2+20+width, self.screen.y/2-300/2+45+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
-                    --// LOCATION
-                    local icon = self.icons.location
-                    dxDrawText(icon, self.screen.x/2-400/2+200, self.screen.y/2-300/2+45+newY, nil, nil, tocolor(166,121,245), 1, self.awesome)
-                    local width = dxGetTextWidth(icon, 1, self.awesome)
-                    dxDrawText(string.sub(value[4], 1, 10), self.screen.x/2-400/2+205+width, self.screen.y/2-300/2+45+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
-                    --// SPAWN
-                    local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
-                    local height = dxGetFontHeight(1, self.awesome)
-                    if cursorShowing and cursorX >= self.screen.x/2-400/2+350 and cursorX <= self.screen.x/2-400/2+350+width and cursorY >= self.screen.y/2-300/2+45+newY and cursorY <= self.screen.y/2-300/2+45+newY+height then
-                        dxDrawText(self.icons.login, self.screen.x/2-400/2+350, self.screen.y/2-300/2+45+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
-                        if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
-                            self.tick = getTickCount()
-                            triggerServerEvent("auth.spawn.character", localPlayer, value[1])
-                            self:stop()
+                    --// LİST SORTED
+                    if index > self.currentRow and current < self.maxRow then
+                        --// GENDER AND NAME
+                        local icon
+                        local color
+                        if value[3] == 1 then
+                            icon = self.icons.male
+                            color = tocolor(121,179,245)
+                        elseif value[3] == 2 then
+                            icon = self.icons.female
+                            color = tocolor(245,121,245)
                         end
-                    else
-                        dxDrawText(self.icons.login, self.screen.x/2-400/2+350, self.screen.y/2-300/2+45+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
+                        dxDrawText(icon, self.screen.x/2-150, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
+                        local width = dxGetTextWidth(icon, 1, self.awesome)
+                        dxDrawText(string.sub(value[2]:gsub("_", " "), 1, 15), self.screen.x/2-145+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                        --// STATE
+                        local icon
+                        local color
+                        if value[5] == 1 then
+                            icon = self.icons.skull
+                            color = tocolor(226,67,67)
+                        else
+                            icon = self.icons.heart
+                            color = tocolor(147,233,121)
+                        end
+                        dxDrawText(icon, self.screen.x/2+13, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
+                        --// LOCATION
+                        dxDrawText(string.sub(value[4], 1, 10), self.screen.x/2+100, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                        --// SPAWN
+                        if value[5] == 1 then
+                            dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(125,125,125,200), 1, self.awesome)
+                        else
+                            local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
+                            local height = dxGetFontHeight(1, self.awesome)
+                            if cursorShowing and cursorX >= self.screen.x/2+175+width and cursorX <= self.screen.x/2+175+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
+                                dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
+                                if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                                    self.tick = getTickCount()
+                                    triggerServerEvent("auth.spawn.character", localPlayer, value[1])
+                                    self:stop()
+                                end
+                            else
+                                dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
+                            end
+                        end
+                        newY = newY + 25
+                        current = current + 1
                     end
-                    newY = newY + 25
                 end
-
+                --// CREATE BUTTON
                 local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
                 local height = dxGetFontHeight(1, self.awesome)
-                if cursorShowing and cursorX >= self.screen.x/2-400/2+375 and cursorX <= self.screen.x/2-400/2+375+width and cursorY >= self.screen.y/2-300/2+275 and cursorY <= self.screen.y/2-300/2+275+height then
-                    dxDrawText(self.icons.plus, self.screen.x/2-400/2+375, self.screen.y/2-300/2+275, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
+                if cursorShowing and cursorX >= self.screen.x/2+243+width and cursorX <= self.screen.x/2+243+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
+                    dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.page = 4
+                        self.load = 0
+                        self.step = 1
                     end
                 else
-                    dxDrawText(self.icons.plus, self.screen.x/2-400/2+375, self.screen.y/2-300/2+275, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
+                    dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
                 end
             end
         elseif self.page == 4 then
-            --// CHARACTER CREATE SCREEN SOON..
+            if self.load <= 350 then
+                self.load = self.load + 5
+                dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
+            else
+                if cursorShowing and cursorX >= 0 and cursorX <= 150 and cursorY >= 0 and cursorY <= self.screen.y then
+                    dxDrawRectangle(0, 0, 150, self.screen.y, tocolor(17,17,17,245))
+                    if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                        self.tick = getTickCount()
+                        if self.step == 1 then
+                            self.page = 3
+                            self.load = 0
+                            self.step = 0
+                        else
+                            self.step = self.step - 1
+                        end
+                    end
+                else
+                    dxDrawRectangle(0, 0, 150, self.screen.y, tocolor(10,10,10,225))
+                end
+                local icon = self.icons.back
+                local width = dxGetTextWidth(icon, 1, self.awesomeVeryBig)
+                local height = dxGetFontHeight(1, self.awesomeVeryBig)
+                dxDrawText(icon, 150/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.awesomeVeryBig)
+
+                if self.step == 1 then
+                    local text = "Yeni karakteriniz için bir isim belirleyelim ('ENTER')"
+                    local width = dxGetTextWidth(text, 1, self.robotoB)
+                    local height = dxGetFontHeight(1, self.robotoB)
+                    dxDrawText(text, self.screen.x/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    local textSize = dxGetTextWidth(self.texts.charName, 1, self.robotoB)
+                    dxDrawText(self.texts.charName, self.screen.x/2-(textSize/2), self.screen.y/2-height/2+20, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    dxDrawText('l', self.screen.x/2-(textSize/2)+(textSize), self.screen.y/2-height/2+20, nil, nil ,tocolor(195,195,195,self.alpha), 1, self.robotoB)
+                    if getKeyState('enter') and self.tick+400 <= getTickCount() then
+                        self.tick = getTickCount()
+                        triggerServerEvent("auth.check.character.name", localPlayer, self.texts.charName)
+                    end
+                elseif self.step == 2 then
+                    local text = "Şimdi yeni karakterinize bir yaş belirleyelim ('ENTER')"
+                    local width = dxGetTextWidth(text, 1, self.robotoB)
+                    local height = dxGetFontHeight(1, self.robotoB)
+                    dxDrawText(text, self.screen.x/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    local textSize = dxGetTextWidth(self.texts.age, 1, self.robotoB)
+                    dxDrawText(self.texts.age, self.screen.x/2-(textSize/2), self.screen.y/2-height/2+20, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    dxDrawText('l', self.screen.x/2-(textSize/2)+(textSize), self.screen.y/2-height/2+20, nil, nil ,tocolor(195,195,195,self.alpha), 1, self.robotoB)
+                    if getKeyState('enter') and self.tick+400 <= getTickCount() then
+                        self.tick = getTickCount()
+                        self:next()
+                    end
+                elseif self.step == 3 then
+                    local text = "Şimdi yeni karakterinize bir boy belirleyelim ('ENTER')"
+                    local width = dxGetTextWidth(text, 1, self.robotoB)
+                    local height = dxGetFontHeight(1, self.robotoB)
+                    dxDrawText(text, self.screen.x/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    local textSize = dxGetTextWidth(self.texts.height, 1, self.robotoB)
+                    dxDrawText(""..self.texts.height.." cm", self.screen.x/2-(textSize/2), self.screen.y/2-height/2+20, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    dxDrawText('l', self.screen.x/2-(textSize/2)+(textSize), self.screen.y/2-height/2+20, nil, nil ,tocolor(195,195,195,self.alpha), 1, self.robotoB)
+                    if getKeyState('enter') and self.tick+400 <= getTickCount() then
+                        self.tick = getTickCount()
+                        self:next()
+                    end
+                elseif self.step == 4 then
+                    local text = "Şimdi yeni karakterinize bir kilo belirleyelim ('ENTER')"
+                    local width = dxGetTextWidth(text, 1, self.robotoB)
+                    local height = dxGetFontHeight(1, self.robotoB)
+                    dxDrawText(text, self.screen.x/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    local textSize = dxGetTextWidth(self.texts.weight, 1, self.robotoB)
+                    dxDrawText(""..self.texts.weight.." kg", self.screen.x/2-(textSize/2), self.screen.y/2-height/2+20, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                    dxDrawText('l', self.screen.x/2-(textSize/2)+(textSize), self.screen.y/2-height/2+20, nil, nil ,tocolor(195,195,195,self.alpha), 1, self.robotoB)
+                    if getKeyState('enter') and self.tick+400 <= getTickCount() then
+                        self.tick = getTickCount()
+                        self:next()
+                    end
+                elseif self.step == 5 then
+                    local text = "Şimdi yeni karakterinizin cinsiyetini belirleyelim ('TIKLA')"
+                    local width = dxGetTextWidth(text, 1, self.robotoB)
+                    local height = dxGetFontHeight(1, self.robotoB)
+                    dxDrawText(text, self.screen.x/2-width/2, self.screen.y/2-height/2, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+
+                    local icon = self.icons.male
+                    local width = dxGetTextWidth(icon, 1, self.awesomeBig)
+                    local height = dxGetFontHeight(1, self.awesomeBig)
+                    if cursorShowing and cursorX >= self.screen.x/2-width/2-100 and cursorX <= self.screen.x/2-width/2-100+width and cursorY >= self.screen.y/2-height/2+50 and cursorY <= self.screen.y/2-height/2+50+height then
+                        dxDrawText(icon, self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, nil, nil, tocolor(121,179,245,225), 1, self.awesomeBig)
+                        if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                            self.tick = getTickCount()
+                            self.gender = 1
+                            self:next()
+                        end
+                    else
+                        dxDrawText(icon, self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, nil, nil, tocolor(121,179,245), 1, self.awesomeBig)
+                    end
+
+                    local icon = self.icons.female
+                    local width = dxGetTextWidth(icon, 1, self.awesomeBig)
+                    local height = dxGetFontHeight(1, self.awesomeBig)
+                    if cursorShowing and cursorX >= self.screen.x/2-width/2+100 and cursorX <= self.screen.x/2-width/2+100+width and cursorY >= self.screen.y/2-height/2+50 and cursorY <= self.screen.y/2-height/2+50+height then
+                        dxDrawText(icon, self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, nil, nil, tocolor(245,121,245,225), 1, self.awesomeBig)
+                        if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                            self.tick = getTickCount()
+                            self.gender = 2
+                            self:next()
+                        end
+                    else
+                        dxDrawText(icon, self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, nil, nil, tocolor(245,121,245), 1, self.awesomeBig)
+                    end
+                end
+            end
         end
     end
     if getKeyState('backspace') and self.tick+120 <= getTickCount() then
@@ -366,8 +502,71 @@ function account:render()
             self.fistPart = self.texts.email:sub(0, string.len(self.texts.email)-1)
             self.lastPart = self.texts.email:sub(string.len(self.texts.email)+1, #self.texts.email)
             self.texts.email = self.fistPart..self.lastPart
+        elseif self.step == 1 then
+            self.fistPart = self.texts.charName:sub(0, string.len(self.texts.charName)-1)
+            self.lastPart = self.texts.charName:sub(string.len(self.texts.charName)+1, #self.texts.charName)
+            self.texts.charName = self.fistPart..self.lastPart
+        elseif self.step == 2 then
+            self.fistPart = self.texts.age:sub(0, string.len(self.texts.age)-1)
+            self.lastPart = self.texts.age:sub(string.len(self.texts.age)+1, #self.texts.age)
+            self.texts.age = self.fistPart..self.lastPart
+        elseif self.step == 3 then
+            self.fistPart = self.texts.height:sub(0, string.len(self.texts.height)-1)
+            self.lastPart = self.texts.height:sub(string.len(self.texts.height)+1, #self.texts.height)
+            self.texts.height = self.fistPart..self.lastPart
+        elseif self.step == 4 then
+            self.fistPart = self.texts.weight:sub(0, string.len(self.texts.weight)-1)
+            self.lastPart = self.texts.weight:sub(string.len(self.texts.weight)+1, #self.texts.weight)
+            self.texts.weight = self.fistPart..self.lastPart
         end
     end
+end
+
+function account:remember(username, password)
+    self.texts.username = username
+    self.texts.password = password
+end
+
+function account:login(results)
+    self.characters = results or {}
+    self.page = 3
+    self.load = 0
+end
+
+function account:textRectangle()
+    if self.alpha == 255 then
+        self.alpha = 0
+    else
+        self.alpha = 255
+    end
+end
+
+function account:next()
+    if self.step == 5 then
+        triggerServerEvent("auth.create.character", localPlayer, self.texts.charName, self.texts.height, self.texts.weight, self.texts.age, self.gender)
+        self.step = 0
+        self.load = 0
+        self.page = 3
+    end
+    self.step = self.step + 1
+    self.load = 0
+end
+
+function account:listUp()
+    if self.page == 3 then
+        if self.currentRow > 0 then
+            self.currentRow = self.currentRow - 1
+        end
+    end
+end
+
+function account:listDown()
+    if self.page == 3 then
+        local table = self.characters or {}
+		if self.currentRow < #table - self.maxRow then
+            self.currentRow = self.currentRow + 1
+        end
+	end
 end
 
 function account:notifyRender()
@@ -391,6 +590,18 @@ function account:notify(result)
     addEventHandler("onClientRender", root, self._functions.notifyRender, true, "low-99999")
 end
 
+function account:roundedRectangle(x, y, width, height, radius, color)
+    local diameter = radius * 2
+    dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
+    dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
+    dxDrawCircle(x + radius, y + height - radius, radius, 90, 180, color)
+    dxDrawCircle(x + width - radius, y + height - radius, radius, 0, 90, color)
+    dxDrawRectangle(x + radius, y, width - diameter, height, color)
+    dxDrawRectangle(x, y + radius, radius, height - diameter, color)
+    dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
+    dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
+end
+
 function account:write(character)
     if self.selected == 1 then
         if string.len(self.texts.username) <= 20 then
@@ -404,56 +615,54 @@ function account:write(character)
         if string.len(self.texts.email) <= 20 then
             self.texts.email = ""..self.texts.email..""..character
         end
-    end
-end
-
-function account:roundedRectangle(x, y, width, height, radius, color)
-    local diameter = radius * 2
-    dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
-    dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
-    dxDrawCircle(x + radius, y + height - radius, radius, 90, 180, color)
-    dxDrawCircle(x + width - radius, y + height - radius, radius, 0, 90, color)
-    dxDrawRectangle(x + radius, y, width - diameter, height, color)
-    dxDrawRectangle(x, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
-end
-
-function account:remember(username, password)
-    self.texts.username = username
-    self.texts.password = password
-end
-
-function account:login(results)
-    self.characters = results or {}
-    self.page = 3
-    self.load = 0
-end
-
-function account:textRectangle()
-    if self.alpha == 255 then
-        self.alpha = 0
-    else
-        self.alpha = 255
+    elseif self.step == 1 then
+        if string.len(self.texts.charName) <= 30 then
+            self.texts.charName = ""..self.texts.charName..""..character
+        end
+    elseif self.step == 2 then
+        if tonumber(character) then
+            if string.len(self.texts.age) <= 1 then
+                self.texts.age = ""..self.texts.age..""..character
+            end
+        end
+    elseif self.step == 3 then
+        if tonumber(character) then
+            if string.len(self.texts.height) <= 2 then
+                self.texts.height = ""..self.texts.height..""..character
+            end
+        end
+    elseif self.step == 4 then
+        if tonumber(character) then
+            if string.len(self.texts.weight) <= 1 then
+                self.texts.weight = ""..self.texts.weight..""..character
+            end
+        end
     end
 end
 
 function account:stop()
-    showChat(true)
-    showCursor(false)
     if isTimer(self.timer) then
         killTimer(self.timer)
     end
+    unbindKey("mouse_wheel_up", "down", self._functions.listUp)
+    unbindKey("mouse_wheel_down", "down", self._functions.listDown)
     removeEventHandler("onClientCharacter", root, self._functions.write)
     removeEventHandler("onClientRender", root, self._functions.render)
+    showChat(true)
+    showCursor(false)
 end
 
 function account:start()
     self.tick, self.page, self.load = 0, 1, 0
+    self.currentRow, self.maxRow = 0, 5
     self.texts = {
         username = "kullanıcı adı",
         password = "şifre",
-        email = "youremail@icloud.com"
+        email = "youremail@icloud.com",
+        charName = "",
+        age = "21",
+        height = "175",
+        weight = "70"
     }
     Camera.fade(true)
     showChat(false)
@@ -462,6 +671,8 @@ function account:start()
     localPlayer:setInterior(0)
     triggerServerEvent("auth.remember.me", localPlayer)
     addEventHandler("onClientCharacter", root, self._functions.write)
+    bindKey("mouse_wheel_up", "down", self._functions.listUp)
+    bindKey("mouse_wheel_down", "down", self._functions.listDown)
     self.timer = Timer(self._functions.textRectangle, 375, 0)
     addEventHandler("onClientRender", root, self._functions.render, true, "low-9999")
 end
@@ -486,6 +697,8 @@ function account:components()
     addEventHandler("auth.login.step", root, self._functions.login)
     addEvent("auth.remembered", true)
     addEventHandler("auth.remembered", root, self._functions.remember)
+    addEvent("auth.next.step", true)
+    addEventHandler("auth.next.step", root, self._functions.step)
 end
 
 account:new()

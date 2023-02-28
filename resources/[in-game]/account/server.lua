@@ -1,6 +1,21 @@
+
+
+
+
+--// WAITING FIX
+
+
+
+
+
+
+
+
 local tonumber = tonumber
 local exports = exports
 local addEvent = addEvent
+local ipairs = ipairs
+local pairs = pairs
 local addEventHandler = addEventHandler
 local triggerClientEvent = triggerClientEvent
 local conn = exports.mysql:getConn()
@@ -19,7 +34,6 @@ addEventHandler('onPlayerCommand', root, function(command)
     end
 end)
 
---// WAITING FIX SPAWN()
 function spawn(dbid)
     local dbid = tonumber(dbid)
     source:setData("dbid", dbid)
@@ -36,6 +50,34 @@ function spawn(dbid)
 end
 addEvent("auth.spawn.character", true)
 addEventHandler("auth.spawn.character", root, spawn)
+
+function createCharacter(name, height, weight, age, gender)
+    local model
+    local walk
+    if tonumber(gender) == 1 then
+        model = 59
+        walk = 128
+    else
+        model = 93
+        walk = 131
+    end
+    dbExec(conn, "INSERT INTO characters SET account='"..(source:getData('account.id')).."', name='"..(name).."', age='"..(tonumber(age)).."', height='"..(tonumber(height)).."', weight='"..(tonumber(weight)).."', gender='"..(tonumber(gender)).."', model='"..(tonumber(model)).."', walk='"..(tonumber(walk)).."'")
+    dbQuery(
+        function(qh)
+            local res, rows, err = dbPoll(qh, 0)
+            if rows > 0 then
+                for index, row in ipairs(res) do
+                    local dbid = tonumber(row.id)
+                    for column, value in pairs(row) do
+                        cache:setCharacterData(dbid, column, value)
+                    end
+                end
+            end
+        end,
+    conn, "SELECT * FROM characters WHERE name = ?", name)
+end
+addEvent("auth.create.character", true)
+addEventHandler("auth.create.character", root, createCharacter)
 
 function loginStep(player)
     player:setData("online", true)
@@ -55,6 +97,7 @@ function loginStep(player)
                     data[i][2] = cache:getCharacterData(dbid, "name")
                     data[i][3] = cache:getCharacterData(dbid, "gender")
                     data[i][4] = getZoneName(x, y, z)
+                    data[i][5] = cache:getCharacterData(dbid, "dead")
                 end
             end
             triggerClientEvent(player, "auth.login.step", player, data)
@@ -107,6 +150,19 @@ function register(username, password, mail)
                             end
                         else
                             dbExec(conn, "INSERT INTO accounts SET name='"..(username).."', password='"..(password).."', serial='"..(player.serial).."'")
+                            dbQuery(
+                                function(qh)
+                                    local res, rows, err = dbPoll(qh, 0)
+                                    if rows > 0 then
+                                        for index, row in ipairs(res) do
+                                            local dbid = tonumber(row.id)
+                                            for column, value in pairs(row) do
+                                                cache:setAccountData(dbid, column, value)
+                                            end
+                                        end
+                                    end
+                                end,
+                            conn, "SELECT * FROM accounts WHERE name = ?", username)
                             triggerClientEvent(player, "auth.notify", player, "başarıyla kayıt oldunuz, ("..username..")")
                         end
                     end,
@@ -132,3 +188,25 @@ function remember()
 end
 addEvent("auth.remember.me", true)
 addEventHandler("auth.remember.me", root, remember)
+
+function checkCharacterName(result)
+    dbQuery(
+        function(qh,player)
+            local res, rows, err = dbPoll(qh, 0)
+            if rows > 0 then
+                triggerClientEvent(player, "auth.notify", player, "Bu karakter ismi kullanılıyor, başka bir tane deneyin.")
+            else
+                local oldName = player.name
+                local successName = player:setName(result)
+                if (successName) then
+                    player:setName(oldName)
+                    triggerClientEvent(player, "auth.next.step", player)
+                else
+                    triggerClientEvent(player, "auth.notify", player, "Seçtiğiniz karakter isminde bir sorun bulundu, başka bir tane deneyin.")
+                end
+            end
+        end,
+    {source}, conn, "SELECT name FROM characters WHERE name = ?", result)
+end
+addEvent("auth.check.character.name", true)
+addEventHandler("auth.check.character.name", root, checkCharacterName)
