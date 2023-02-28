@@ -1,0 +1,1 @@
+setGameType('Roleplay')
