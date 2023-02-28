@@ -4,5 +4,14 @@
     <script src="client.lua" type="client" cache="false"/>
     <script src="server.lua" type="server"/>
 
-    <export function="getAccountData" type="client"/>
+    <export function="getAccountData" type="server"/>
+    <export function="setAccountData" type="server"/>
+    <export function="getCharacterData" type="server"/>
+    <export function="setCharacterData" type="server"/>
+    <export function="getItemData" type="server"/>
+    <export function="setItemData" type="server"/>
+    <export function="getInteriorData" type="server"/>
+    <export function="setInteriorData" type="server"/>
+    <export function="getVehicleData" type="server"/>
+    <export function="setVehicleData" type="server"/>
 </meta>

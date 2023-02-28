@@ -24,6 +24,8 @@ function fonts:new()
         ['mail'] = '@',
         ['sun'] = '',
         ['light'] = '',
+        ['login'] = '',
+        ['location'] = '',
         ['github'] = '',
         ['palette'] = '',
         ['load'] = '',
