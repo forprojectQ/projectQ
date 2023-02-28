@@ -1,16 +1,3 @@
-
-
-
-
---// WAITING FIX
-
-
-
-
-
-
-
-
 local tonumber = tonumber
 local exports = exports
 local addEvent = addEvent
@@ -40,6 +27,7 @@ function spawn(dbid)
     local x, y, z, int, dim = unpack(split(cache:getCharacterData(dbid, "pos"), ","))
     local characterModel = cache:getCharacterData(dbid, "model")
     local characterName = cache:getCharacterData(dbid, "name")
+    local walk = cache:getCharacterData(dbid, "walk")
     source:spawn(x,y,z)
     source:setInterior(tonumber(int))
     source:setDimension(tonumber(dim))
@@ -47,6 +35,8 @@ function spawn(dbid)
     source.gravity = 0.008
     source.model = tonumber(characterModel)
     source.name = tostring(characterName)
+    source.walkingStyle = walk
+    triggerEvent("load.items.server", source)
 end
 addEvent("auth.spawn.character", true)
 addEventHandler("auth.spawn.character", root, spawn)
@@ -75,6 +65,7 @@ function createCharacter(name, height, weight, age, gender)
             end
         end,
     conn, "SELECT * FROM characters WHERE name = ?", name)
+    loginStep(source)
 end
 addEvent("auth.create.character", true)
 addEventHandler("auth.create.character", root, createCharacter)

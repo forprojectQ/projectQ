@@ -315,54 +315,56 @@ function account:render()
 
                 local newY = 0
                 local current = 0
-                for index, value in ipairs(self.characters) do
-                    --// LİST SORTED
-                    if index > self.currentRow and current < self.maxRow then
-                        --// GENDER AND NAME
-                        local icon
-                        local color
-                        if value[3] == 1 then
-                            icon = self.icons.male
-                            color = tocolor(121,179,245)
-                        elseif value[3] == 2 then
-                            icon = self.icons.female
-                            color = tocolor(245,121,245)
-                        end
-                        dxDrawText(icon, self.screen.x/2-150, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
-                        local width = dxGetTextWidth(icon, 1, self.awesome)
-                        dxDrawText(string.sub(value[2]:gsub("_", " "), 1, 15), self.screen.x/2-145+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
-                        --// STATE
-                        local icon
-                        local color
-                        if value[5] == 1 then
-                            icon = self.icons.skull
-                            color = tocolor(226,67,67)
-                        else
-                            icon = self.icons.heart
-                            color = tocolor(147,233,121)
-                        end
-                        dxDrawText(icon, self.screen.x/2+13, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
-                        --// LOCATION
-                        dxDrawText(string.sub(value[4], 1, 10), self.screen.x/2+100, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
-                        --// SPAWN
-                        if value[5] == 1 then
-                            dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(125,125,125,200), 1, self.awesome)
-                        else
-                            local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
-                            local height = dxGetFontHeight(1, self.awesome)
-                            if cursorShowing and cursorX >= self.screen.x/2+175+width and cursorX <= self.screen.x/2+175+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
-                                dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
-                                if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
-                                    self.tick = getTickCount()
-                                    triggerServerEvent("auth.spawn.character", localPlayer, value[1])
-                                    self:stop()
-                                end
-                            else
-                                dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
+                if #self.characters > 0 then
+                    for index, value in ipairs(self.characters) do
+                        --// LİST SORTED
+                        if index > self.currentRow and current < self.maxRow then
+                            --// GENDER AND NAME
+                            local icon
+                            local color
+                            if value[3] == 1 then
+                                icon = self.icons.male
+                                color = tocolor(121,179,245)
+                            elseif value[3] == 2 then
+                                icon = self.icons.female
+                                color = tocolor(245,121,245)
                             end
+                            dxDrawText(icon, self.screen.x/2-150, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
+                            local width = dxGetTextWidth(icon, 1, self.awesome)
+                            dxDrawText(string.sub(value[2]:gsub("_", " "), 1, 15), self.screen.x/2-145+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                            --// STATE
+                            local icon
+                            local color
+                            if value[5] == 1 then
+                                icon = self.icons.skull
+                                color = tocolor(226,67,67)
+                            else
+                                icon = self.icons.heart
+                                color = tocolor(147,233,121)
+                            end
+                            dxDrawText(icon, self.screen.x/2+13, self.screen.y/2-60+newY, nil, nil, color, 1, self.awesome)
+                            --// LOCATION
+                            dxDrawText(string.sub(value[4], 1, 10), self.screen.x/2+100, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
+                            --// SPAWN
+                            if value[5] == 1 then
+                                dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(125,125,125,200), 1, self.awesome)
+                            else
+                                local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
+                                local height = dxGetFontHeight(1, self.awesome)
+                                if cursorShowing and cursorX >= self.screen.x/2+175+width and cursorX <= self.screen.x/2+175+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
+                                    dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
+                                    if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                                        self.tick = getTickCount()
+                                        triggerServerEvent("auth.spawn.character", localPlayer, value[1])
+                                        self:stop()
+                                    end
+                                else
+                                    dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
+                                end
+                            end
+                            newY = newY + 25
+                            current = current + 1
                         end
-                        newY = newY + 25
-                        current = current + 1
                     end
                 end
                 --// CREATE BUTTON
@@ -372,9 +374,7 @@ function account:render()
                     dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
-                        self.page = 4
-                        self.load = 0
-                        self.step = 1
+                        self.page, self.load, self.step = 4, 0, 1
                     end
                 else
                     dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
@@ -390,9 +390,7 @@ function account:render()
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         if self.step == 1 then
-                            self.page = 3
-                            self.load = 0
-                            self.step = 0
+                            self.page, self.load, self.step = 3, 0, 0
                         else
                             self.step = self.step - 1
                         end
@@ -524,6 +522,47 @@ function account:render()
     end
 end
 
+function account:write(character)
+    if self.selected == 1 then
+        if string.len(self.texts.username) <= 20 then
+            self.texts.username = ""..self.texts.username..""..character
+        end
+    elseif self.selected == 2 then
+        if string.len(self.texts.password) <= 20 then
+            self.texts.password = ""..self.texts.password..""..character
+        end
+    elseif self.selected == 3 then
+        if string.len(self.texts.email) <= 20 then
+            self.texts.email = ""..self.texts.email..""..character
+        end
+    elseif self.page == 4 then
+        outputChatBox(character)
+        if self.step == 1 then
+            if string.len(self.texts.charName) <= 30 then
+                self.texts.charName = ""..self.texts.charName..""..character
+            end
+        elseif self.step == 2 then
+            if tonumber(character) then
+                if string.len(self.texts.age) <= 1 then
+                    self.texts.age = ""..self.texts.age..""..character
+                end
+            end
+        elseif self.step == 3 then
+            if tonumber(character) then
+                if string.len(self.texts.height) <= 2 then
+                    self.texts.height = ""..self.texts.height..""..character
+                end
+            end
+        elseif self.step == 4 then
+            if tonumber(character) then
+                if string.len(self.texts.weight) <= 1 then
+                    self.texts.weight = ""..self.texts.weight..""..character
+                end
+            end
+        end
+    end
+end
+
 function account:remember(username, password)
     self.texts.username = username
     self.texts.password = password
@@ -598,44 +637,6 @@ function account:roundedRectangle(x, y, width, height, radius, color)
     dxDrawRectangle(x, y + radius, radius, height - diameter, color)
     dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
     dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
-end
-
-function account:write(character)
-    if self.selected == 1 then
-        if string.len(self.texts.username) <= 20 then
-            self.texts.username = ""..self.texts.username..""..character
-        end
-    elseif self.selected == 2 then
-        if string.len(self.texts.password) <= 20 then
-            self.texts.password = ""..self.texts.password..""..character
-        end
-    elseif self.selected == 3 then
-        if string.len(self.texts.email) <= 20 then
-            self.texts.email = ""..self.texts.email..""..character
-        end
-    elseif self.step == 1 then
-        if string.len(self.texts.charName) <= 30 then
-            self.texts.charName = ""..self.texts.charName..""..character
-        end
-    elseif self.step == 2 then
-        if tonumber(character) then
-            if string.len(self.texts.age) <= 1 then
-                self.texts.age = ""..self.texts.age..""..character
-            end
-        end
-    elseif self.step == 3 then
-        if tonumber(character) then
-            if string.len(self.texts.height) <= 2 then
-                self.texts.height = ""..self.texts.height..""..character
-            end
-        end
-    elseif self.step == 4 then
-        if tonumber(character) then
-            if string.len(self.texts.weight) <= 1 then
-                self.texts.weight = ""..self.texts.weight..""..character
-            end
-        end
-    end
 end
 
 function account:stop()
