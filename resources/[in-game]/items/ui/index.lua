@@ -88,18 +88,20 @@ function ui:addCategory(name, image)
 end
 
 function ui:open()
-    self.active = not self.active
-    self.items = {}
-    showCursor(self.active)
-    if self.active then
-        self.tick = 0
-        self:refresh()
-        Sound('assets/audio/bag.wav')
-        self.render = self.render or Timer(self._function.display, 0, 0)
-    else
-        if self.render and self.render.valid then
-            self.render:destroy()
-            self.render = nil
+    if localPlayer:getData("online") then
+        self.active = not self.active
+        self.items = {}
+        showCursor(self.active)
+        if self.active then
+            self.tick = 0
+            self:refresh()
+            Sound('assets/audio/bag.wav')
+            self.render = self.render or Timer(self._function.display, 0, 0)
+        else
+            if self.render and self.render.valid then
+                self.render:destroy()
+                self.render = nil
+            end
         end
     end
 end
