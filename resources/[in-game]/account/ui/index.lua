@@ -55,7 +55,9 @@ function account:init()
     self.roboto = exports.fonts:getFont('Roboto', 10)
     self.robotoB = exports.fonts:getFont('RobotoB', 10)
 
-    self:start()
+    if not localPlayer:getData("online") then
+        self:start()
+    end
     self:components()
 end
 
