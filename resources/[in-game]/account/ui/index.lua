@@ -29,6 +29,7 @@ function account:init()
         step = function(...) self:next(...) end,
         remember = function(...) self:remember(...) end
     }
+	
     self.icons = {
         load = exports.fonts:getIcon("load"),
         user = exports.fonts:getIcon("user"),
@@ -48,6 +49,7 @@ function account:init()
         back = exports.fonts:getIcon("back"),
         location = exports.fonts:getIcon("location")
     }
+	
     self.screen = Vector2(guiGetScreenSize())
     self.awesome = exports.fonts:getFont("AwesomeSolid", 9)
     self.awesomeBig = exports.fonts:getFont("AwesomeSolid", 14)
@@ -55,9 +57,7 @@ function account:init()
     self.roboto = exports.fonts:getFont('Roboto', 10)
     self.robotoB = exports.fonts:getFont('RobotoB', 10)
 
-    if not localPlayer:getData("online") then
-        self:start()
-    end
+    if not localPlayer:getData("online") then self:start() end
     self:components()
 end
 
@@ -530,9 +530,8 @@ function account:remember(username, password)
 end
 
 function account:login(results)
-    self.characters = results or {}
-    self.page = 3
-    self.load = 0
+    local results = results or {}
+    self.characters, self.page, self.load = results, 3, 0
 end
 
 function account:textRectangle()
@@ -546,12 +545,9 @@ end
 function account:next()
     if self.step == 5 then
         triggerServerEvent("auth.create.character", localPlayer, self.texts.charName, self.texts.height, self.texts.weight, self.texts.age, self.gender)
-        self.step = 0
-        self.load = 0
-        self.page = 3
+	self.step, self.load, self.page = 0, 0, 3
     end
-    self.step = self.step + 1
-    self.load = 0
+    self.step, self.load = self.step + 1, 0
 end
 
 function account:listUp()
@@ -563,12 +559,12 @@ function account:listUp()
 end
 
 function account:listDown()
-    if self.page == 3 then
-        local table = self.characters or {}
-		if self.currentRow < #table - self.maxRow then
-            self.currentRow = self.currentRow + 1
-        end
-	end
+   if self.page == 3 then
+      local table = self.characters or {}
+      if self.currentRow < #table - self.maxRow then
+         self.currentRow = self.currentRow + 1
+      end
+   end
 end
 
 function account:notifyRender()
