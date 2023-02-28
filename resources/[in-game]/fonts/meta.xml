@@ -3,8 +3,12 @@
 
     <file src='assets/RobotoB.ttf'/>
     <file src='assets/Roboto.ttf'/>
+    <file src='assets/FontAwesomeRegular.otf'/>
+    <file src='assets/FontAwesomeSolid.otf'/>
 
-    <export function='get' type='client'/>
+    <export function='getFont' type='client'/>
+    <export function='getIcon' type='client'/>
+
     <oop>true</oop>
     <download_priority_group>10</download_priority_group>
 </meta>

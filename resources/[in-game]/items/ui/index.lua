@@ -24,7 +24,7 @@ function ui:init()
     self:addCategory('Anahtarlık', 'assets/images/key.png')
     self:addCategory('Silahlar', 'assets/images/gun.png')
     self.screen = Vector2(guiGetScreenSize())
-    self.font = exports.fonts:get('RobotoB', 9)
+    self.font = exports.fonts:getFont('RobotoB', 9)
     self.itemImages = {}
     self.current = 1
     bindKey('i', 'down', self._function.open)

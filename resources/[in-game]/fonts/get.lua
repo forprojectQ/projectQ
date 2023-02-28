@@ -9,13 +9,38 @@ function fonts:new()
 
     obj.list = {
         ['RobotoB'] = 'assets/RobotoB.ttf',
-        ['Roboto'] = 'assets/Roboto.ttf'
+        ['Roboto'] = 'assets/Roboto.ttf',
+        ['AwesomeSolid'] = 'assets/FontAwesomeSolid.otf',
+        ['AwesomeRegular'] = 'assets/FontAwesomeRegular.otf'
+    }
+
+    --// https://fontawesome.com/search?m=free&o=r
+    obj.icons = {
+        ['user'] = '',
+        ['key'] = '',
+        ['person-circle-plus'] = '',
+        ['arrow-right'] = '',
+        ['moon'] = '',
+        ['mail'] = '@',
+        ['sun'] = '',
+        ['light'] = '',
+        ['github'] = '',
+        ['palette'] = '',
+        ['load'] = '',
+        ['fork'] = '',
+        ['volume-off'] = '',
+        ['volume-on'] = '',
+        ['plus'] = '+',
+        ['eye'] = '',
+        ['eye-slash'] = '',
+        ['person'] = '',
+        ['person-dress'] = ''
     }
 
     return obj
 end
 
-function fonts:get(name, size)
+function fonts:getFont(name, size)
     local size = size or 9
     local name = name or 'Roboto'
     local path = self.list[name]
@@ -30,7 +55,16 @@ function fonts:get(name, size)
     return self.cache[name..' '..size]
 end
 
+function fonts:getIcon(name)
+    return self.icons[name]
+end
+
 local myFonts = fonts:new()
-function get(name, size) 
-  return myFonts:get(name, size) 
+
+function getFont(name, size)
+  return myFonts:getFont(name, size)
+end
+
+function getIcon(name)
+  return myFonts:getIcon(name)
 end
