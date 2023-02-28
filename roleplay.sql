@@ -49,6 +49,7 @@ CREATE TABLE `characters` (
   `money` bigint(11) NOT NULL DEFAULT '1000',
   `hunger` int(11) NOT NULL DEFAULT '100',
   `thirst` int(11) NOT NULL DEFAULT '100',
+  `dead` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
