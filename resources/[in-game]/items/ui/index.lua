@@ -107,12 +107,12 @@ function ui:open()
 end
 
 function ui:refresh()
-    local items = getItems(localPlayer)
+    local items = getItems(localPlayer) or {}
     local category = getItemCategory
     local current = self.current
     local size = 55
     self.items = {}
-    for index, value in ipairs(getItems(localPlayer)) do
+    for index, value in pairs(items) do
         if category(value[1]) == current then
             table.insert(self.items, {value[1], self:getImage(value[1]), getItemCount(localPlayer, value[1])})
             if index % 4 == 0 then

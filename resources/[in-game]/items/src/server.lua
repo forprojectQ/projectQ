@@ -143,15 +143,7 @@ function getItemCount(player,item,value)
     return itemCount or 0
 end
 
-addCommandHandler('ff',function(player,command)
-    giveItem(player,6,nil,1)
-end)
-
 addEvent('load.items.server', true)
 addEventHandler('load.items.server', root, function()
-    loadItems(source)
-end)
-
-addEventHandler('onCharacterSpawn', root, function()
     loadItems(source)
 end)

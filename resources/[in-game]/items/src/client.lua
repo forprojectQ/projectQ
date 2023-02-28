@@ -1,9 +1,9 @@
-local items = {}
+items = {}
 
 addEvent('load.items.client',true)
-addEventHandler('load.items.client',root,function(data)
-    local data = data or {}
-    items = data
+addEventHandler('load.items.client',root,function(results)
+    local results = results or {}
+    items = results
 end)
 
 function getItems(player)

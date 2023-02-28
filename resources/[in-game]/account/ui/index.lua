@@ -502,22 +502,24 @@ function account:render()
             self.fistPart = self.texts.email:sub(0, string.len(self.texts.email)-1)
             self.lastPart = self.texts.email:sub(string.len(self.texts.email)+1, #self.texts.email)
             self.texts.email = self.fistPart..self.lastPart
-        elseif self.step == 1 then
-            self.fistPart = self.texts.charName:sub(0, string.len(self.texts.charName)-1)
-            self.lastPart = self.texts.charName:sub(string.len(self.texts.charName)+1, #self.texts.charName)
-            self.texts.charName = self.fistPart..self.lastPart
-        elseif self.step == 2 then
-            self.fistPart = self.texts.age:sub(0, string.len(self.texts.age)-1)
-            self.lastPart = self.texts.age:sub(string.len(self.texts.age)+1, #self.texts.age)
-            self.texts.age = self.fistPart..self.lastPart
-        elseif self.step == 3 then
-            self.fistPart = self.texts.height:sub(0, string.len(self.texts.height)-1)
-            self.lastPart = self.texts.height:sub(string.len(self.texts.height)+1, #self.texts.height)
-            self.texts.height = self.fistPart..self.lastPart
-        elseif self.step == 4 then
-            self.fistPart = self.texts.weight:sub(0, string.len(self.texts.weight)-1)
-            self.lastPart = self.texts.weight:sub(string.len(self.texts.weight)+1, #self.texts.weight)
-            self.texts.weight = self.fistPart..self.lastPart
+        elseif self.page == 4 then
+            if self.step == 1 then
+                self.fistPart = self.texts.charName:sub(0, string.len(self.texts.charName)-1)
+                self.lastPart = self.texts.charName:sub(string.len(self.texts.charName)+1, #self.texts.charName)
+                self.texts.charName = self.fistPart..self.lastPart
+            elseif self.step == 2 then
+                self.fistPart = self.texts.age:sub(0, string.len(self.texts.age)-1)
+                self.lastPart = self.texts.age:sub(string.len(self.texts.age)+1, #self.texts.age)
+                self.texts.age = self.fistPart..self.lastPart
+            elseif self.step == 3 then
+                self.fistPart = self.texts.height:sub(0, string.len(self.texts.height)-1)
+                self.lastPart = self.texts.height:sub(string.len(self.texts.height)+1, #self.texts.height)
+                self.texts.height = self.fistPart..self.lastPart
+            elseif self.step == 4 then
+                self.fistPart = self.texts.weight:sub(0, string.len(self.texts.weight)-1)
+                self.lastPart = self.texts.weight:sub(string.len(self.texts.weight)+1, #self.texts.weight)
+                self.texts.weight = self.fistPart..self.lastPart
+            end
         end
     end
 end
@@ -536,7 +538,6 @@ function account:write(character)
             self.texts.email = ""..self.texts.email..""..character
         end
     elseif self.page == 4 then
-        outputChatBox(character)
         if self.step == 1 then
             if string.len(self.texts.charName) <= 30 then
                 self.texts.charName = ""..self.texts.charName..""..character
@@ -570,7 +571,7 @@ end
 
 function account:login(results)
     local results = results or {}
-    self.characters, self.page, self.load = results, 3, 0
+    self.characters, self.page, self.load, self.selected = results, 3, 0, nil
 end
 
 function account:textRectangle()
