@@ -50,6 +50,7 @@ CREATE TABLE `characters` (
   `hunger` int(11) NOT NULL DEFAULT '100',
   `thirst` int(11) NOT NULL DEFAULT '100',
   `dead` int(1) NOT NULL DEFAULT '0',
+  `walk` int(11) NOT NULL DEFAULT '128',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
