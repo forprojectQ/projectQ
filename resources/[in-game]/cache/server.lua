@@ -1,131 +1,66 @@
 All = class("All")
-Accounts = All:extend("accounts")
-Characters = All:extend("characters")
-Items = All:extend("items")
-Interiors = All:extend("interiors")
-Vehicles = All:extend("vehicles")
+-- cache yapılcak mysql table isimleri.
+cached_tables = {
+    "accounts","characters"
+}
 
 function All:init()
-    local conn = exports.mysql:getConn()
     local tonumber = tonumber
     local ipairs = ipairs
     local pairs = pairs
     local dbQuery = dbQuery
     local dbPoll = dbPoll
-    dbQuery(
-        function(qh)
-            local res, rows, err = dbPoll(qh, 0)
-            for index, row in ipairs(res) do
-                local dbid = tonumber(row.id)
-                Accounts[dbid]={}
-                for column, value in pairs(row) do
-                    if not Accounts[0][column] then Accounts[0][column] = true end
-                    Accounts[dbid][column]=value
+
+    function loadCache(i)
+        local v = cached_tables[i]
+        if not v then print("cache işlemi bitti") return end
+        tables_cache[v] = All:extend(v)
+
+        dbQuery(function(qh,tablename,tableindex)
+                local res, rows, err = dbPoll(qh, 0)
+                for index, row in ipairs(res) do
+                    local dbid = tonumber(row.id)
+                    tables_cache[tablename][dbid] = {}
+                    for column, value in pairs(row) do
+                        if not tables_cache[tablename][0][column] then tables_cache[tablename][0][column] = true end
+                        if value then
+                            tables_cache[tablename][dbid][column]=value
+                        end
+                    end
                 end
-            end
-            Accounts.databaseLoaded=true
-        end,
-    conn, "SELECT * FROM accounts")
-
-    dbQuery(
-        function(qh)
-            local res, rows, err = dbPoll(qh, 0)
-            for index, row in ipairs(res) do
-                local dbid = tonumber(row.id)
-                Characters[dbid]={}
-                for column, value in pairs(row) do
-                    if not Characters[0][column] then Characters[0][column] = true end
-                    Characters[dbid][column]=value
-                end
-            end
-            Characters.databaseLoaded=true
-        end,
-    conn, "SELECT * FROM characters")
-
-    dbQuery(
-        function(qh)
-            local res, rows, err = dbPoll(qh, 0)
-            for index, row in ipairs(res) do
-                local dbid = tonumber(row.id)
-                Items[dbid]={}
-                for column, value in pairs(row) do
-                    if not Items[0][column] then Items[0][column] = true end
-                    Items[dbid][column]=value
-                end
-            end
-            Items.databaseLoaded=true
-        end,
-    conn, "SELECT * FROM items")
-
-
-    --// Interiors
-
-    --// Vehicles
-    
-
-    function getAccountData(target, key)
-        local app = Accounts:get(target, key)
-        return app
+                tables_cache[tablename].databaseLoaded = true
+                loadCache(tableindex+1)
+        end,{v,i},conn,"SELECT * FROM "..v)
     end
+    loadCache(1)    
 
+    --// set and get functions
+    function getAccountData(target, key)
+        return tables_cache["accounts"]:get(target, key)
+    end
     function setAccountData(target, key, value)
-        if Accounts:set(target, key, value) then
-            return true
-        else
-            return false
-        end
+        return tables_cache["accounts"]:set(target, key, value)
     end
 
     function getCharacterData(target, key)
-        local app = Characters:get(target, key)
-        return app
+        return tables_cache["characters"]:get(target, key)
     end
-
     function setCharacterData(target, key, value)
-        if Characters:set(target, key, value) then
-            return true
-        else
-            return false
-        end
-    end
-
-    function getItemData(target, key)
-        local app = Items:get(target, key)
-        return app
-    end
-
-    function setItemData(target, key, value)
-        if Items:set(target, key, value) then
-            return true
-        else
-            return false
-        end
+        return tables_cache["characters"]:set(target, key, value)
     end
 
     function getInteriorData(taget, key)
-        local app = Interiors:get(target, key)
-        return app
+        return tables_cache["interiors"]:get(target, key)
     end
-
     function setInteriorData(target, key, value)
-        if Interiors:set(target, key, value) then
-            return true
-        else
-            return false
-        end
+        return tables_cache["interiors"]:set(target, key, value)
     end
 
     function getVehicleData(target, key)
-        local app = Vehicles:get(target, key)
-        return app
+        return tables_cache["vehicles"]:get(target, key)
     end
-
     function setVehicleData(target, key, value)
-        if Vehicles:set(target, key, value) then
-            return true
-        else
-            return false
-        end
+        return tables_cache["vehicles"]:set(target, key, value)
     end
 
 end
