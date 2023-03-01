@@ -3,4 +3,6 @@
     <oop>true</oop>
     <script src='connection.lua' type='server'/>
     <export function='getConn' type='server'/>
+    <export function='newConnect' type='server'/>
+    <export function='getNewID' type='server'/>
 </meta>
