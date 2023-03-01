@@ -1,4 +1,7 @@
-local conn = exports.mysql:getConn()
+conn = exports.mysql:newConnect("cache","suppress=1060")
+
+-- Tüm verilerin tutulcağı tablo. tables_cache["accounts"]
+tables_cache = {}
 function class(name)
     local c = {}
     c[0] = {}
@@ -35,10 +38,12 @@ function class(name)
 
         if not self[target] then
             self[target] = {}
+            dbExec(conn, "INSERT INTO `"..(self.__type).."` (id) VALUES(?)", target)
         end
 
         if (self[0] and self[0][key] == nil) then
             self[0][key] = true
+            dbExec(conn, "ALTER TABLE `"..(self.__type).."` ADD `??` text", key)
         end
 
         if (value ~= nil) then
