@@ -10,6 +10,22 @@
     <script src='ui/index.lua' type='client' cache='false' />
     <script src='ui/use.lua' type='server' />
 
+
+    <export function="hasItem" type="server"/>
+    <export function="getItems" type="server"/>
+    <export function="giveItem" type="server"/>
+    <export function="takeItem" type="server"/>
+    <export function="setItemValue" type="server"/>
+    <export function="setItemCount" type="server"/>
+    <export function="getItemValue" type="server"/>
+    <export function="getItemCount" type="server"/>
+
+
+    <export function="getItems" type="client"/>
+    <export function="hasItem" type="client"/>
+    <export function="getItemValue" type="client"/>
+
+
     <file src='assets/audio/bag.wav' />
     <file src='assets/images/null.png' />
     <file src='assets/images/wallet.png' />

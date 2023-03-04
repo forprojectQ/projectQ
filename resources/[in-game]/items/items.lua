@@ -8,7 +8,6 @@ list = {
             stack (true/false) (true ise, aynı id ve value' ile item verildiği zaman stack olur.)
             tip (yazı) (itemi kullanırken item tipine göre olaylar yapmak için.),
         }
-
     ]]
     [5] = {'Kızartma', 2, 0.1, false, true, 'FOOD'},
     [6] = {'Hamburger', 2, 0.1, false, true, 'FOOD'},
@@ -45,7 +44,6 @@ function getItemDefaultValue(itemID)
     if not tonumber(itemID) then return false end
     local info = list[itemID]
     if not info then return false end
-    -- eğer giveItem yapılırken value verilmişse verilen valueyi döndür
     local tip = info[6]
     -- yiyecek ve içecek kategorilerinde value default olarak 100.
     if tip == "FOOD" or tip == "DRINK" then
