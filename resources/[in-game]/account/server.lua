@@ -51,7 +51,8 @@ function createCharacter(name, height, weight, age, gender)
         model = 93
         walk = 131
     end
-    dbExec(conn, "INSERT INTO characters SET account='"..(source:getData('account.id')).."', name='"..(name).."', age='"..(tonumber(age)).."', height='"..(tonumber(height)).."', weight='"..(tonumber(weight)).."', gender='"..(tonumber(gender)).."', model='"..(tonumber(model)).."', walk='"..(tonumber(walk)).."'")
+    local nextID = exports.mysql:getNewID("characters")
+    dbExec(conn, "INSERT INTO characters SET id='"..(nextID).."', account='"..(source:getData('account.id')).."', name='"..(name).."', age='"..(tonumber(age)).."', height='"..(tonumber(height)).."', weight='"..(tonumber(weight)).."', gender='"..(tonumber(gender)).."', model='"..(tonumber(model)).."', walk='"..(tonumber(walk)).."'")
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
@@ -64,7 +65,7 @@ function createCharacter(name, height, weight, age, gender)
                 end
             end
         end,
-    conn, "SELECT * FROM characters WHERE name = ?", name)
+    conn, "SELECT * FROM characters WHERE id = ?", nextID)
     loginStep(source)
 end
 addEvent("auth.create.character", true)
@@ -140,7 +141,8 @@ function register(username, password, mail)
                                 triggerClientEvent(player, "auth.notify", player, "bu hesap ismi kullanılıyor, ("..row['name']..")")
                             end
                         else
-                            dbExec(conn, "INSERT INTO accounts SET name='"..(username).."', password='"..(password).."', serial='"..(player.serial).."'")
+                            local nextID = exports.mysql:getNewID("accounts")
+                            dbExec(conn, "INSERT INTO accounts SET id='"..(nextID).."', name='"..(username).."', password='"..(password).."', serial='"..(player.serial).."'")
                             dbQuery(
                                 function(qh)
                                     local res, rows, err = dbPoll(qh, 0)
@@ -153,7 +155,7 @@ function register(username, password, mail)
                                         end
                                     end
                                 end,
-                            conn, "SELECT * FROM accounts WHERE name = ?", username)
+                            conn, "SELECT * FROM accounts WHERE id = ?", nextID)
                             triggerClientEvent(player, "auth.notify", player, "başarıyla kayıt oldunuz, ("..username..")")
                         end
                     end,

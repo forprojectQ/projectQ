@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : database
 Source Server Version : 80017
 Source Host           : localhost:3306
-Source Database       : roleplay
+Source Database       : mta
 
 Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-02-24 01:33:13
+Date: 2023-03-04 21:59:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -19,14 +19,14 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE `accounts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `password` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `admin` int(11) NOT NULL DEFAULT '0',
   `serial` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `limit` int(11) NOT NULL DEFAULT '3',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of accounts
@@ -37,7 +37,7 @@ CREATE TABLE `accounts` (
 -- ----------------------------
 DROP TABLE IF EXISTS `characters`;
 CREATE TABLE `characters` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `account` int(11) NOT NULL DEFAULT '0',
   `name` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `pos` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,5,0,0',
@@ -52,7 +52,7 @@ CREATE TABLE `characters` (
   `dead` int(1) NOT NULL DEFAULT '0',
   `walk` int(11) NOT NULL DEFAULT '128',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of characters
