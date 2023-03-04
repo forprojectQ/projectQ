@@ -6,15 +6,14 @@ addEventHandler('load.items.client',root,function(results)
     items = results
 end)
 
-function getItems(player)
-    return items[player]
+function getItems()
+    return items
 end
 
-function hasItem(player,item,value)
-    if player and tonumber(item) then
+function hasItem(item,value)
+    if  tonumber(item) then
         local value = value or 0
-        local data = items[player] or {}
-        for i, v in pairs(data) do
+        for i, v in pairs(items) do
             if v[1] == item and v[2] == value then
                 return i, v[1], v[2], v[3]
             end
@@ -23,15 +22,15 @@ function hasItem(player,item,value)
     end
 end
 
-function getItemValue(player,item,value)
+function getItemValue(item,value)
     local value = value or 0
-    local _, _, itemValue, _ = hasItem(player,item,value)
+    local _, _, itemValue, _ = hasItem(item,value)
     return itemValue or 0
 end
 
-function getItemCount(player,item,value)
+function getItemCount(item,value)
     local value = value or 0
-    local _, _, _, itemCount = hasItem(player,item,value)
+    local _, _, _, itemCount = hasItem(item,value)
     return itemCount or 0
 end
 

@@ -13,7 +13,7 @@ local getlastID = function()
 end
 
 local refresh = function(player)
-    triggerClientEvent(player,'load.items.client',player,items)
+    triggerClientEvent(player,'load.items.client',player,items[player])
 end
 
 function loadItems(player)
@@ -58,13 +58,14 @@ end
 
 function giveItem(player,item,value,count)
     local count = count or 1
-    local value = value or 0
+    local value = value or getItemDefaultValue(item)
     local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
-    if itemIndex then
+    -- aynı id ve value' olan bir item envanterinde varsa ve o item stack yapılıyor ise, count arttır.
+    if itemIndex and isStackableItem(item) then
         local newCount = itemCount + count
         items[player][itemIndex] = {tonumber(item),tonumber(value),tonumber(newCount)}
         dbExec(mysql:getConn(), "UPDATE items SET count='"..(newCount).."', value='"..(value).."' WHERE id=?", itemIndex)
-    else
+    else -- eğer item yoksa veya item varsa ama stack yapılmıyosa yeni item oalrak ver
         local id = getlastID()
         items[player][id] = {tonumber(item),tonumber(value),tonumber(count)}
         dbExec(mysql:getConn(), "INSERT INTO items SET id='"..(id).."', owner='"..(player:getData('dbid')).."', item='"..(tonumber(item)).."', value='"..(value).."', count='"..(tonumber(count)).."'")
