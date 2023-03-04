@@ -35,14 +35,20 @@ function getItemType(itemID)
     end
 end
 
+function isStackableItem(itemID)
+    if tonumber(itemID) then
+        return list[itemID][5]
+    end
+end
+
 function getItemDefaultValue(itemID)
     if not tonumber(itemID) then return false end
     local info = list[itemID]
     if not info then return false end
     -- eğer giveItem yapılırken value verilmişse verilen valueyi döndür
-    local category = info[5]
+    local tip = info[6]
     -- yiyecek ve içecek kategorilerinde value default olarak 100.
-    if category == "FOOD" or category == "DRINK" then
+    if tip == "FOOD" or tip == "DRINK" then
         return 100
     end   
     return 0 
