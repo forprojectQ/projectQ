@@ -11,7 +11,7 @@ list = {
     ]]
     [5] = {'Kızartma', 2, 0.1, false, true, 'FOOD'},
     [6] = {'Hamburger', 2, 0.1, false, true, 'FOOD'},
-    [7] = {'Sosisli', 2, 0.1, false,, true, 'FOOD'},
+    [7] = {'Sosisli', 2, 0.1, false, true, 'FOOD'},
     [8] = {'Su', 2, 0.1, false, true, 'DRINK'},
     [9] = {'Kola', 2, 0.1, false, true, 'DRINK'},
 }
