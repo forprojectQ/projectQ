@@ -8,20 +8,8 @@ local addEventHandler = addEventHandler
 local mysql = exports.mysql
 local items = {}
 
-local getBigID = function()
-    local query = dbQuery(mysql:getConn(), "SELECT `id` FROM items ORDER BY id DESC LIMIT 1")
-	local result = dbPoll(query, -1)
-	if #result > 0 then
-		return tonumber(result[1]["id"]) or 1
-    end
-	return 1
-end
-
-local lastID = getBigID()
-
 local getlastID = function()
-    lastID = lastID + 1
-    return lastID
+    return mysql:getNewID("items")
 end
 
 local refresh = function(player)
