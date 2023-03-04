@@ -114,7 +114,7 @@ function ui:refresh()
     self.items = {}
     for index, value in pairs(items) do
         if category(value[1]) == current then
-            table.insert(self.items, {value[1], self:getImage(value[1]), getItemCount(localPlayer, value[1])})
+            table.insert(self.items, {value, self:getImage(value[1]), getItemCount(value[1],value[2])})
             if index % 4 == 0 then
                 size = size + 55
             end

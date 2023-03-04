@@ -30,7 +30,7 @@ function loadItems(player)
                             items[player][row.id] = {tonumber(row.item),tonumber(row.value),tonumber(row.count)}
                         end
                     end
-                    triggerClientEvent(player,'load.items.client',player,items)
+                    triggerClientEvent(player,'load.items.client',player,items[player])
                 end,
             {player}, mysql:getConn(), "SELECT * FROM items WHERE owner = ?", player:getData('dbid'))
         end
@@ -57,6 +57,7 @@ function getItems(player)
 end
 
 function giveItem(player,item,value,count)
+    if not list[item] then return false end
     local count = count or 1
     local value = value or getItemDefaultValue(item)
     local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
@@ -71,6 +72,7 @@ function giveItem(player,item,value,count)
         dbExec(mysql:getConn(), "INSERT INTO items SET id='"..(id).."', owner='"..(player:getData('dbid')).."', item='"..(tonumber(item)).."', value='"..(value).."', count='"..(tonumber(count)).."'")
     end
     refresh(player)
+    return true
 end
 
 function takeItem(player,item,value,count)
@@ -97,11 +99,14 @@ function takeItem(player,item,value,count)
     end
 end
 
-function setItemValue(player,item,value)
+function setItemValue(player,itemIndex,value)
+    if not items[player] then return false end
+    if not items[player][itemIndex] then return false end
+    local info = items[player][itemIndex]
     local value = value or 0
-    local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
+    local itemID,itemValue, itemCount = unpack({info[1],info[2],info[3]})
     if itemIndex then
-        items[player][itemIndex] = {tonumber(item),tonumber(value),tonumber(itemCount)}
+        items[player][itemIndex] = {tonumber(itemID),tonumber(value),tonumber(itemCount)}
         dbExec(mysql:getConn(), "UPDATE items SET value='"..(value).."' WHERE id=?", itemIndex)
         refresh(player)
         return true
@@ -110,7 +115,7 @@ function setItemValue(player,item,value)
     end
 end
 
-function setItemCount(player,item,count)
+function setItemCount(player,item,value,count)
     local count = count or 1
     local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
     if itemIndex then
