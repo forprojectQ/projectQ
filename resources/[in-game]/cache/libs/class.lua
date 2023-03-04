@@ -1,4 +1,4 @@
-conn = exports.mysql:newConnect("cache","suppress=1060")
+conn = exports.mysql:newConnect("cache","suppress=1060,1062")
 
 -- Tüm verilerin tutulcağı tablo. tables_cache["accounts"]
 tables_cache = {}
