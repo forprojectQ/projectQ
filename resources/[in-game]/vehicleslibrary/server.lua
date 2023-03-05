@@ -1,8 +1,4 @@
-local mysql = exports.mysql
-local conn = mysql:getConn()
-local getlastID = function()
-    return mysql:getNewID("vehicles_library")
-end
+local conn = exports.mysql:getConn()
 
 addCommandHandler("vehlib", function(player)
     if player:getData("online") then
@@ -33,8 +29,7 @@ end)
 
 addEvent("vehicle.library.create", true)
 addEventHandler("vehicle.library.create", root, function(brand, model, year, price, tax, gta)
-    local id = getlastID()
-    local query = dbExec(conn, "INSERT INTO vehicles_library SET id='"..(id).."', brand='"..(brand).."', model='"..(model).."', year='"..(year).."', price='"..(price).."', tax='"..(tax).."', gta='"..(gta).."'")
+    local query = dbExec(conn, "INSERT INTO vehicles_library SET brand='"..(brand).."', model='"..(model).."', year='"..(year).."', price='"..(price).."', tax='"..(tax).."', gta='"..(gta).."'")
     if query then
         source:outputChat("[!]#ffffff Araç veri tabanına başarılı bir şekilde kaydedildi.", 111, 72, 201, true)
     else
