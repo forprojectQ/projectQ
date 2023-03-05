@@ -12,7 +12,7 @@ mysql.port = 3306
 
 -- ID sorgusu yapılcak table isimleri.
 mysql.id_tables = {
-    "accounts","characters","items"
+    "accounts","characters","items","vehicles_library"
 }
 -- idlerin depolancağı tablo.
 mysql.id_cache = {}
