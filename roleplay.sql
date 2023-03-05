@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : database
 Source Server Version : 80017
 Source Host           : localhost:3306
-Source Database       : mta
+Source Database       : roleplay
 
 Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-03-04 21:59:03
+Date: 2023-03-05 08:56:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -73,4 +73,23 @@ CREATE TABLE `items` (
 
 -- ----------------------------
 -- Records of items
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `vehicles_library`
+-- ----------------------------
+DROP TABLE IF EXISTS `vehicles_library`;
+CREATE TABLE `vehicles_library` (
+  `id` bigint(11) DEFAULT NULL,
+  `gta` int(11) DEFAULT NULL,
+  `brand` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `model` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `year` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `price` int(11) DEFAULT NULL,
+  `tax` int(11) DEFAULT NULL,
+  `handling` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of vehicles_library
 -- ----------------------------
