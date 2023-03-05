@@ -1,0 +1,7 @@
+<meta>
+    <script src="client.lua" type="client" cache="false"/>
+
+    <file src="assets/cursor.png"/>
+
+    <oop>true</oop>
+</meta>
