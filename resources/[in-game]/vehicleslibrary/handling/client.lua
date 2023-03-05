@@ -61,6 +61,7 @@ function editWindow(id)
     handlingWindow = GuiWindow(10, screen.y-460, 400, 450, "Araç Özellikleri ("..dbid..")", false)
     handlingWindow:setSizable(false)
     handlingList = GuiGridList(5, 25, 385, 370, false, handlingWindow)
+    handlingList:setSortingEnabled(false)
     handlingName = handlingList:addColumn("Özellik", 0.70)
     handlingValue = handlingList:addColumn("Değer", 0.2)
     for _, value in ipairs(options) do
@@ -102,8 +103,7 @@ end
 addEventHandler("onClientGUIClick", resourceRoot, function()
     if source == handlingClose then
         closeHandling()
-        local veh = localPlayer.vehicle
-        triggerServerEvent("vehicle.library.handling.stop", localPlayer, veh)
+        triggerServerEvent("vehicle.library.handling.stop", localPlayer)
     elseif source == saveEdit then
         local getNewValue = newValue.text
         if max and option then
