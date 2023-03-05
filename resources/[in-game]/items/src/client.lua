@@ -4,6 +4,7 @@ addEvent('load.items.client',true)
 addEventHandler('load.items.client',root,function(results)
     local results = results or {}
     items = results
+    iprint("load.items.client",items)
 end)
 
 function getItems()
