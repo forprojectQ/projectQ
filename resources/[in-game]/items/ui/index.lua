@@ -12,6 +12,11 @@ local getCursorPosition = getCursorPosition
 local getKeyState = getKeyState
 local getTickCount = getTickCount
 local triggerServerEvent = triggerServerEvent
+local cursorX, cursorY
+
+local bgColor = tocolor(15, 15, 15, 235)
+local hoverBgColor = tocolor(25, 25, 25, 235)
+local progColor = tocolor(66, 135, 245)
 
 function ui:init()
     self._function = {
@@ -33,11 +38,8 @@ end
 function ui:display()
     local x,y,w,h = self.screen.x-70,self.screen.y/2-250/2,60,250
     local boxX, boxY, boxW, boxH = x+5, y+20, 50, 50
-    local bgColor = tocolor(15, 15, 15, 235)
-    local hoverBgColor = tocolor(25, 25, 25, 235)
     local newX,newY = 55,20
     local cursorShowing = isCursorShowing()
-    local cursorX, cursorY
     if cursorShowing then
         cursorX, cursorY = getCursorPosition()
         cursorX, cursorY = cursorX*self.screen.x, cursorY*self.screen.y
@@ -56,6 +58,9 @@ function ui:display()
         end
         dxDrawText('x'..value[3],self.screen.x-1-newX,y+newY,nil,nil,tocolor(155,155,155,235),1,self.font)
         dxDrawImage(self.screen.x-1+10-newX,y+10+newY,30,30,value[2])
+        if value[4] == "FOOD" or value[4] == "DRINK" then 
+            dxDrawRectangle(self.screen.x-1-newX,y+newY+boxH-5,math.min(boxW/100)*value[1][2],boxW),5,progColor)
+        end
         newY = newY + 52
         if index % 4 == 0 then
             newY = 20
@@ -114,7 +119,12 @@ function ui:refresh()
     self.items = {}
     for index, value in pairs(items) do
         if category(value[1]) == current then
-            table.insert(self.items, {value, self:getImage(value[1]), getItemCount(value[1],value[2])})
+            table.insert(self.items, {
+                value, 
+                self:getImage(value[1]), 
+                getItemCount(value[1],value[2]),
+                getItemType(value[1]),
+            })
             if index % 4 == 0 then
                 size = size + 55
             end

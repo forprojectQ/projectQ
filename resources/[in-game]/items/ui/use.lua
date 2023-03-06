@@ -6,7 +6,7 @@ functions = {
         local new_value = tonumber(itemValue) - 25
         
         if new_value <= 0 then 
-            takeItem(player, itemID, itemValue, 1)
+            takeItemFromIndex(player,itemIndex,1)
             if itemCount > 1 then setItemValue(player,itemIndex,100) end
         else 
             setItemValue(player,itemIndex,new_value)
@@ -26,7 +26,7 @@ functions = {
         local new_value = tonumber(itemValue) - 25
 
         if new_value <= 0 then 
-            takeItem(player, itemID, itemValue, 1)
+            takeItemFromIndex(player,itemIndex,1)
             if itemCount > 1 then setItemValue(player,itemIndex,100) end
         else 
             setItemValue(player,itemIndex,new_value)

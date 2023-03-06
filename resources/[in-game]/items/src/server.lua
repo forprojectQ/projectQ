@@ -30,9 +30,9 @@ function loadItems(player)
                             items[player][row.id] = {tonumber(row.item),tonumber(row.value),tonumber(row.count)}
                         end
                     end
-                    triggerClientEvent(player,'load.items.client',player,items[player])
+                    refresh(player)
                 end,
-            {player}, mysql:getConn(), "SELECT * FROM items WHERE owner = ?", player:getData('dbid'))
+            {player}, mysql:getConn(), "SELECT * FROM items WHERE owner=? AND type=?", getID(player), getType(player))
         end
     end
 end
@@ -40,8 +40,7 @@ end
 function hasItem(player,item,value)
     if player and tonumber(item) then
         local value = value or 0
-        local data = items[player] or {}
-        for i, v in pairs(data) do
+        for i, v in pairs(items[player] or {}) do
             if v[1] == item and v[2] == value then
                 return i, v[1], v[2], v[3]
             end
@@ -51,9 +50,7 @@ function hasItem(player,item,value)
 end
 
 function getItems(player)
-    if player then
-        return items[player] or {}
-    end
+    return items[player] or {}
 end
 
 function giveItem(player,item,value,count)
@@ -64,12 +61,12 @@ function giveItem(player,item,value,count)
     -- aynı id ve value' olan bir item envanterinde varsa ve o item stack yapılıyor ise, count arttır.
     if itemIndex and isStackableItem(item) then
         local newCount = itemCount + count
-        items[player][itemIndex] = {tonumber(item),tonumber(value),tonumber(newCount)}
+        items[player][itemIndex] = {itemID,itemValue,tonumber(newCount)}
         dbExec(mysql:getConn(), "UPDATE items SET count='"..(newCount).."', value='"..(value).."' WHERE id=?", itemIndex)
     else -- eğer item yoksa veya item varsa ama stack yapılmıyosa yeni item oalrak ver
         local id = getlastID()
-        items[player][id] = {tonumber(item),tonumber(value),tonumber(count)}
-        dbExec(mysql:getConn(), "INSERT INTO items SET id='"..(id).."', owner='"..(player:getData('dbid')).."', item='"..(tonumber(item)).."', value='"..(value).."', count='"..(tonumber(count)).."'")
+        items[player][id] = {tonumber(item),tonumber(value) or value,tonumber(count)}
+        dbExec(mysql:getConn(), "INSERT INTO items SET id='"..(id).."', type='"..getType(player).."', owner='"..getID(player).."', item='"..(tonumber(item)).."', value='"..(value).."', count='"..(tonumber(count)).."'")
     end
     refresh(player)
     return true
@@ -80,33 +77,40 @@ function takeItem(player,item,value,count)
     local value = value or 0
     local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
     if itemIndex then
-        local newCount = itemCount - count
-        if newCount < 0 then
-            return false
-        end
-        if newCount == 0 then
-            items[player][itemIndex] = nil
-            dbExec(mysql:getConn(), "DELETE FROM items WHERE id=?",itemIndex)
-            collectgarbage('collect')
-        else
-            items[player][itemIndex] = {tonumber(item),tonumber(value),tonumber(newCount)}
-            dbExec(mysql:getConn(), "UPDATE items SET count='"..(newCount).."' WHERE id=?", itemIndex)
-        end
-        refresh(player)
-        return true
+        return takeItemFromIndex(player,itemIndex,count)
     else
         return false
     end
 end
+
+function takeItemFromIndex(player,itemIndex,count)
+    if not items[player] then return false end
+    if not items[player][itemIndex] then return false end
+    local itemCount = items[player][itemIndex][3]
+    local newCount = itemCount - count
+    if newCount < 0 then
+        return false
+    end
+    if newCount == 0 then
+        items[player][itemIndex] = nil
+        dbExec(mysql:getConn(), "DELETE FROM items WHERE id=?",itemIndex)
+        collectgarbage('collect')
+    else
+        items[player][itemIndex][3]=tonumber(newCount)
+        dbExec(mysql:getConn(), "UPDATE items SET count='"..(newCount).."' WHERE id=?", itemIndex)
+    end
+    refresh(player)
+    return true
+
+end    
 
 function setItemValue(player,itemIndex,value)
     if not items[player] then return false end
     if not items[player][itemIndex] then return false end
     local info = items[player][itemIndex]
     local value = value or 0
-    local itemID,itemValue, itemCount = unpack({info[1],info[2],info[3]})
     if itemIndex then
-        items[player][itemIndex] = {tonumber(itemID),tonumber(value),tonumber(itemCount)}
+        items[player][itemIndex][2] = tonumber(value) or value
         dbExec(mysql:getConn(), "UPDATE items SET value='"..(value).."' WHERE id=?", itemIndex)
         refresh(player)
         return true
@@ -116,10 +120,13 @@ function setItemValue(player,itemIndex,value)
 end
 
 function setItemCount(player,item,value,count)
-    local count = count or 1
-    local itemIndex,itemID,itemValue, itemCount = hasItem(player,item,value)
+    local count = tonumber(count) or 1
+    local itemIndex,itemID,itemValue,itemCount = hasItem(player,item,value)
     if itemIndex then
-        return takeItem(player,item,itemValue,count)
+        items[player][itemIndex][3] = count
+        dbExec(mysql:getConn(), "UPDATE items SET count='"..(value).."' WHERE id=?", itemIndex)
+        refresh(player)
+        return true
     else
         return false
     end
@@ -136,6 +143,30 @@ function getItemCount(player,item,value)
     local _, _, _, itemCount = hasItem(player,item,value)
     return itemCount or 0
 end
+
+
+
+
+
+
+function getID(element)
+    local element_type = element:getType()
+    if element_type == "player" or element_type == "vehicle" then
+        return element:getData("dbid")
+    end    
+	return 0
+end
+function getType(element)
+    local element_type = element:getType()
+	if element_type == "player" then
+		return 1
+	elseif element_type == "vehicle" then
+		return 2
+	end
+    return 0
+end
+
+
 
 addEvent('load.items.server', true)
 addEventHandler('load.items.server', root, function()
