@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2023-03-06 01:58:52
+Date: 2023-03-06 08:40:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,12 +58,14 @@ CREATE TABLE `characters` (
 -- Records of characters
 -- ----------------------------
 
+
 -- ----------------------------
 -- Table structure for `items`
 -- ----------------------------
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
   `id` bigint(11) NOT NULL,
+  `type` int(11) DEFAULT NULL,
   `owner` bigint(11) DEFAULT NULL,
   `item` int(11) DEFAULT NULL,
   `value` text DEFAULT NULL,
