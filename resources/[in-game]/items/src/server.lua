@@ -37,6 +37,10 @@ function loadItems(player)
     end
 end
 
+function clearItems(player)
+    items[player] = nil
+end   
+
 function hasItem(player,item,value)
     if player and tonumber(item) then
         local value = value or 0
@@ -167,6 +171,12 @@ function getType(element)
 end
 
 
+addEventHandler("onPlayerQuit",root,function()
+    clearItems(source)
+end)
+addEventHandler("onElementDestroy",root,function()
+    clearItems(source)
+end)
 
 addEvent('load.items.server', true)
 addEventHandler('load.items.server', root, function()

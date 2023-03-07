@@ -59,7 +59,7 @@ function ui:display()
         dxDrawText('x'..value[3],self.screen.x-1-newX,y+newY,nil,nil,tocolor(155,155,155,235),1,self.font)
         dxDrawImage(self.screen.x-1+10-newX,y+10+newY,30,30,value[2])
         if value[4] == "FOOD" or value[4] == "DRINK" then 
-            dxDrawRectangle(self.screen.x-1-newX,y+newY+boxH-5,math.min(boxW/100)*value[1][2],boxW),5,progColor)
+            dxDrawRectangle(self.screen.x-1-newX,y+newY+boxH-5,math.min((boxW/100)*value[1][2],boxW),5,progColor)
         end
         newY = newY + 52
         if index % 4 == 0 then
