@@ -24,6 +24,7 @@
     <export function="getItems" type="client"/>
     <export function="hasItem" type="client"/>
     <export function="getItemValue" type="client"/>
+    <export function="getItemCount" type="client"/>
 
 
     <file src='assets/audio/bag.wav' />
