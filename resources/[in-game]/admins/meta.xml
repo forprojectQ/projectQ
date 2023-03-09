@@ -2,6 +2,6 @@
     <oop>true</oop>
     <script src="commands.lua" type="server"/>
     
-    <script src="client.lua" type="client" cache="false"/>
-    <script src="server.lua" type="server"/>
+    <script src="src/client.lua" type="client" cache="false"/>
+    <script src="src/server.lua" type="server"/>
 </meta>
