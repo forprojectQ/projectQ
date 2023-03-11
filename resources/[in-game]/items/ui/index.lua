@@ -142,19 +142,15 @@ function ui:getImage(itemID)
 end
 
 function ui:roundedRectangle(x, y, width, height, radius, color)
-    local radius = radius or 6
-    local color = color or tocolor(255, 255, 255, 255)
-    dxDrawRectangle(x+radius, y, width-(radius*2), height, color)
-    dxDrawRectangle(x, y+radius, radius, height-(radius*2), color)
-    dxDrawRectangle(x+width-radius, y+radius, radius, height-(radius*2), color)
-    local corners = {
-        { x+radius, y+radius },
-        { x+width-radius, y+radius },
-        { x+radius, y+height-radius },
-    }
-    for i, corner in ipairs(corners) do
-        dxDrawCircle(corner[1], corner[2], radius, 180*(i-1), 180*i, color, color, 32)
-    end
+    local diameter = radius * 2
+    dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
+    dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
+    dxDrawCircle(x + radius, y + height - radius, radius, 90, 180, color)
+    dxDrawCircle(x + width - radius, y + height - radius, radius, 0, 90, color)
+    dxDrawRectangle(x + radius, y, width - diameter, height, color)
+    dxDrawRectangle(x, y + radius, radius, height - diameter, color)
+    dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
+    dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
 end
 
 ui:new()

@@ -10,7 +10,7 @@ commands = {
     {
         command = "ornekserialkomut",
         -- bu komutu kullanabilecek serial adresleri
-        serial = "31E905B109F9F8F359BB2DE44BA66742,62E905B109F9F8F359BB2DE44BA66762",
+        serial = "31E905B109F9F8F359BB2DE44BA66742,B5D767EFFB542805FE49564D79C68A54",
         func = function(player, args)
             iprint(player)
         end,
