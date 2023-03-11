@@ -11,7 +11,7 @@ function command_function(player, command, ...)
     if not cmd then return end
     local username = cache:getAccountData(player:getData("account.id"), "name")
     local serial = player.serial
-    local level = player:getData("admin") or 0
+    local level = cache:getAccountData(player:getData("account.id"), "admin") or 0
 
     if cmd.access and level < cmd.access then return end
     if cmd.account and cmd.account:match(username) ~= username then return end
