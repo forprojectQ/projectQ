@@ -1,7 +1,9 @@
 <meta>
     <script src="client.lua" type="client" cache="false"/>
 
-    <file src="assets/cursor.png"/>
+    <file src="assets/arrow.png"/>
+    <file src="assets/hand.png"/>
 
+	<export function="setPointer" type="client"/>
     <oop>true</oop>
 </meta>

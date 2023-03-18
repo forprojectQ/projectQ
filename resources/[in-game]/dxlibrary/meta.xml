@@ -1,0 +1,5 @@
+<meta>
+    <oop>true</oop>
+    <script src="library.lua" type="client" cache="false"/>
+    <export function="loadFunctions" type="client"/>
+</meta>

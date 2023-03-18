@@ -24,6 +24,8 @@ local resources = {
     launcher:new("items", 5),
     launcher:new("admins", 6),
     launcher:new("vehicleslibrary", 7),
+    launcher:new("cursor", 8),
+    launcher:new("dxlibrary", 9),
 }
 
 table.sort(resources, function(a,b) return a.priority < b.priority end)
