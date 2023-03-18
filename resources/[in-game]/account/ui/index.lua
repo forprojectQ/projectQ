@@ -1,3 +1,4 @@
+assert(loadstring(exports.dxlibrary:loadFunctions()))()
 local ipairs = ipairs
 local getKeyState = getKeyState
 local dxDrawText = dxDrawText
@@ -63,16 +64,7 @@ end
 
 function account:render()
     dxDrawRectangle(0, 0, self.screen.x, self.screen.y, tocolor(25,25,25))
-
-    --// CURSOR FUNCTIONS
-    local cursorShowing = isCursorShowing()
-    local cursorX, cursorY
-    if cursorShowing then
-        cursorX, cursorY = getCursorPosition()
-        cursorX, cursorY = cursorX*self.screen.x, cursorY*self.screen.y
-    end
-
-    if self.load <= 750 then
+    if self.load <= 550 then
         self.load = self.load + 5
         dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
     else
@@ -80,12 +72,12 @@ function account:render()
             local newY = 0
             local order = 1
             if self.selected == order then
-                self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-                if cursorShowing and cursorX >= self.screen.x/2-240/2 and cursorX <= self.screen.x/2-240/2+240 and cursorY >= self.screen.y/2-30/2+newY and cursorY <= self.screen.y/2-30/2+newY+30 then
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -94,7 +86,7 @@ function account:render()
                         end
                     end
                 else
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.user, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -103,7 +95,7 @@ function account:render()
             local newY = newY + 33
             local order = 2
             if self.selected == order then
-                self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 if self.show then
                     textSize = dxGetTextWidth(self.texts.password, 1, self.roboto)
                 else
@@ -111,8 +103,8 @@ function account:render()
                 end
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-                if cursorShowing and cursorX >= self.screen.x/2-240/2 and cursorX <= self.screen.x/2-240/2+240 and cursorY >= self.screen.y/2-30/2+newY and cursorY <= self.screen.y/2-30/2+newY+30 then
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -121,7 +113,7 @@ function account:render()
                         end
                     end
                 else
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.key, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -139,7 +131,7 @@ function account:render()
             end
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+215 and cursorX <= self.screen.x/2-240/2+215+width and cursorY >= self.screen.y/2-30/2+newY+6 and cursorY <= self.screen.y/2-30/2+newY+6+height then
+			if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(icon, self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -155,7 +147,7 @@ function account:render()
 
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+240+10 and cursorX <= self.screen.x/2-240/2+240+10+width and cursorY >= self.screen.y/2-30/2+newY+7 and cursorY <= self.screen.y/2-30/2+newY+7+height then
+			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+7, width, height) then
                 dxDrawText(self.icons.arrow, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -168,7 +160,7 @@ function account:render()
             local newY = newY - 32
             local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+240+10 and cursorX <= self.screen.x/2-240/2+240+10+width and cursorY >= self.screen.y/2-30/2+newY+6 and cursorY <= self.screen.y/2-30/2+newY+6+height then
+			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(self.icons.plus, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -181,12 +173,12 @@ function account:render()
             local newY = 0
             local order = 1
             if self.selected == order then
-                self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-                if cursorShowing and cursorX >= self.screen.x/2-240/2 and cursorX <= self.screen.x/2-240/2+240 and cursorY >= self.screen.y/2-30/2+newY and cursorY <= self.screen.y/2-30/2+newY+30 then
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+			if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -195,7 +187,7 @@ function account:render()
                         end
                     end
                 else
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.user, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -205,7 +197,7 @@ function account:render()
             local newY = newY + 33
             local order = 2
             if self.selected == order then
-                self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 if self.show then
                     textSize = dxGetTextWidth(self.texts.password, 1, self.roboto)
                 else
@@ -213,8 +205,8 @@ function account:render()
                 end
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-                if cursorShowing and cursorX >= self.screen.x/2-240/2 and cursorX <= self.screen.x/2-240/2+240 and cursorY >= self.screen.y/2-30/2+newY and cursorY <= self.screen.y/2-30/2+newY+30 then
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -223,7 +215,7 @@ function account:render()
                         end
                     end
                 else
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.key, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -241,7 +233,7 @@ function account:render()
             end
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+215 and cursorX <= self.screen.x/2-240/2+215+width and cursorY >= self.screen.y/2-30/2+newY+6 and cursorY <= self.screen.y/2-30/2+newY+6+height then
+			if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(icon, self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -258,12 +250,12 @@ function account:render()
             local newY = newY + 33
             local order = 3
             if self.selected == order then
-                self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 local textSize = dxGetTextWidth(self.texts.email, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-                if cursorShowing and cursorX >= self.screen.x/2-240/2 and cursorX <= self.screen.x/2-240/2+240 and cursorY >= self.screen.y/2-30/2+newY and cursorY <= self.screen.y/2-30/2+newY+30 then
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -272,7 +264,7 @@ function account:render()
                         end
                     end
                 else
-                    self:roundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.mail, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -280,7 +272,7 @@ function account:render()
 
             local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+240+10 and cursorX <= self.screen.x/2-240/2+240+10+width and cursorY >= self.screen.y/2-30/2+newY+6 and cursorY <= self.screen.y/2-30/2+newY+6+height then
+			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(self.icons.plus, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -293,7 +285,7 @@ function account:render()
             local newY = newY - 32
             local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-            if cursorShowing and cursorX >= self.screen.x/2-240/2+240+10 and cursorX <= self.screen.x/2-240/2+240+10+width and cursorY >= self.screen.y/2-30/2+newY+6 and cursorY <= self.screen.y/2-30/2+newY+6+height then
+			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(self.icons.login, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -303,7 +295,7 @@ function account:render()
                 dxDrawText(self.icons.login, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,200), 1, self.awesome)
             end
         elseif self.page == 3 then
-            if self.load <= 750 then
+            if self.load <= 250 then
                 self.load = self.load + 5
                 dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
             else
@@ -351,7 +343,7 @@ function account:render()
                             else
                                 local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
                                 local height = dxGetFontHeight(1, self.awesome)
-                                if cursorShowing and cursorX >= self.screen.x/2+175+width and cursorX <= self.screen.x/2+175+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
+								if isInBox(self.screen.x/2+175+width, self.screen.y/2-60+newY, width, height) then
                                     dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                                         self.tick = getTickCount()
@@ -370,7 +362,7 @@ function account:render()
                 --// CREATE BUTTON
                 local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
                 local height = dxGetFontHeight(1, self.awesome)
-                if cursorShowing and cursorX >= self.screen.x/2+243+width and cursorX <= self.screen.x/2+243+width+width and cursorY >= self.screen.y/2-60+newY and cursorY <= self.screen.y/2-60+newY+height then
+				if isInBox(self.screen.x/2+243+width, self.screen.y/2-60+newY, width, height) then
                     dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -381,11 +373,11 @@ function account:render()
                 end
             end
         elseif self.page == 4 then
-            if self.load <= 350 then
+            if self.load <= 150 then
                 self.load = self.load + 5
                 dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
             else
-                if cursorShowing and cursorX >= 0 and cursorX <= 150 and cursorY >= 0 and cursorY <= self.screen.y then
+				if isInBox(0, 0, 150, self.screen.y) then
                     dxDrawRectangle(0, 0, 150, self.screen.y, tocolor(17,17,17,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -460,7 +452,7 @@ function account:render()
                     local icon = self.icons.male
                     local width = dxGetTextWidth(icon, 1, self.awesomeBig)
                     local height = dxGetFontHeight(1, self.awesomeBig)
-                    if cursorShowing and cursorX >= self.screen.x/2-width/2-100 and cursorX <= self.screen.x/2-width/2-100+width and cursorY >= self.screen.y/2-height/2+50 and cursorY <= self.screen.y/2-height/2+50+height then
+					if isInBox(self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, width, height) then
                         dxDrawText(icon, self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, nil, nil, tocolor(121,179,245,225), 1, self.awesomeBig)
                         if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                             self.tick = getTickCount()
@@ -474,7 +466,7 @@ function account:render()
                     local icon = self.icons.female
                     local width = dxGetTextWidth(icon, 1, self.awesomeBig)
                     local height = dxGetFontHeight(1, self.awesomeBig)
-                    if cursorShowing and cursorX >= self.screen.x/2-width/2+100 and cursorX <= self.screen.x/2-width/2+100+width and cursorY >= self.screen.y/2-height/2+50 and cursorY <= self.screen.y/2-height/2+50+height then
+					if isInBox(self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, width, height) then
                         dxDrawText(icon, self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, nil, nil, tocolor(245,121,245,225), 1, self.awesomeBig)
                         if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                             self.tick = getTickCount()
@@ -626,18 +618,6 @@ function account:notify(result)
         removeEventHandler("onClientRender", root, self._functions.notifyRender)
     end, 2500, 1)
     addEventHandler("onClientRender", root, self._functions.notifyRender, true, "low-99999")
-end
-
-function account:roundedRectangle(x, y, width, height, radius, color)
-    local diameter = radius * 2
-    dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
-    dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
-    dxDrawCircle(x + radius, y + height - radius, radius, 90, 180, color)
-    dxDrawCircle(x + width - radius, y + height - radius, radius, 0, 90, color)
-    dxDrawRectangle(x + radius, y, width - diameter, height, color)
-    dxDrawRectangle(x, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
 end
 
 function account:stop()

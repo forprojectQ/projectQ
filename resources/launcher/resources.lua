@@ -19,13 +19,13 @@ local resources = {
     -- isim, sıra/öncelik
     launcher:new("mysql", 1),
     launcher:new("cache", 2),
-    launcher:new("fonts", 3),
-    launcher:new("account", 4),
-    launcher:new("items", 5),
-    launcher:new("admins", 6),
-    launcher:new("vehicleslibrary", 7),
-    launcher:new("cursor", 8),
-    launcher:new("dxlibrary", 9),
+	launcher:new("dxlibrary", 3),
+    launcher:new("fonts", 4),
+    launcher:new("account", 5),
+    launcher:new("items", 6),
+    launcher:new("admins", 7),
+    launcher:new("vehicleslibrary", 8),
+    launcher:new("cursor", 9),
 }
 
 table.sort(resources, function(a,b) return a.priority < b.priority end)

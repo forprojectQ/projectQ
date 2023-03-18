@@ -1,3 +1,4 @@
+assert(loadstring(exports.dxlibrary:loadFunctions()))()
 local ui = class("UI")
 local localPlayer = getLocalPlayer()
 local isCursorShowing = isCursorShowing
@@ -39,14 +40,9 @@ function ui:display()
     local x,y,w,h = self.screen.x-70,self.screen.y/2-250/2,60,250
     local boxX, boxY, boxW, boxH = x+5, y+20, 50, 50
     local newX,newY = 55,20
-    local cursorShowing = isCursorShowing()
-    if cursorShowing then
-        cursorX, cursorY = getCursorPosition()
-        cursorX, cursorY = cursorX*self.screen.x, cursorY*self.screen.y
-    end
-    self:roundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
+    dxDrawroundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
     for index, value in ipairs(self.items) do
-        if cursorShowing and cursorX >= self.screen.x-1-newX and cursorX <= self.screen.x-1-newX+boxW and cursorY >= y+newY and cursorY <= y+newY+boxH then
+		if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH) then
             dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,hoverBgColor)
             if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                 self.tick = getTickCount()
@@ -68,12 +64,12 @@ function ui:display()
         end
     end
     x, boxX = x - newX, boxX - newX
-    self:roundedRectangle(x,y,w,h,9,bgColor)
+    dxDrawroundedRectangle(x,y,w,h,9,bgColor)
     for i = 1, #self.categorys do
         local category = self.categorys[i]
         if self.current == i then
             dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
-        elseif cursorShowing and cursorX >= boxX and cursorX <= boxX+boxW and cursorY >= boxY and cursorY <= boxY+boxH then
+		elseif isInBox(boxX,boxY,boxW,boxH) then
             dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
             if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                 self.tick = getTickCount()
@@ -139,18 +135,6 @@ function ui:getImage(itemID)
         self.itemImages[itemID] = File.exists(imagePath) and imagePath or 'assets/images/null.png'
     end
     return self.itemImages[itemID]
-end
-
-function ui:roundedRectangle(x, y, width, height, radius, color)
-    local diameter = radius * 2
-    dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
-    dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
-    dxDrawCircle(x + radius, y + height - radius, radius, 90, 180, color)
-    dxDrawCircle(x + width - radius, y + height - radius, radius, 0, 90, color)
-    dxDrawRectangle(x + radius, y, width - diameter, height, color)
-    dxDrawRectangle(x, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
-    dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
 end
 
 ui:new()
