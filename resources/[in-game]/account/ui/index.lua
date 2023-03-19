@@ -76,7 +76,7 @@ function account:render()
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -103,7 +103,7 @@ function account:render()
                 end
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -131,7 +131,7 @@ function account:render()
             end
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-			if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
+	    if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(icon, self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -147,7 +147,7 @@ function account:render()
 
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+7, width, height) then
+	    if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+7, width, height) then
                 dxDrawText(self.icons.arrow, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -160,7 +160,7 @@ function account:render()
             local newY = newY - 32
             local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
+	    if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(self.icons.plus, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -177,7 +177,7 @@ function account:render()
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-			if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+	        if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -205,7 +205,7 @@ function account:render()
                 end
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -233,7 +233,7 @@ function account:render()
             end
             local width = dxGetTextWidth(self.icons.arrow, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-			if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
+	    if isInBox(self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(icon, self.screen.x/2-240/2+215, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -254,7 +254,7 @@ function account:render()
                 local textSize = dxGetTextWidth(self.texts.email, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-				if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -285,7 +285,7 @@ function account:render()
             local newY = newY - 32
             local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
             local height = dxGetFontHeight(1, self.awesome)
-			if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
+   	    if isInBox(self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, width, height) then
                 dxDrawText(self.icons.login, self.screen.x/2-240/2+240+10, self.screen.y/2-30/2+newY+6, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                 if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                     self.tick = getTickCount()
@@ -362,7 +362,7 @@ function account:render()
                 --// CREATE BUTTON
                 local width = dxGetTextWidth(self.icons.plus, 1, self.awesome)
                 local height = dxGetFontHeight(1, self.awesome)
-				if isInBox(self.screen.x/2+243+width, self.screen.y/2-60+newY, width, height) then
+		if isInBox(self.screen.x/2+243+width, self.screen.y/2-60+newY, width, height) then
                     dxDrawText(self.icons.plus, self.screen.x/2+243+width, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225,245), 1, self.awesome)
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -377,7 +377,7 @@ function account:render()
                 self.load = self.load + 5
                 dxDrawText(self.icons.load, self.screen.x/2, self.screen.y/2, nil, nil, tocolor(225,225,225), 1, self.awesome, "center", "center", false, false, false, false, false, self.load)
             else
-				if isInBox(0, 0, 150, self.screen.y) then
+		if isInBox(0, 0, 150, self.screen.y) then
                     dxDrawRectangle(0, 0, 150, self.screen.y, tocolor(17,17,17,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
@@ -452,7 +452,7 @@ function account:render()
                     local icon = self.icons.male
                     local width = dxGetTextWidth(icon, 1, self.awesomeBig)
                     local height = dxGetFontHeight(1, self.awesomeBig)
-					if isInBox(self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, width, height) then
+		    if isInBox(self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, width, height) then
                         dxDrawText(icon, self.screen.x/2-width/2-100, self.screen.y/2-height/2+50, nil, nil, tocolor(121,179,245,225), 1, self.awesomeBig)
                         if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                             self.tick = getTickCount()
@@ -466,7 +466,7 @@ function account:render()
                     local icon = self.icons.female
                     local width = dxGetTextWidth(icon, 1, self.awesomeBig)
                     local height = dxGetFontHeight(1, self.awesomeBig)
-					if isInBox(self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, width, height) then
+		    if isInBox(self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, width, height) then
                         dxDrawText(icon, self.screen.x/2-width/2+100, self.screen.y/2-height/2+50, nil, nil, tocolor(245,121,245,225), 1, self.awesomeBig)
                         if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                             self.tick = getTickCount()
