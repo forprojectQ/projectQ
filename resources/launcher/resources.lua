@@ -19,7 +19,7 @@ local resources = {
     -- isim, sıra/öncelik
     launcher:new("mysql", 1),
     launcher:new("cache", 2),
-	launcher:new("dxlibrary", 3),
+    launcher:new("dxlibrary", 3),
     launcher:new("fonts", 4),
     launcher:new("account", 5),
     launcher:new("items", 6),
