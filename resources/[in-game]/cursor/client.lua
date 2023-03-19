@@ -2,16 +2,15 @@ local cursor = "arrow"
 local screen = Vector2(guiGetScreenSize())
 
 function setPointer(result)
-	cursor = result
+    cursor = result
 end
 
 bindKey("m", "down", function()
-    if (isCursorShowing()) then
-        showCursor(false)
-    else
-		cursor = "arrow"
-		setCursorPosition(screen.x/2, screen.y/2)
-        showCursor(true)
+    local state = not isCursorShowing()
+    showCursor(state)
+    if state then
+        cursor = "arrow"
+        setCursorPosition(screen.x / 2, screen.y / 2)
     end
 end)
 
