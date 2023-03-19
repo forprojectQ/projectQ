@@ -32,7 +32,7 @@ end
 
 function mysql:loadIDCache(i)
     local v = self.id_tables[i]
-    if not v then print("MYSQL: id cache bitti") return end
+    if not v then print("! MYSQL ID CACHED") return end
     self.id_cache[v]={}
     dbQuery(function(qh,index,tablename)
         local res, rows, err = dbPoll(qh, 0)
