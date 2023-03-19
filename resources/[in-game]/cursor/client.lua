@@ -2,7 +2,10 @@ local cursor = "arrow"
 local screen = Vector2(guiGetScreenSize())
 
 function setPointer(result)
-    cursor = result
+    if result then
+        if cursor == "hand" then return end
+        cursor = "hand"
+    end
 end
 
 bindKey("m", "down", function()
@@ -19,6 +22,9 @@ addEventHandler("onClientRender", root, function()
         local cursorX, cursorY = getCursorPosition()
         cursorX, cursorY = cursorX * screen.x, cursorY * screen.y
         dxDrawImage(cursorX, cursorY, 32, 32, "assets/"..(cursor or "arrow")..".png", 0, 0, 0, tocolor(255, 255, 255, 255), true)
+        if cursor == "hand" then
+            cursor = "arrow"
+        end
     end
 end, true, "low-9999")
 

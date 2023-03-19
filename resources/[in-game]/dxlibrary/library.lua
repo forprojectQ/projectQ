@@ -3,19 +3,17 @@ _functions = [[
 	screen = Vector2(guiGetScreenSize())
 	tick = getTickCount()
 
-    function isInBox(xS, yS, wS, hS)
-        if(isCursorShowing()) then
-            local cursorX, cursorY = getCursorPosition()
-            cursorX, cursorY = cursorX*screen.x, cursorY*screen.y
-            if(cursorX >= xS and cursorX <= xS+wS and cursorY >= yS and cursorY <= yS+hS) then
-                exports.cursor:setPointer("hand")
-				return true
-            else
-				exports.cursor:setPointer("arrow")
-                return false
+	function isInBox(x, y, w, h)
+        if isCursorShowing() then
+            local cx, cy = getCursorPosition()
+            cx, cy = cx*screen.x, cy*screen.y
+            if (cx >= x and cx <= x+w and cy >= y and cy <= y+h) then
+                exports.cursor:setPointer(true)
+                return true
             end
         end
-    end
+        return false
+	end
 
     function dxDrawroundedRectangle(x, y, width, height, radius, color)
         local diameter = radius * 2
