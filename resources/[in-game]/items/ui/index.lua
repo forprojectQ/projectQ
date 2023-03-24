@@ -92,7 +92,6 @@ function ui:open()
     if localPlayer:getData("online") then
         self.active = not self.active
         self.items = {}
-        showCursor(self.active)
         if self.active then
             self.tick = 0
             self:refresh()
