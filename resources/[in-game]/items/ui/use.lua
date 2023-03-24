@@ -24,6 +24,7 @@ functions = {
     end},
 
     ['DRINK'] = {function(player,itemID,itemValue,itemCount,itemIndex)
+        local dbid = player:getData("dbid")
         local thirst = player:getData('thirst') or 100
         local newThirst = thirst + 20
         local new_value = tonumber(itemValue) - 25
