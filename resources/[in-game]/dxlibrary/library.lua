@@ -14,7 +14,7 @@ _functions = [[
        return false
     end
 
-    function dxDrawroundedRectangle(x, y, width, height, radius, color)
+    function dxDrawRoundedRectangle(x, y, width, height, radius, color)
         local diameter = radius * 2
         dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
         dxDrawCircle(x + width - radius, y + radius, radius, 270, 360, color)
@@ -26,7 +26,7 @@ _functions = [[
         dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
     end
 	
-    function dxDrawouterBorder(x, y, w, h, borderSize, borderColor, postGUI)
+    function dxDrawOuterBorder(x, y, w, h, borderSize, borderColor, postGUI)
        borderSize = borderSize or 2
        borderColor = borderColor or tocolor(0, 0, 0, 255)
        dxDrawRectangle(x - borderSize, y - borderSize, w + (borderSize * 2), borderSize, borderColor, postGUI)

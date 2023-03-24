@@ -40,7 +40,7 @@ function ui:display()
     local x,y,w,h = self.screen.x-70,self.screen.y/2-250/2,60,250
     local boxX, boxY, boxW, boxH = x+5, y+20, 50, 50
     local newX,newY = 55,20
-    dxDrawroundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
+    dxDrawRoundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
     for index, value in ipairs(self.items) do
 	if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH) then
             dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,hoverBgColor)
@@ -64,7 +64,7 @@ function ui:display()
         end
     end
     x, boxX = x - newX, boxX - newX
-    dxDrawroundedRectangle(x,y,w,h,9,bgColor)
+    dxDrawRoundedRectangle(x,y,w,h,9,bgColor)
     for i = 1, #self.categorys do
         local category = self.categorys[i]
         if self.current == i then

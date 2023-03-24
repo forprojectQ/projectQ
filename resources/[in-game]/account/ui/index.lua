@@ -72,12 +72,12 @@ function account:render()
             local newY = 0
             local order = 1
             if self.selected == order then
-                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+		        if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -86,7 +86,7 @@ function account:render()
                         end
                     end
                 else
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.user, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -95,7 +95,7 @@ function account:render()
             local newY = newY + 33
             local order = 2
             if self.selected == order then
-                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 if self.show then
                     textSize = dxGetTextWidth(self.texts.password, 1, self.roboto)
                 else
@@ -104,7 +104,7 @@ function account:render()
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
 		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -113,7 +113,7 @@ function account:render()
                         end
                     end
                 else
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.key, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -173,12 +173,12 @@ function account:render()
             local newY = 0
             local order = 1
             if self.selected == order then
-                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 local textSize = dxGetTextWidth(self.texts.username, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
 	        if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -187,7 +187,7 @@ function account:render()
                         end
                     end
                 else
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.user, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -197,7 +197,7 @@ function account:render()
             local newY = newY + 33
             local order = 2
             if self.selected == order then
-                dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+                dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                 if self.show then
                     textSize = dxGetTextWidth(self.texts.password, 1, self.roboto)
                 else
@@ -205,8 +205,8 @@ function account:render()
                 end
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
+		        if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
                         self.selected = order
@@ -215,7 +215,7 @@ function account:render()
                         end
                     end
                 else
-                    dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
+                    dxDrawRoundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,200))
                 end
             end
             dxDrawText(self.icons.key, self.screen.x/2-240/2+10, self.screen.y/2-30/2+newY+7, nil, nil, tocolor(225,225,225), 1, self.awesome)
@@ -254,7 +254,7 @@ function account:render()
                 local textSize = dxGetTextWidth(self.texts.email, 1, self.roboto)
                 dxDrawText('l', self.screen.x/2-240/2+30+(textSize), self.screen.y/2-30/2+newY+6, nil, nil,tocolor(195,195,195,self.alpha), 1, self.roboto)
             else
-		if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
+		        if isInBox(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30) then
                     dxDrawroundedRectangle(self.screen.x/2-240/2, self.screen.y/2-30/2+newY, 240, 30, 9, tocolor(55,55,55,245))
                     if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                         self.tick = getTickCount()
