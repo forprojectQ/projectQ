@@ -14,6 +14,15 @@ _functions = [[
        return false
     end
 
+    function dxDrawShadowedText(text, leftX, topY, rightX, bottomY, color, scale, font, ...)
+        local black = tocolor(5, 5, 5, 155)
+        dxDrawText(text, leftX+1, topY, rightX+1, bottomY, black, scale, font, ...)
+        dxDrawText(text, leftX-1, topY, rightX-1, bottomY, black, scale, font, ...)
+        dxDrawText(text, leftX, topY+1, rightX, bottomY+1, black, scale, font, ...)
+        dxDrawText(text, leftX, topY-1, rightX, bottomY-1, black, scale, font, ...)
+        dxDrawText(text, leftX, topY, rightX, bottomY, color, scale, font, ...)
+    end
+
     function dxDrawRoundedRectangle(x, y, width, height, radius, color)
         local diameter = radius * 2
         dxDrawCircle(x + radius, y + radius, radius, 180, 270, color)
