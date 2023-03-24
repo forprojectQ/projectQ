@@ -1,0 +1,6 @@
+<meta>
+    <oop>true</oop>
+    <script src="libs/classlib.lua" type="client" cache="false"/>
+    <script src="ui/index.lua" type="client" cache="false"/>
+    <script src="server.lua" type="server"/>
+</meta>
