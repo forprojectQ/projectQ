@@ -15,7 +15,7 @@ local removeEventHandler = removeEventHandler
 local guiGetScreenSize = guiGetScreenSize
 local getCursorPosition = getCursorPosition
 local triggerServerEvent = triggerServerEvent
-account = class("All")
+local account = class("account")
 
 function account:init()
     self._functions = {
