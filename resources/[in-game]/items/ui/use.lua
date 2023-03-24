@@ -1,6 +1,7 @@
 functions = {
     -- itemID, function
     ['FOOD'] = {function(player,itemID,itemValue,itemCount,itemIndex)
+        local dbid = player:getData('dbid')
         local hunger = player:getData('hunger') or 100
         local newHunger = hunger + 20
         local new_value = tonumber(itemValue) - 25
@@ -15,8 +16,10 @@ functions = {
 
         if newHunger > 100 then
             player:setData('hunger', 100)
+            exports.cache:setCharacterData(dbid, 'hunger', 100)
         else
             player:setData('hunger', newHunger)
+            exports.cache:setCharacterData(dbid, 'hunger', newHunger)
         end
     end},
 
@@ -34,8 +37,10 @@ functions = {
 
         if newThirst > 100 then
             player:setData('thirst', 100)
+            exports.cache:setCharacterData(dbid, 'thirst', 100)
         else
             player:setData('thirst', newThirst)
+            exports.cache:setCharacterData(dbid, 'thirst', newThirst)
         end
     end},
 }
