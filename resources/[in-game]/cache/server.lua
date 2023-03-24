@@ -13,7 +13,7 @@ function All:init()
 
     function loadCache(i)
         local v = cached_tables[i]
-        if not v then print("cache işlemi bitti") return end
+        if not v then print("! CACHE IS FINISHED") return end
         tables_cache[v] = All:extend(v)
 
         dbQuery(function(qh,tablename,tableindex)
