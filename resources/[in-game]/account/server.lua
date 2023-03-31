@@ -22,6 +22,7 @@ addEventHandler('onPlayerCommand', root, function(command)
 end)
 
 function spawn(dbid)
+    source:setData("online", true)
     local dbid = tonumber(dbid)
     source:setData("dbid", dbid)
     local x, y, z, int, dim = unpack(split(cache:getCharacterData(dbid, "pos"), ","))
@@ -78,7 +79,6 @@ addEvent("auth.create.character", true)
 addEventHandler("auth.create.character", root, createCharacter)
 
 function loginStep(player)
-    player:setData("online", true)
     dbQuery(
         function(qh,player)
             local res, rows, err = dbPoll(qh, 0)
