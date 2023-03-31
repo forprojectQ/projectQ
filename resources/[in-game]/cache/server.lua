@@ -1,7 +1,7 @@
 All = class("All")
 -- cache yapılcak mysql table isimleri.
 cached_tables = {
-    "accounts","characters"
+    "accounts","characters","vehicles"
 }
 
 function All:init()

@@ -1,0 +1,5 @@
+<meta>
+    <script src="server.lua" type="server"/>
+
+    <export function="makeVehicle" type="server"/>
+</meta>
