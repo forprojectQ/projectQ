@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-03-31 09:25:28
+Date: 2023-04-03 10:42:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,7 +58,7 @@ CREATE TABLE `characters` (
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '98', '95', '0', '131');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '97', '93', '0', '131');
 
 -- ----------------------------
 -- Table structure for `items`
@@ -84,14 +84,11 @@ CREATE TABLE `items` (
 DROP TABLE IF EXISTS `vehicles`;
 CREATE TABLE `vehicles` (
   `id` int(11) NOT NULL,
-  `gta` int(11) DEFAULT NULL,
-  `brand` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-  `model` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `library_id` int(11) DEFAULT NULL,
   `fuel` int(11) NOT NULL DEFAULT '100',
   `tax` int(11) NOT NULL DEFAULT '0',
   `job` int(11) DEFAULT NULL,
   `pos` varchar(255) NOT NULL DEFAULT '0,0,5,0,0,',
-  `library_id` int(11) DEFAULT NULL,
   `plate` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,0',
   `lock` int(11) NOT NULL DEFAULT '1',
@@ -101,6 +98,7 @@ CREATE TABLE `vehicles` (
 -- ----------------------------
 -- Records of vehicles
 -- ----------------------------
+INSERT INTO `vehicles` VALUES ('1', '1', '100', '0', '0', '0,0,5,0,0,', '42', '0,0,0', '1');
 
 -- ----------------------------
 -- Table structure for `vehicles_library`
@@ -122,4 +120,4 @@ CREATE TABLE `vehicles_library` (
 -- ----------------------------
 -- Records of vehicles_library
 -- ----------------------------
-INSERT INTO `vehicles_library` VALUES ('1', '411', 'test', 'car', '2022', '25000', '12', '1', '');
+INSERT INTO `vehicles_library` VALUES ('1', '560', 'test', 'car', '2022', '25000', '12', '1', '');
