@@ -52,7 +52,7 @@ dbQuery(
             conn, "SELECT * FROM vehicles_library")
         end
     end,
-conn, "SELECT * FROM vehicles")
+conn, "SELECT id,library_id FROM vehicles")
 
 function makeVehicle()
     -- soon
