@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-04-03 10:42:52
+Date: 2023-04-03 11:16:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,7 +58,7 @@ CREATE TABLE `characters` (
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '97', '93', '0', '131');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '89', '82', '0', '131');
 
 -- ----------------------------
 -- Table structure for `items`
@@ -92,13 +92,14 @@ CREATE TABLE `vehicles` (
   `plate` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,0',
   `lock` int(11) NOT NULL DEFAULT '1',
+  `interest` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of vehicles
 -- ----------------------------
-INSERT INTO `vehicles` VALUES ('1', '1', '100', '0', '0', '0,0,5,0,0,', '42', '0,0,0', '1');
+INSERT INTO `vehicles` VALUES ('1', '1', '100', '252', '0', '0,0,5,0,0,', '42', '0,0,0', '1', '1');
 
 -- ----------------------------
 -- Table structure for `vehicles_library`
