@@ -42,6 +42,7 @@ function fonts:new()
         ['eye-slash'] = '',
         ['person'] = '',
         ['person-dress'] = ''
+        ['skull-crossbones] = '' 
     }
 
     return obj
