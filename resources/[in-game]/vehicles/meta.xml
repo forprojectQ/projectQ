@@ -1,4 +1,6 @@
 <meta>
+    <script src="libs/async.lua" type="shared"/>
+    
     <script src="server.lua" type="server"/>
 
     <script src="tax/client.lua" type="client" cache="false"/>
