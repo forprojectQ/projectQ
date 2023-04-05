@@ -15,21 +15,20 @@ function All:init()
         local v = cached_tables[i]
         if not v then print("! CACHE IS FINISHED") return end
         tables_cache[v] = All:extend(v)
-
         dbQuery(function(qh,tablename,tableindex)
-                local res, rows, err = dbPoll(qh, 0)
-                for index, row in ipairs(res) do
-                    local dbid = tonumber(row.id)
-                    tables_cache[tablename][dbid] = {}
-                    for column, value in pairs(row) do
-                        if not tables_cache[tablename][0][column] then tables_cache[tablename][0][column] = true end
-                        if value then
-                            tables_cache[tablename][dbid][column]=value
-                        end
+            local res = dbPoll(qh, 0)
+            Async:foreach(res, function(row)
+                local dbid = tonumber(row.id)
+                tables_cache[tablename][dbid] = {}
+                for column, value in pairs(row) do
+                    if not tables_cache[tablename][0][column] then tables_cache[tablename][0][column] = true end
+                    if value then
+                        tables_cache[tablename][dbid][column]=value
                     end
                 end
                 tables_cache[tablename].databaseLoaded = true
                 loadCache(tableindex+1)
+            end)
         end,{v,i},conn,"SELECT * FROM "..v)
     end
     loadCache(1)    

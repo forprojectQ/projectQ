@@ -1,6 +1,7 @@
 <meta>
     <oop>true</oop>
     <script src="libs/class.lua" type="server"/>
+    <script src="libs/async.lua" type="shared"/>
     <script src="server.lua" type="server"/>
 
     <export function="getAccountData" type="server"/>
