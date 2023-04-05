@@ -1,5 +1,6 @@
 local launcher = {}
 launcher.__index = launcher
+local _print = outputDebugString
 
 function launcher:new(name, priority)
     local resource = {}
@@ -7,11 +8,6 @@ function launcher:new(name, priority)
     resource.name = name
     resource.priority = priority or 0
     return resource
-end
-
-function launcher:launch()
-    print("Starting "..self.name)
-    Resource.getFromName(self.name):start()
 end
 
 -- Resource listesi
@@ -30,8 +26,19 @@ local resources = {
     launcher:new("vehicles", 11),
 }
 
+local max = #resources
+local delay = 0
+
+function launcher:launch(state)
+    setTimer(function()
+        _print("Resource "..self.name.." stated. "..state.."/"..max.."")
+        Resource.getFromName(self.name):start()
+    end, delay * 1000, 1)
+end
+
 table.sort(resources, function(a,b) return a.priority < b.priority end)
 
-for _, resource in ipairs(resources) do
-    resource:launch()
+for index, resource in ipairs(resources) do
+    resource:launch(index, delay)
+    delay = delay + 2
 end
