@@ -16,6 +16,7 @@ dbQuery(function(qh)
         local r, g, b = unpack(split(cache:getVehicleData(dbid, "color"), ","))
         local plate = cache:getVehicleData(dbid, "plate")
         local lock = cache:getVehicleData(dbid, "lock")
+        local engine = cache:getVehicleData(dbid, "engine")
         local fuel = cache:getVehicleData(dbid, "fuel")
         local tax = cache:getVehicleData(dbid, "tax")
         dbQuery(function(qh)
@@ -41,6 +42,11 @@ dbQuery(function(qh)
                         else
                             setVehicleLocked(veh, false)
                         end
+                        if tonumber(engine) == 1 then
+                            setVehicleEngineState(veh, true)
+                        else
+                            setVehicleEngineState(veh, false)
+                        end
                     else
                         _print("! VEHICLES FAILED CREATE VEHICLE "..dbid)
                     end
@@ -50,6 +56,18 @@ dbQuery(function(qh)
     end)
 end, conn, "SELECT id,library_id FROM vehicles")
 
-function makeVehicle()
+function enterVehicle(player)
+    local vehicle = source
+    local playerJob = cache:getCharacterData(getElementData(player, "dbid"), "job") or 0
+    local vehicleJob = cache:getVehicleData(getElementData(vehicle, "dbid"), "job") or 0
+    if vehicleJob > 0 then
+        if playerJob ~= vehicleJob then
+            cancelEvent()
+        end
+    end
+end
+addEventHandler("onVehicleStartEnter", getRootElement(), enterVehicle)
+
+function makeVehicle(player)
     -- soon
 end

@@ -12,6 +12,8 @@ function taxation()
             end
             local current = tonumber(getElementData(vehicle, "tax"))
             if current > 25000 then
+                setVehicleEngineState(vehicle, false)
+                cache:setVehicleData(dbid, "engine", 0)
                 cache:setVehicleData(dbid, "interest", 1)
                 return
             end

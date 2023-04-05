@@ -6,5 +6,8 @@
     <script src="tax/client.lua" type="client" cache="false"/>
     <script src="tax/server.lua" type="server"/>
 
+    <script src="fuel/client.lua" type="client" cache="false"/>
+    <script src="fuel/server.lua" type="server"/>
+
     <export function="makeVehicle" type="server"/>
 </meta>
