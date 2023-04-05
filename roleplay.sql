@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-04-03 11:16:19
+Date: 2023-04-05 09:14:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,13 +52,14 @@ CREATE TABLE `characters` (
   `thirst` int(11) NOT NULL DEFAULT '100',
   `dead` int(1) NOT NULL DEFAULT '0',
   `walk` int(11) NOT NULL DEFAULT '128',
+  `job` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '89', '82', '0', '131');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '89', '82', '0', '131', '0');
 
 -- ----------------------------
 -- Table structure for `items`
