@@ -44,6 +44,39 @@ functions = {
             exports.cache:setCharacterData(dbid, 'thirst', newThirst)
         end
     end},
+
+    ['KEY'] = {function(player,itemID,itemValue,itemCount,itemIndex)
+        if itemID == 1 then
+            --// INTERIOR
+        else
+            local x, y, z = player.position.x, player.position.y, player.position.z
+            for _, vehicle in ipairs(Element.getAllByType('vehicle')) do
+                local vx, vy, vz = vehicle.position.x, vehicle.position.y, vehicle.position.z
+                if getDistanceBetweenPoints3D(x, y, z, vx, vy, vz) <= 5 then
+                    local dbid = vehicle:getData('dbid')
+                    if itemValue == dbid then
+                        local lock = exports.cache:getVehicleData(dbid, 'lock') or 0
+                        if lock == 1 then
+                            exports.cache:setVehicleData(dbid, 'lock', 0)
+                            vehicle:setLocked(false)
+                        else
+                            exports.cache:setVehicleData(dbid, 'lock', 1)
+                            vehicle:setLocked(true)
+                        end
+                        player:setAnimation('ped', 'walk_doorpartial', -1, false, false, false, false)
+                        local oldState = vehicle.overrideLights
+                        local from = 2
+                        local to = oldState
+                        if oldState == 2 then
+                            from = 1
+                        end
+                        setVehicleOverrideLights(vehicle, from)
+                        setTimer(setVehicleOverrideLights, 500, 1, vehicle, to)
+                    end
+                end
+            end
+        end
+    end},
 }
 
 function useItem(info)

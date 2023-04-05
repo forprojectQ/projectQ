@@ -9,6 +9,8 @@ list = {
             tip (yazı) (itemi kullanırken item tipine göre olaylar yapmak için.),
         }
     ]]
+    [1] = {'Ev Anahtarı', 3, 0.1, false, false, 'KEY'},
+    [2] = {'Araç Anahtarı', 3, 0.1, false, false, 'KEY'},
     [5] = {'Kızartma', 2, 0.1, false, true, 'FOOD'},
     [6] = {'Hamburger', 2, 0.1, false, true, 'FOOD'},
     [7] = {'Sosisli', 2, 0.1, false, true, 'FOOD'},
