@@ -72,6 +72,7 @@ functions = {
                         end
                         setVehicleOverrideLights(vehicle, from)
                         setTimer(setVehicleOverrideLights, 500, 1, vehicle, to)
+                        break
                     end
                 end
             end
