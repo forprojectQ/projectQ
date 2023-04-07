@@ -64,6 +64,7 @@ functions = {
                             vehicle:setLocked(true)
                         end
                         player:setAnimation('ped', 'walk_doorpartial', -1, false, false, false, false)
+                        triggerClientEvent("vehicle.effect.3d", root, "assets/lock.mp3", vx, vy, vz)
                         local oldState = vehicle.overrideLights
                         local from = 2
                         local to = oldState
