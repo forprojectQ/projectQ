@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-04-05 09:48:09
+Date: 2023-04-10 10:26:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -59,7 +59,7 @@ CREATE TABLE `characters` (
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '89', '82', '0', '131', '0');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '78', '71', '0', '131', '0');
 
 -- ----------------------------
 -- Table structure for `items`
@@ -89,7 +89,7 @@ CREATE TABLE `vehicles` (
   `fuel` int(11) NOT NULL DEFAULT '100',
   `tax` int(11) NOT NULL DEFAULT '0',
   `job` int(11) DEFAULT NULL,
-  `pos` varchar(255) NOT NULL DEFAULT '0,0,5,0,0,',
+  `pos` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,5,0,0',
   `plate` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,0',
   `lock` int(11) NOT NULL DEFAULT '1',
@@ -102,7 +102,6 @@ CREATE TABLE `vehicles` (
 -- ----------------------------
 -- Records of vehicles
 -- ----------------------------
-INSERT INTO `vehicles` VALUES ('1', '1', '100', '0', '0', '0,0,5,0,0,', '42', '0,0,0', '1', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for `vehicles_library`
