@@ -20,58 +20,88 @@ local _print = outputDebugString
 local ipairs = ipairs
 
 function loadAlllVehicle()
-    local vehLibrary = {}
-    local query = dbQuery(conn, "SELECT id,gta,price,tax FROM vehicles_library")
-    local result = dbPoll(query, -1)
-    if result then
-        for index, value in ipairs(result) do
-            vehLibrary[value.id] = value
-        end
-        dbQuery(function(qh)
-            local res = dbPoll(qh, 0)
-            Async:foreach(res, function(row)
-                local dbid = tonumber(row.id)
-                local libid = tonumber(row.library_id)
-                local x, y, z, int, dim = unpack(split(cache:getVehicleData(dbid, "pos"), ","))
-                local r, g, b = unpack(split(cache:getVehicleData(dbid, "color"), ","))
-                local plate = cache:getVehicleData(dbid, "plate")
-                local lock = cache:getVehicleData(dbid, "lock")
-                local engine = cache:getVehicleData(dbid, "engine")
-                local fuel = cache:getVehicleData(dbid, "fuel")
-                local tax = cache:getVehicleData(dbid, "tax")
-                local value = vehLibrary[libid]
-                if value then
-                    local gta = tonumber(value.gta)
-                    local carshop_price = tonumber(value.price)
-                    local carshop_tax = tonumber(value.tax)
-                    local veh = createVehicle(gta, x, y, z)
-                    if veh then
-                        setVehicleColor(veh, r, g, b)
-                        setElementInterior(veh, int)
-                        setElementDimension(veh, dim)
-                        setVehiclePlateText(veh, plate)
-                        setElementData(veh, "dbid", dbid)
-                        setElementData(veh, "fuel", tonumber(fuel))
-                        setElementData(veh, "tax", tonumber(tax))
-                        setElementData(veh, "carshop_price", tonumber(carshop_price))
-                        setElementData(veh, "carshop_tax", tonumber(carshop_tax))
-                        setVehicleLocked(veh, tonumber(lock) == 1)
-                        setVehicleEngineState(veh, tonumber(engine) == 1)
-                    else
-                        _print("! VEHICLES FAILED CREATE VEHICLE "..dbid)
-                    end
-                else
-                    _print("! VEHICLES INVALID LIBRARY ID "..dbid)
-                end
-            end)
-        end, conn, "SELECT id,library_id FROM vehicles")
-    end
+	dbQuery(function(qh)
+		local res = dbPoll(qh, 0)
+		Async:foreach(res, function(row)
+			loadOneVehicle(row.id,row)
+		end)
+	end, conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id")
 end
-addEventHandler("onResourceStart", root, loadAlllVehicle)
+addEventHandler("onResourceStart", resourceRoot, loadAlllVehicle)
+
+
+-- makeVehicle ile oluştururken sonra tekrar query yapılmaması için row yollanabilir.
+function loadOneVehicle(dbid,row)
+	local veh = getElementByID("vehicle"..dbid)
+	if isElement(veh) then destroyElement(veh) end
+	-- eğer row argümanı varsa direk onu kullan.
+	if row then
+		local dbid = tonumber(row.id)
+		local libid = tonumber(row.library_id)
+		local x, y, z, int, dim = unpack(split(row.pos, ","))
+		local veh = createVehicle(tonumber(row.carshop_gta), x, y, z)
+		if veh then
+			setElementID(veh,"vehicle"..dbid)
+			setVehicleColor(veh, unpack(split(row.color, ",")))
+			setElementInterior(veh, int)
+			setElementDimension(veh, dim)
+			setVehiclePlateText(veh, tostring(row.plate))
+			setElementData(veh, "dbid", dbid)
+			setElementData(veh, "fuel", tonumber(row.fuel))
+			setElementData(veh, "tax", tonumber(row.tax))
+			setElementData(veh, "carshop_price", tonumber(row.carshop_price))
+			setElementData(veh, "carshop_tax", tonumber(row.carshop_tax))
+			setVehicleLocked(veh, tonumber(row.lock) == 1)
+			setVehicleEngineState(veh, tonumber(row.engine) == 1)
+			for property,value in pairs(fromJSON(row.carshop_handling or "[ [ ] ]") or {}) do
+				setVehicleHandling(veh,property,value)
+			end
+			if row.handling then
+				-- eğer aracın özel handı varsa önce handı sıfırla ve sonra özel handı yükle
+				setVehicleHandling(veh, false) 
+				for property,value in pairs(fromJSON(row.handling or "[ [ ] ]") or {}) do
+					setVehicleHandling(veh,property,value)
+				end
+			end
+		else
+			_print("! VEHICLES FAILED CREATE VEHICLE "..dbid)
+		end
+	else
+		-- eğer row argümanı yoksa dbQuery yap ve tekrar aynı fonksiyonu row argümanı vererek çağır.
+		-- böylelikle yukardaki kodları tekrar yazmaya gerek yok
+		dbQuery(
+			function(qh)
+				local res, rows, err = dbPoll(qh, 0)
+				if rows > 0 then
+					loadOneVehicle(res[1].id,res[1])
+				end
+			end,
+		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", dbid)
+	end	
+
+end
 
 function makeVehicle(admin, libID, owner, job)
     if tonumber(libID) and tonumber(owner) and tonumber(job) then
-
+		local nextID = exports.mysql:getNewID("vehicles")
+		dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(owner).."', job='"..(tonumber(job)).."'")
+		dbQuery(
+			function(qh)
+				local res, rows, err = dbPoll(qh, 0)
+				if rows > 0 then
+					local dbid = tonumber(res[1].id)
+					for index, row in ipairs(res) do
+						for column, value in pairs(row) do
+							--carshop columnlarını cache ekleme
+							if column:sub(1,7) ~= "carshop" then
+								cache:setVehicleData(dbid, column, value)
+							end	
+						end
+					end
+					loadOneVehicle(dbid,res[1])
+				end
+			end,
+		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", nextID)
     else
         outputChatBox("[!]#ffffff /makeveh [Kütüphane ID] [Sahip] [Meslek(0 = Şahsi Araç)]", admin, 235, 180, 132, true)
     end
@@ -108,6 +138,7 @@ function toggleVehicleLock()
             local dbid = getElementData(vehicle, "dbid")
             if exports.items:hasItem(source, 2, dbid) then
                 local lock = exports.cache:getVehicleData(dbid, "lock") or 0
+				print(lock)
                 if lock == 1 then
                     exports.cache:setVehicleData(dbid, "lock", 0)
                     setVehicleLocked(vehicle, false)
