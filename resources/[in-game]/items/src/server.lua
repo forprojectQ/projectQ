@@ -148,11 +148,6 @@ function getItemCount(player,item,value)
     return itemCount or 0
 end
 
-
-
-
-
-
 function getID(element)
     local element_type = element:getType()
     if element_type == "player" or element_type == "vehicle" then
@@ -160,6 +155,7 @@ function getID(element)
     end    
 	return 0
 end
+
 function getType(element)
     local element_type = element:getType()
 	if element_type == "player" then
@@ -169,7 +165,6 @@ function getType(element)
 	end
     return 0
 end
-
 
 addEventHandler("onPlayerQuit",root,function()
     clearItems(source)
