@@ -69,8 +69,12 @@ function loadAlllVehicle()
 end
 addEventHandler("onResourceStart", root, loadAlllVehicle)
 
-function makeVehicle(player)
-    -- soon
+function makeVehicle(admin, libID, owner, job)
+    if tonumber(libID) and tonumber(owner) and tonumber(job) then
+
+    else
+        outputChatBox("[!]#ffffff /makeveh [Kütüphane ID] [Sahip] [Meslek(0 = Şahsi Araç)]", admin, 235, 180, 132, true)
+    end
 end
 
 function startEnterVehicle(player)
@@ -156,11 +160,11 @@ function toggleVehicleEngine(vehicle)
             return
         end
         if interest == 1 then
-            outputChatBox("Aracınız faize bağlanmış", source, 255, 0, 0)
+            outputChatBox("[!]#ffffff Aracınız faize bağlanmış.", source, 235, 180, 132, true)
             return
         end
         if fuel <= 0 then
-            outputChatBox("Aracınızda yakıt bulunmuyor", source, 255, 0, 0)
+            outputChatBox("[!]#ffffff Aracınızın yakıtı bitmiş.", source, 235, 180, 132, true)
             return
         end
     end
@@ -170,7 +174,7 @@ function toggleVehicleEngine(vehicle)
         setTimer(function()
             local chance = math.random(1, 3)
             if chance == 1 then
-                outputChatBox("Aracın motorunu çalıştıramadınız.", source)
+                outputChatBox("[!]#ffffff Aracın motorunu çalıştıramadınız.", source, 235, 180, 132, true)
             else
                 setVehicleEngineState(vehicle, true)
                 cache:setVehicleData(dbid, "engine", 1)

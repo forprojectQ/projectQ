@@ -51,4 +51,11 @@ commands = {
             player:outputChat("Dimension, Interior: " .. dim .. ", " .. int .. ", " .. rz, 255, 194, 14)
         end,
     },
+    {
+        command = "makeveh",
+        access = 5,
+        func = function(player, args)
+            exports.vehicles:makeVehicle(player, args[1], args[2], args[3])
+        end,
+    },
 }
