@@ -12,6 +12,6 @@
 
     <export function="makeVehicle" type="server"/>
 
-    <file src="assets/engine.mp3"/>
-    <file src="assets/lock.mp3"/>
+    <file src="assets/engine.wav"/>
+    <file src="assets/lock.wav"/>
 </meta>
