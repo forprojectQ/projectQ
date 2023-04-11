@@ -14,9 +14,8 @@ local getKeyState = getKeyState
 local getTickCount = getTickCount
 local triggerServerEvent = triggerServerEvent
 local cursorX, cursorY
-
 local bgColor = tocolor(15, 15, 15, 235)
-local hoverBgColor = tocolor(25, 25, 25, 235)
+local hoverBgColor = tocolor(30, 30, 30, 235)
 local progColor = tocolor(66, 135, 245)
 
 function ui:init()
@@ -40,10 +39,32 @@ function ui:display()
     local x,y,w,h = self.screen.x-70,self.screen.y/2-250/2,60,250
     local boxX, boxY, boxW, boxH = x+5, y+20, 50, 50
     local newX,newY = 55,20
+    x, boxX = x - newX, boxX - newX
+    dxDrawRoundedRectangle(x,y,w,h,9,bgColor)
+    for i = 1, #self.categorys do
+        local category = self.categorys[i]
+        if self.current == i then
+            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
+	    elseif isInBox(boxX,boxY,boxW,boxH) then
+            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
+            if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
+                self.tick = getTickCount()
+                self.current = i
+                self:refresh()
+            end
+        else
+            dxDrawRectangle(boxX,boxY,boxW,boxH,bgColor)
+        end
+        dxDrawImage(boxX+7.5,boxY+7.5,35,35,category[2])
+        boxY=boxY+52
+    end
     dxDrawRoundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
     for index, value in ipairs(self.items) do
-	if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH) then
+	    if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH) then
             dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,hoverBgColor)
+            local cursorX, cursorY = getCursorPosition()
+            cursorX, cursorY = cursorX * self.screen.x, cursorY * self.screen.y
+            dxDrawText(""..string.sub(value[6],1,10).." ("..value[5]..")",cursorX-35,cursorY-20,nil,nil,tocolor(155,155,155,235),1,self.font)
             if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                 self.tick = getTickCount()
                 triggerServerEvent('use.item',localPlayer,value[1])
@@ -62,25 +83,6 @@ function ui:display()
             newY = 20
             newX = newX + 55
         end
-    end
-    x, boxX = x - newX, boxX - newX
-    dxDrawRoundedRectangle(x,y,w,h,9,bgColor)
-    for i = 1, #self.categorys do
-        local category = self.categorys[i]
-        if self.current == i then
-            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
-	elseif isInBox(boxX,boxY,boxW,boxH) then
-            dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
-            if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
-                self.tick = getTickCount()
-                self.current = i
-                self:refresh()
-            end
-        else
-            dxDrawRectangle(boxX,boxY,boxW,boxH,bgColor)
-        end
-        dxDrawImage(boxX+7.5,boxY+7.5,35,35,category[2])
-        boxY=boxY+52
     end
 end
 
@@ -119,6 +121,8 @@ function ui:refresh()
                 self:getImage(value[1]), 
                 getItemCount(value[1],value[2]),
                 getItemType(value[1]),
+                getItemValue(value[1],value[2]),
+                getItemName(value[1]),
             })
             if index % 4 == 0 then
                 size = size + 55

@@ -32,6 +32,21 @@ bindKey("l", "down", function()
     triggerServerEvent("vehicle.toggle.lights", localPlayer, vehicle)
 end)
 
+bindKey("x", "down", function()
+    if not getElementData(localPlayer, "online") then
+        return
+    end
+    
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    
+    if not vehicle then
+        return
+    end
+
+    triggerServerEvent("vehicle.toggle.windows", localPlayer, vehicle)
+end)
+
+
 bindKey("k", "down", function()
     if not getElementData(localPlayer, "online") then
         return

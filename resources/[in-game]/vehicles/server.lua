@@ -46,6 +46,7 @@ function loadOneVehicle(dbid,row)
 			setElementInterior(veh, int)
 			setElementDimension(veh, dim)
 			setVehiclePlateText(veh, tostring(row.plate))
+            setElementData(veh, "window", 0)
 			setElementData(veh, "dbid", dbid)
 			setElementData(veh, "fuel", tonumber(row.fuel))
 			setElementData(veh, "tax", tonumber(row.tax))
@@ -130,39 +131,57 @@ function enterVehicle(player, seat)
 end
 addEventHandler("onVehicleEnter", getRootElement(), enterVehicle)
 
-function toggleVehicleLock()
+function toggleVehicleLock(key)
     local x, y, z = getElementPosition(source)
     for _, vehicle in ipairs(getElementsByType("vehicle")) do
         local vx, vy, vz = getElementPosition(vehicle)
         if getDistanceBetweenPoints3D(x, y, z, vx, vy, vz) <= 5 then
             local dbid = getElementData(vehicle, "dbid")
-            if exports.items:hasItem(source, 2, dbid) then
-                local lock = exports.cache:getVehicleData(dbid, "lock") or 0
-				print(lock)
-                if lock == 1 then
-                    exports.cache:setVehicleData(dbid, "lock", 0)
-                    setVehicleLocked(vehicle, false)
-                else
-                    exports.cache:setVehicleData(dbid, "lock", 1)
-                    setVehicleLocked(vehicle, true)
+            if key then
+                if key ~= dbid then
+                    return
                 end
-                triggerClientEvent("vehicle.effect.3d", root, "assets/lock.wav", vx, vy, vz)
-                setPedAnimation(source, "ped", "walk_doorpartial", -1, false, false, false, false)
-                local oldState = getVehicleOverrideLights(vehicle)
-                local from = 2
-                local to = oldState
-                if oldState == 2 then
-                    from = 1
-                end
-                setVehicleOverrideLights(vehicle, from)
-                setTimer(setVehicleOverrideLights, 500, 1, vehicle, to)
-                break
             end
+            if not exports.items:hasItem(source, 2, dbid) then
+                return
+            end
+            local lock = cache:getVehicleData(dbid, "lock") or 0
+            if lock == 1 then
+                cache:setVehicleData(dbid, "lock", 0)
+                setVehicleLocked(vehicle, false)
+            else
+                cache:setVehicleData(dbid, "lock", 1)
+                setVehicleLocked(vehicle, true)
+            end
+            triggerClientEvent("vehicle.effect.3d", root, "assets/lock.wav", vx, vy, vz)
+            setPedAnimation(source, "ped", "walk_doorpartial", -1, false, false, false, false)
+            local oldState = getVehicleOverrideLights(vehicle)
+            local from = 2
+            local to = oldState
+            if oldState == 2 then
+                from = 1
+            end
+            setVehicleOverrideLights(vehicle, from)
+            setTimer(setVehicleOverrideLights, 500, 1, vehicle, to)
+            break
         end
     end
 end
 addEvent("vehicle.toggle.lock", true)
 addEventHandler("vehicle.toggle.lock", root, toggleVehicleLock)
+
+function toggleVehicleWindows(vehicle)
+    local window = tonumber(getElementData(vehicle, "window")) or 0 --// ( 0 KAPALI / 1 AÇIK)
+    local x, y, z = getElementPosition(vehicle)
+    triggerClientEvent("vehicle.effect.3d", root, "assets/window.wav", x, y, z)
+    if window == 1 then
+        setElementData(vehicle, "window", 0)
+    else
+        setElementData(vehicle, "window", 1)
+    end
+end
+addEvent("vehicle.toggle.windows", true)
+addEventHandler("vehicle.toggle.windows", root, toggleVehicleWindows)
 
 function toggleVehicleLights(vehicle)
     local dbid = getElementData(vehicle, "dbid")
