@@ -1,3 +1,5 @@
+local conn = exports.mysql:getConn()
+
 commands = {
     {
         command = "ornekhesapkomut",
@@ -49,6 +51,21 @@ commands = {
             player:outputChat("Pozisyon: " .. x .. ", " .. y .. ", " .. z, 255, 194, 14)
             player:outputChat("Rotasyon: " .. rx .. ", " .. ry .. ", " .. rz, 255, 194, 14)
             player:outputChat("Dimension, Interior: " .. dim .. ", " .. int .. ", " .. rz, 255, 194, 14)
+        end,
+    },
+    {
+        command = "vehlib",
+        -- araç kütüphanesi
+        access = 5,
+        func = function(player)
+            dbQuery(
+                function(qh, thePlayer)
+                    local results = dbPoll(qh, -1)
+                    if results then
+                        triggerClientEvent(thePlayer, "vehicle.library", thePlayer, results)
+                    end
+                end,
+            {player}, conn, "SELECT * FROM vehicles_library")
         end,
     },
     {
