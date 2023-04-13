@@ -17,13 +17,14 @@ local resources = {
     launcher:new("cache", 2),
     launcher:new("dxlibrary", 3),
     launcher:new("fonts", 4),
-    launcher:new("account", 5),
-    launcher:new("items", 6),
-    launcher:new("admins", 7),
-    launcher:new("vehicleslibrary", 8),
-    launcher:new("cursor", 9),
-    launcher:new("living", 10),
-    launcher:new("vehicles", 11),
+    launcher:new("identity", 5),
+    launcher:new("account", 6),
+    launcher:new("items", 7),
+    launcher:new("admins", 8),
+    launcher:new("vehicleslibrary", 9),
+    launcher:new("cursor", 10),
+    launcher:new("living", 11),
+    launcher:new("vehicles", 12),
 }
 
 local max = #resources
