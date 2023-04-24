@@ -1,0 +1,9 @@
+
+<meta>
+    <oop>true</oop>
+    
+    <script src="s_player.lua" type="server"/>
+    <script src="s_vehicle.lua" type="server"/>
+    
+    <export function="findPlayer" type="server"/>
+</meta>

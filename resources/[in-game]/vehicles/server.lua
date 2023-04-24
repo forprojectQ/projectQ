@@ -29,7 +29,6 @@ function loadAlllVehicle()
 end
 addEventHandler("onResourceStart", resourceRoot, loadAlllVehicle)
 
-
 -- makeVehicle ile oluştururken sonra tekrar query yapılmaması için row yollanabilir.
 function loadOneVehicle(dbid,row)
 	local veh = getElementByID("vehicle"..dbid)
@@ -84,25 +83,32 @@ end
 
 function makeVehicle(admin, libID, owner, job)
     if tonumber(libID) and tonumber(owner) and tonumber(job) then
-		local nextID = exports.mysql:getNewID("vehicles")
-		dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(owner).."', job='"..(tonumber(job)).."'")
-		dbQuery(
-			function(qh)
-				local res, rows, err = dbPoll(qh, 0)
-				if rows > 0 then
-					local dbid = tonumber(res[1].id)
-					for index, row in ipairs(res) do
-						for column, value in pairs(row) do
-							--carshop columnlarını cache ekleme
-							if column:sub(1,7) ~= "carshop" then
-								cache:setVehicleData(dbid, column, value)
-							end	
-						end
-					end
-					loadOneVehicle(dbid,res[1])
-				end
-			end,
-		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", nextID)
+        local targetPlayer, targetPlayerName = exports.global:findPlayer(owner)
+        if targetPlayer then
+            local nextID = exports.mysql:getNewID("vehicles")
+            local pdbid = getElementData(targetPlayer, "dbid")
+            exports.items:giveItem(targetPlayer, 2, nextID)
+            dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."'")
+            dbQuery(
+                function(qh)
+                    local res, rows, err = dbPoll(qh, 0)
+                    if rows > 0 then
+                        local dbid = tonumber(res[1].id)
+                        for index, row in ipairs(res) do
+                            for column, value in pairs(row) do
+                                --carshop columnlarını cache ekleme
+                                if column:sub(1,7) ~= "carshop" then
+                                    cache:setVehicleData(dbid, column, value)
+                                end	
+                            end
+                        end
+                        loadOneVehicle(dbid,res[1])
+                    end
+                end,
+            conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", nextID)
+        else
+            outputChatBox("[!]#ffffff Oyuncu bulunamadı, veya giriş yapmamış.", admin, 235, 180, 132, true)
+        end
     else
         outputChatBox("[!]#ffffff /makeveh [Kütüphane ID] [Sahip] [Meslek(0 = Şahsi Araç)]", admin, 235, 180, 132, true)
     end
