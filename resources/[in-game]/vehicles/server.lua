@@ -88,21 +88,24 @@ function makeVehicle(admin, libID, owner, job)
             local nextID = exports.mysql:getNewID("vehicles")
             local pdbid = getElementData(targetPlayer, "dbid")
             exports.items:giveItem(targetPlayer, 2, nextID)
-            dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."'")
+            local plate = exports.global:createRandomPlateText()
+            dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', plate='"..(tostring(plate)).."'")
             dbQuery(
                 function(qh)
-                    local res, rows, err = dbPoll(qh, 0)
-                    if rows > 0 then
-                        local dbid = tonumber(res[1].id)
-                        for index, row in ipairs(res) do
-                            for column, value in pairs(row) do
-                                --carshop columnlarını cache ekleme
-                                if column:sub(1,7) ~= "carshop" then
-                                    cache:setVehicleData(dbid, column, value)
-                                end	
+                    local res, rows = dbPoll(qh, -1)
+                    if res then
+                        if rows > 0 then
+                            local dbid = tonumber(res[1].id)
+                            for index, row in ipairs(res) do
+                                for column, value in pairs(row) do
+                                    --carshop columnlarını cache ekleme
+                                    if column:sub(1,7) ~= "carshop" then
+                                        cache:setVehicleData(dbid, column, value)
+                                    end	
+                                end
                             end
+                            loadOneVehicle(dbid,res[1])
                         end
-                        loadOneVehicle(dbid,res[1])
                     end
                 end,
             conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", nextID)
