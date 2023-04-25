@@ -27,9 +27,7 @@ function All:init()
                     end
                 end
                 tables_cache[tablename].databaseLoaded = true
-            end,function()
-				loadCache(tableindex+1)
-			end)
+            end, function() loadCache(tableindex+1) end)
         end,{v,i},conn,"SELECT * FROM "..v)
     end
     loadCache(1)    
