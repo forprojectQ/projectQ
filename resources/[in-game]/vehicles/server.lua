@@ -76,7 +76,7 @@ function loadOneVehicle(dbid,row)
 					loadOneVehicle(res[1].id,res[1])
 				end
 			end,
-		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", dbid)
+		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", dbid)
 	end	
 
 end
@@ -90,7 +90,7 @@ function makeVehicle(admin, libID, owner, job)
             exports.items:giveItem(targetPlayer, 2, nextID)
             local plate = exports.global:createRandomPlateText()
             dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', plate='"..(tostring(plate)).."'")
-            dbQuery(
+			dbQuery(
                 function(qh)
                     local res, rows = dbPoll(qh, -1)
                     if res then
@@ -108,7 +108,7 @@ function makeVehicle(admin, libID, owner, job)
                         end
                     end
                 end,
-            conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id AND v.id=?", nextID)
+            conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", nextID)
         else
             outputChatBox("[!]#ffffff Oyuncu bulunamadı, veya giriş yapmamış.", admin, 235, 180, 132, true)
         end
