@@ -131,6 +131,7 @@ function deleteVehicle(admin, vehID)
             local dbid = getElementData(vehicle, "dbid")
             destroyElement(vehicle)
             dbExec(conn, "DELETE FROM vehicles WHERE id = '"..(dbid).."'")
+            cache:clearVehicleAllData(dbid)
             outputChatBox("[!]#ffffff #"..dbid.." başarıyla silindi.", admin, 255, 0, 0, true)
         else
             outputChatBox("[!]#ffffff Araç bulunamadı veya yanlış ID girdiniz.", admin, 235, 180, 132, true)
