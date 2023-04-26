@@ -6,5 +6,6 @@
     <script src="s_vehicle.lua" type="server"/>
     
     <export function="findPlayer" type="server"/>
+    <export function="findVehicle" type="server"/>
     <export function="createRandomPlateText" type="server"/>
 </meta>

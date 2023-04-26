@@ -14,3 +14,15 @@ function createRandomPlateText()
     
 	return plate
 end
+
+function findVehicle(arg)
+    if tonumber(arg) then
+		local vehicle = Element.getByID("vehicle"..arg)
+        if vehicle then
+            return vehicle
+        else
+            return false
+        end
+    end
+    return false
+end

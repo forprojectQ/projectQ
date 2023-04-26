@@ -11,6 +11,7 @@
     <script src="fuel/server.lua" type="server"/>
 
     <export function="makeVehicle" type="server"/>
+    <export function="deleteVehicle" type="server"/>
 
     <file src="assets/engine.wav"/>
     <file src="assets/lock.wav"/>

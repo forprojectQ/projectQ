@@ -87,9 +87,16 @@ function makeVehicle(admin, libID, owner, job)
         if targetPlayer then
             local nextID = exports.mysql:getNewID("vehicles")
             local pdbid = getElementData(targetPlayer, "dbid")
-            exports.items:giveItem(targetPlayer, 2, nextID)
             local plate = exports.global:createRandomPlateText()
-            dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', plate='"..(tostring(plate)).."'")
+            local rotation = getPedRotation(targetPlayer)
+            local interior = getElementInterior(targetPlayer)
+            local dimension = getElementDimension(targetPlayer)
+			local x, y, z = getElementPosition(targetPlayer)
+			x = x + (( math.cos(math.rad(rotation))) * 5)
+			y = y + (( math.sin(math.rad(rotation))) * 5)
+            local position = ""..x..","..y..","..z..","..interior..","..dimension..""
+            exports.items:giveItem(targetPlayer, 2, nextID)
+            dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', pos='"..(position).."',  plate='"..(tostring(plate)).."'")
 			dbQuery(
                 function(qh)
                     local res, rows = dbPoll(qh, -1)
@@ -114,6 +121,22 @@ function makeVehicle(admin, libID, owner, job)
         end
     else
         outputChatBox("[!]#ffffff /makeveh [Kütüphane ID] [Sahip] [Meslek(0 = Şahsi Araç)]", admin, 235, 180, 132, true)
+    end
+end
+
+function deleteVehicle(admin, vehID)
+    if tonumber(vehID) then
+        local vehicle = exports.global:findVehicle(vehID)
+        if vehicle then
+            local dbid = getElementData(vehicle, "dbid")
+            destroyElement(vehicle)
+            dbExec(conn, "DELETE FROM vehicles WHERE id = '"..(dbid).."'")
+            outputChatBox("[!]#ffffff #"..dbid.." başarıyla silindi.", admin, 255, 0, 0, true)
+        else
+            outputChatBox("[!]#ffffff Araç bulunamadı veya yanlış ID girdiniz.", admin, 235, 180, 132, true)
+        end
+    else
+        outputChatBox("[!]#ffffff /delveh [Araç ID]", admin, 235, 180, 132, true)
     end
 end
 

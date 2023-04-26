@@ -1,6 +1,6 @@
 function findPlayer(arg)
     if tonumber(arg) then
-        local player = getElementByID("player"..arg)
+        local player = Element.getByID("player"..arg)
         if player then
             return player, player.name
         else

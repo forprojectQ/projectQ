@@ -75,4 +75,11 @@ commands = {
             exports.vehicles:makeVehicle(player, args[1], args[2], args[3])
         end,
     },
+    {
+        command = "delveh",
+        access = 5,
+        func = function(player, args)
+            exports.vehicles:deleteVehicle(player, args[1])
+        end,
+    },
 }
