@@ -6,10 +6,21 @@
 
     <export function="getAccountData" type="server"/>
     <export function="setAccountData" type="server"/>
+    <export function="removeAccountData" type="server"/>
+    <export function="clearAccountAllData" type="server"/>
+
     <export function="getCharacterData" type="server"/>
     <export function="setCharacterData" type="server"/>
+    <export function="removeCharacterData" type="server"/>
+    <export function="clearCharacterAllData" type="server"/>
+
     <export function="getInteriorData" type="server"/>
     <export function="setInteriorData" type="server"/>
+    <export function="removeInteriorData" type="server"/>
+    <export function="clearInteriorAllData" type="server"/>
+
     <export function="getVehicleData" type="server"/>
     <export function="setVehicleData" type="server"/>
+    <export function="removeVehicleData" type="server"/>
+    <export function="clearVehicleAllData" type="server"/>
 </meta>

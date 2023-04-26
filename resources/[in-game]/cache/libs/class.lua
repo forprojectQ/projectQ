@@ -1,7 +1,6 @@
 conn = exports.mysql:newConnect("cache","suppress=1060,1062")
+tables_cache = {} --// Tüm verilerin tutulcağı tablo. tables_cache["accounts"]
 
--- Tüm verilerin tutulcağı tablo. tables_cache["accounts"]
-tables_cache = {}
 function class(name)
     local c = {}
     c[0] = {}
@@ -35,23 +34,19 @@ function class(name)
     function c:set(target, key, value)
         if (not self.databaseLoaded) then return false end
 	    if (not target or not key) then return false end
-
         if not self[target] then
             self[target] = {}
             dbExec(conn, "INSERT INTO `"..(self.__type).."` (id) VALUES(?)", target)
         end
-
         if (self[0] and self[0][key] == nil) then
             self[0][key] = true
             dbExec(conn, "ALTER TABLE `"..(self.__type).."` ADD `??` text", key)
         end
-
         if (value ~= nil) then
             dbExec(conn, "UPDATE `"..(self.__type).."` SET `??`=? WHERE id=?", key, tostring(value), target)
         else
             dbExec(conn, "UPDATE `"..(self.__type).."` SET `??`=NULL WHERE id=?", key, target)
         end
-
         self[target][key] = value
         return true
     end
@@ -60,8 +55,6 @@ function class(name)
         if (not self.databaseLoaded) then return false end
 	    if (not target or not key) then return nil end
         if (self[target] == nil) then return nil end
-
-
         return tonumber(self[target][key]) or self[target][key]
     end
 
@@ -70,7 +63,7 @@ function class(name)
         collectgarbage("collect")
     end
 
-    function c:destroy(target)
+    function c:clear(target)
         self[target] = nil
         collectgarbage("collect")
     end
