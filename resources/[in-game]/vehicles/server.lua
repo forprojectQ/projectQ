@@ -37,13 +37,14 @@ function loadOneVehicle(dbid,row)
 	if row then
 		local dbid = tonumber(row.id)
 		local libid = tonumber(row.library_id)
-		local x, y, z, int, dim = unpack(split(row.pos, ","))
+		local x, y, z, int, dim, rx, ry, rz = unpack(split(row.pos, ","))
 		local veh = createVehicle(tonumber(row.carshop_gta), x, y, z)
 		if veh then
 			setElementID(veh,"vehicle"..dbid)
 			setVehicleColor(veh, unpack(split(row.color, ",")))
 			setElementInterior(veh, int)
 			setElementDimension(veh, dim)
+            setElementRotation(veh, rx, ry, rz)
 			setVehiclePlateText(veh, tostring(row.plate))
             setElementData(veh, "window", 0)
 			setElementData(veh, "dbid", dbid)
@@ -77,8 +78,7 @@ function loadOneVehicle(dbid,row)
 				end
 			end,
 		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", dbid)
-	end	
-
+	end
 end
 
 function makeVehicle(admin, libID, owner, job)
@@ -88,13 +88,12 @@ function makeVehicle(admin, libID, owner, job)
             local nextID = exports.mysql:getNewID("vehicles")
             local pdbid = getElementData(targetPlayer, "dbid")
             local plate = exports.global:createRandomPlateText()
-            local rotation = getPedRotation(targetPlayer)
-            local interior = getElementInterior(targetPlayer)
-            local dimension = getElementDimension(targetPlayer)
-			local x, y, z = getElementPosition(targetPlayer)
-			x = x + (( math.cos(math.rad(rotation))) * 5)
-			y = y + (( math.sin(math.rad(rotation))) * 5)
-            local position = ""..x..","..y..","..z..","..interior..","..dimension..""
+            local x, y, z = getElementPosition(targetPlayer)
+            local interior, dimension = getElementInterior(targetPlayer), getElementDimension(targetPlayer)
+            local rx, ry, rz = getElementRotation(targetPlayer)
+			x = x + (( math.cos(math.rad(rz))) * 5)
+			y = y + (( math.sin(math.rad(rz))) * 5)
+            local position = ""..x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz..""
             exports.items:giveItem(targetPlayer, 2, nextID)
             dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', pos='"..(position).."',  plate='"..(tostring(plate)).."'")
 			dbQuery(
@@ -147,6 +146,7 @@ function startEnterVehicle(player)
     local vehicleJob = cache:getVehicleData(getElementData(vehicle, "dbid"), "job") or 0
     if vehicleJob > 0 then
         if playerJob ~= vehicleJob then
+            outputChatBox("[!]#ffffff Bu aracı kullanabilmek için meslekte olmalısınız.", player, 235, 180, 132, true)
             cancelEvent()
         end
     end
@@ -154,8 +154,8 @@ end
 addEventHandler("onVehicleStartEnter", getRootElement(), startEnterVehicle)
 
 function enterVehicle(player, seat)
+    local dbid = getElementData(source, "dbid")
     if seat == 0 then
-        local dbid = getElementData(source, "dbid")
         local engine = cache:getVehicleData(dbid, "engine") or 0
         if tonumber(engine) == 0 then
             setVehicleEngineState(source, false)
@@ -163,6 +163,18 @@ function enterVehicle(player, seat)
     end
 end
 addEventHandler("onVehicleEnter", getRootElement(), enterVehicle)
+
+function exitVehicle(player, seat)
+    local dbid = getElementData(source, "dbid")
+    if seat == 0 then
+        local x, y, z = getElementPosition(source)
+        local interior, dimension = getElementInterior(source), getElementDimension(source)
+        local rx, ry, rz = getElementRotation(source)
+        local position = ""..x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz..""
+        cache:setVehicleData(dbid, "pos", position)
+    end
+end
+addEventHandler("onVehicleExit", getRootElement(), exitVehicle)
 
 function toggleVehicleLock(key)
     local x, y, z = getElementPosition(source)

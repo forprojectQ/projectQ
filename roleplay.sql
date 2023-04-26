@@ -89,7 +89,7 @@ CREATE TABLE `vehicles` (
   `fuel` int(11) NOT NULL DEFAULT '100',
   `tax` int(11) NOT NULL DEFAULT '0',
   `job` int(11) DEFAULT NULL,
-  `pos` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,5,0,0',
+  `pos` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,5,0,0,0,0,90',
   `plate` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,0',
   `lock` int(11) NOT NULL DEFAULT '1',
