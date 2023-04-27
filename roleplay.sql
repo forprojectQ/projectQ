@@ -96,6 +96,7 @@ CREATE TABLE `vehicles` (
   `interest` int(11) NOT NULL DEFAULT '0',
   `owner` int(11) DEFAULT NULL,
   `engine` int(11) NOT NULL DEFAULT '0',
+  `enabled` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

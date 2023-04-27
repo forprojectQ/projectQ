@@ -3,6 +3,7 @@
 
     <file src="assets/arrow.png"/>
     <file src="assets/hand.png"/>
+    <file src="assets/text.png"/>
 
 	<export function="setPointer" type="client"/>
     <oop>true</oop>

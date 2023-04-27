@@ -45,7 +45,7 @@ function ui:display()
         local category = self.categorys[i]
         if self.current == i then
             dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
-	    elseif isInBox(boxX,boxY,boxW,boxH) then
+	    elseif isInBox(boxX,boxY,boxW,boxH,"hand") then
             dxDrawRectangle(boxX,boxY,boxW,boxH,hoverBgColor)
             if getKeyState('mouse1') and self.tick+400 <= getTickCount() then
                 self.tick = getTickCount()
@@ -60,7 +60,7 @@ function ui:display()
     end
     dxDrawRoundedRectangle(self.screen.x-5-self.size,y,self.size+2.5,h,9,bgColor)
     for index, value in ipairs(self.items) do
-	    if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH) then
+	    if isInBox(self.screen.x-1-newX,y+newY,boxW,boxH,"hand") then
             dxDrawRectangle(self.screen.x-1-newX,y+newY,boxW,boxH,hoverBgColor)
             local cursorX, cursorY = getCursorPosition()
             cursorX, cursorY = cursorX * self.screen.x, cursorY * self.screen.y

@@ -2,14 +2,16 @@ _functions = [[
     screen = Vector2(guiGetScreenSize())
     tick = getTickCount()
 
-    function isInBox(x, y, w, h)
+    function isInBox(x, y, w, h, type)
        if isCursorShowing() then
-          local cx, cy = getCursorPosition()
- 	  cx, cy = cx*screen.x, cy*screen.y
-       	  if (cx >= x and cx <= x+w and cy >= y and cy <= y+h) then
-              exports.cursor:setPointer(true)
-              return true
-  	  end
+            local cx, cy = getCursorPosition()
+            cx, cy = cx*screen.x, cy*screen.y
+            if (cx >= x and cx <= x+w and cy >= y and cy <= y+h) then
+                if type then
+                    exports.cursor:setPointer(type)
+                end
+                return true
+            end
        end
        return false
     end

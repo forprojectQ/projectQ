@@ -23,7 +23,9 @@ function loadAlllVehicle()
 	dbQuery(function(qh)
 		local res = dbPoll(qh, 0)
 		Async:foreach(res, function(row)
-			loadOneVehicle(row.id,row)
+            if row.enabled == 1 then
+			    loadOneVehicle(row.id,row)
+            end
 		end)
 	end, conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id")
 end
@@ -35,7 +37,6 @@ function loadOneVehicle(dbid,row)
 	if isElement(veh) then destroyElement(veh) end
 	-- eğer row argümanı varsa direk onu kullan.
 	if row then
-		local dbid = tonumber(row.id)
 		local libid = tonumber(row.library_id)
 		local x, y, z, int, dim, rx, ry, rz = unpack(split(row.pos, ","))
 		local veh = createVehicle(tonumber(row.carshop_gta), x, y, z)
@@ -129,7 +130,7 @@ function deleteVehicle(admin, vehID)
         if vehicle then
             local dbid = getElementData(vehicle, "dbid")
             destroyElement(vehicle)
-            dbExec(conn, "DELETE FROM vehicles WHERE id = '"..(dbid).."'")
+            dbExec(conn,"UPDATE vehicles SET enabled='0' WHERE id='"..(dbid).."'")
             cache:clearVehicleAllData(dbid)
             outputChatBox("[!]#ffffff #"..dbid.." başarıyla silindi.", admin, 255, 0, 0, true)
         else
