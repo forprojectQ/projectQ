@@ -82,7 +82,7 @@ function loadOneVehicle(dbid,row)
 	end
 end
 
-function makeVehicle(admin, libID, owner, job)
+function makeVehicle(libID, owner, job)
     if tonumber(libID) and tonumber(owner) and tonumber(job) then
         local targetPlayer, targetPlayerName = exports.global:findPlayer(owner)
         if targetPlayer then
@@ -116,15 +116,16 @@ function makeVehicle(admin, libID, owner, job)
                     end
                 end,
             conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", nextID)
+            return true
         else
-            outputChatBox("[!]#ffffff Oyuncu bulunamadı, veya giriş yapmamış.", admin, 235, 180, 132, true)
+            return false
         end
     else
-        outputChatBox("[!]#ffffff /makeveh [Kütüphane ID] [Sahip] [Meslek(0 = Şahsi Araç)]", admin, 235, 180, 132, true)
+        return false
     end
 end
 
-function deleteVehicle(admin, vehID)
+function deleteVehicle(vehID)
     if tonumber(vehID) then
         local vehicle = exports.global:findVehicle(vehID)
         if vehicle then
@@ -132,12 +133,20 @@ function deleteVehicle(admin, vehID)
             destroyElement(vehicle)
             dbExec(conn,"UPDATE vehicles SET enabled='0' WHERE id='"..(dbid).."'")
             cache:clearVehicleAllData(dbid)
-            outputChatBox("[!]#ffffff #"..dbid.." başarıyla silindi.", admin, 255, 0, 0, true)
+            return true
         else
-            outputChatBox("[!]#ffffff Araç bulunamadı veya yanlış ID girdiniz.", admin, 235, 180, 132, true)
+            return false
         end
     else
-        outputChatBox("[!]#ffffff /delveh [Araç ID]", admin, 235, 180, 132, true)
+        return false
+    end
+end
+
+function reloadVehicle(vehID)
+    if tonumber(vehID) then
+        
+    else
+        return false
     end
 end
 

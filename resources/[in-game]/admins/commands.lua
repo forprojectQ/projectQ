@@ -47,7 +47,6 @@ commands = {
             local x, y, z = player.position.x, player.position.y, player.position.z
             local int, dim = player.interior, player.dimension
             local rx, ry, rz = player.rotation.x, player.rotation.y, player.rotation.z
-
             player:outputChat("Pozisyon: " .. x .. ", " .. y .. ", " .. z, 255, 194, 14)
             player:outputChat("Rotasyon: " .. rx .. ", " .. ry .. ", " .. rz, 255, 194, 14)
             player:outputChat("Dimension, Interior: " .. dim .. ", " .. int .. ", " .. rz, 255, 194, 14)
@@ -55,7 +54,6 @@ commands = {
     },
     {
         command = "vehlib",
-        -- araç kütüphanesi
         access = 5,
         func = function(player)
             dbQuery(
@@ -72,14 +70,37 @@ commands = {
         command = "makeveh",
         access = 5,
         func = function(player, args)
-            exports.vehicles:makeVehicle(player, args[1], args[2], args[3])
+            if tonumber(args[1]) and tonumber(args[2]) and tonumber(args[3]) then --// Kütüphane ID , Sahip, Meslek
+                if exports.vehicles:makeVehicle(args[1], args[2], args[3]) then
+                    player:outputChat("[!]#ffffff Araç oluşturuldu.", 235, 180, 132, true)
+                else
+                    player:outputChat("[!]#ffffff Bir hata meydana geldi, girdiğiniz argümanları doğrulayın.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /"..(command).." [Kütüphane ID] [Sahip ID] [Meslek (0 = Şahıs Aracı)]", 235, 180, 132, true)
+            end
         end,
     },
     {
         command = "delveh",
         access = 5,
         func = function(player, args)
-            exports.vehicles:deleteVehicle(player, args[1])
+            if tonumber(args[1]) then --// ARAÇ ID
+                if exports.vehicles:deleteVehicle(args[1]) then
+                    player:outputChat("[!]#ffffff #"..ags[1]..", silindi.", 235, 180, 132, true)
+                else
+                    player:outputChat("[!]#ffffff Geçersiz araç ID, daha sonra tekrar deneyiniz.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /"..(command).." [ID]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "reloadveh",
+        access = 7,
+        func = function(player, args)
+
         end,
     },
 }
