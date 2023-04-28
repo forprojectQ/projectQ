@@ -4,6 +4,7 @@ tables_cache = {} --// Tüm verilerin tutulcağı tablo. tables_cache["accounts"
 function class(name)
     local c = {}
     c[0] = {}
+    c.pool = {}
     c.__index = c
     c.__type = name
     c.databaseLoaded = false
@@ -31,22 +32,20 @@ function class(name)
         return self[target]
     end
 
-    function c:set(target, key, value)
-        if (not self.databaseLoaded) then return false end
+    function c:set(target, key, value, noSql)
+        if (not self.databaseLoaded) then table.insert(self.pool,{target,key,value,noSql}) return false end
 	    if (not target or not key) then return false end
+		
         if not self[target] then
             self[target] = {}
-            dbExec(conn, "INSERT INTO `"..(self.__type).."` (id) VALUES(?)", target)
+            if not noSql then dbExec(conn, "INSERT INTO `"..(self.__type).."` (id) VALUES(?)", target) end
         end
         if (self[0] and self[0][key] == nil) then
             self[0][key] = true
-            dbExec(conn, "ALTER TABLE `"..(self.__type).."` ADD `??` text", key)
+            if not noSql then  dbExec(conn, "ALTER TABLE `"..(self.__type).."` ADD `??` text", key) end
         end
-        if (value ~= nil) then
-            dbExec(conn, "UPDATE `"..(self.__type).."` SET `??`=? WHERE id=?", key, tostring(value), target)
-        else
-            dbExec(conn, "UPDATE `"..(self.__type).."` SET `??`=NULL WHERE id=?", key, target)
-        end
+        if not noSql then dbExec(conn, "UPDATE `"..(self.__type).."` SET `??`=? WHERE id=?", key, value==nil and "NULL" or  tostring(value), target) end
+		
         self[target][key] = value
         return true
     end

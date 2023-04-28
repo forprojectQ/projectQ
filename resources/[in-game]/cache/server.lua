@@ -2,6 +2,7 @@ All = class("All")
 cached_tables = { --// cache yapılcak mysql table isimleri.
     "accounts","characters","vehicles"
 }
+addEvent("onDatabaseLoaded",true)
 
 function All:init()
     local tonumber = tonumber
@@ -25,11 +26,22 @@ function All:init()
                         tables_cache[tablename][dbid][column]=value
                     end
                 end
-                tables_cache[tablename].databaseLoaded = true
-            end, function() loadCache(tableindex+1) end)
+            end, function() 
+				tables_cache[tablename].databaseLoaded = true
+				triggerEvent("onDatabaseLoaded",root,tablename)
+				loadCache(tableindex+1) 
+			end)
         end,{v,i},conn,"SELECT * FROM "..v)
     end
     loadCache(1)
+	
+	addEventHandler("onDatabaseLoaded",root,function(tablename)
+		if #tables_cache[tablename].pool > 0 then
+			for i,v in ipairs(tables_cache[tablename].pool) do tables_cache[tablename]:set(unpack(v)) end
+			print(tablename.."'s pool set and cleared.")
+			tables_cache[tablename].pool = {}
+		end
+	end)
 
     --// set, get, remove and clear functions
 
@@ -37,8 +49,8 @@ function All:init()
     function getAccountData(target, key)
         return tables_cache["accounts"]:get(target, key)
     end
-    function setAccountData(target, key, value)
-        return tables_cache["accounts"]:set(target, key, value)
+    function setAccountData(target, key, value, noSql)
+        return tables_cache["accounts"]:set(target, key, value, noSql)
     end
     function removeAccountData(target, key)
         return tables_cache["accounts"]:remove(target, key)
@@ -51,8 +63,8 @@ function All:init()
     function getCharacterData(target, key)
         return tables_cache["characters"]:get(target, key)
     end
-    function setCharacterData(target, key, value)
-        return tables_cache["characters"]:set(target, key, value)
+    function setCharacterData(target, key, value, noSql)
+        return tables_cache["characters"]:set(target, key, value, noSql)
     end
     function removeCharacterData(target, key)
         return tables_cache["characters"]:remove(target, key)
@@ -65,8 +77,8 @@ function All:init()
     function getInteriorData(taget, key)
         return tables_cache["interiors"]:get(target, key)
     end
-    function setInteriorData(target, key, value)
-        return tables_cache["interiors"]:set(target, key, value)
+    function setInteriorData(target, key, value, noSql)
+        return tables_cache["interiors"]:set(target, key, value, noSql)
     end
     function removeInteriorData(target, key)
         return tables_cache["interiors"]:remove(target, key)
@@ -79,8 +91,8 @@ function All:init()
     function getVehicleData(target, key)
         return tables_cache["vehicles"]:get(target, key)
     end
-    function setVehicleData(target, key, value)
-        return tables_cache["vehicles"]:set(target, key, value)
+    function setVehicleData(target, key, value, noSql)
+        return tables_cache["vehicles"]:set(target, key, value, noSql)
     end
     function removeVehicleData(target, key)
         return tables_cache["vehicles"]:remove(target, key)
