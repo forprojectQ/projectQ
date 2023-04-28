@@ -19,51 +19,96 @@ local cache = exports.cache
 local _print = outputDebugString
 local ipairs = ipairs
 
+
+-- Araba load oldukdan sonra veya oluşturuldukdan sonra cacheye gönderilcek fakat sql işlenmicek column isimleri
+local noSql_columns = {
+	["carshop_price"]=true,["carshop_gta"]=true,["carshop_tax"]=true,["carshop_handling"]=true,["carshop_brand"]=true,["carshop_model"]=true,["carshop_year"]=true,
+	["custom_brand"]=true,["custom_model"]=true,["custom_year"]=true,["custom_tax"]=true,["custom_handling"]=true,
+}
+
+local query_sql = [[
+	SELECT 
+		v.*,
+		vl.price AS carshop_price,
+		vl.gta AS carshop_gta,
+		vl.tax AS carshop_tax,
+		vl.brand AS carshop_brand,
+		vl.model AS carshop_model,
+		vl.year AS carshop_year,
+		vl.handling AS carshop_handling,
+		vc.brand AS custom_brand,
+		vc.model AS custom_model,
+		vc.year AS custom_year,
+		vc.tax AS custom_tax,		
+		vc.handling AS custom_handling	
+	FROM 
+		vehicles v 
+	LEFT JOIN vehicles_library vl ON 
+		v.library_id = vl.id
+	LEFT JOIN vehicles_custom vc ON 
+		v.id = vc.id	
+]]	
+
 function loadAlllVehicle()
 	dbQuery(function(qh)
 		local res = dbPoll(qh, 0)
 		Async:foreach(res, function(row)
             if row.enabled == 1 then
-			    loadOneVehicle(row.id,row)
+			    loadOneVehicle(row.id,row,"start")
             end
 		end)
-	end, conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id")
+	end, conn, query_sql)
 end
 addEventHandler("onResourceStart", resourceRoot, loadAlllVehicle)
 
+function reloadVehicle(dbid)
+	loadOneVehicle(dbid)
+end
+
 -- makeVehicle ile oluştururken sonra tekrar query yapılmaması için row yollanabilir.
-function loadOneVehicle(dbid,row)
+function loadOneVehicle(dbid,row,loadtype)
 	local veh = getElementByID("vehicle"..dbid)
 	if isElement(veh) then destroyElement(veh) end
 	-- eğer row argümanı varsa direk onu kullan.
 	if row then
-		local libid = tonumber(row.library_id)
 		local x, y, z, int, dim, rx, ry, rz = unpack(split(row.pos, ","))
-		local veh = createVehicle(tonumber(row.carshop_gta), x, y, z)
+		local veh = createVehicle(tonumber(row.carshop_gta), x, y, z, rx, ry, rz, tostring(row.plate))
 		if veh then
 			setElementID(veh,"vehicle"..dbid)
-			setVehicleColor(veh, unpack(split(row.color, ",")))
 			setElementInterior(veh, int)
 			setElementDimension(veh, dim)
-            setElementRotation(veh, rx, ry, rz)
-			setVehiclePlateText(veh, tostring(row.plate))
             setElementData(veh, "window", 0)
 			setElementData(veh, "dbid", dbid)
 			setElementData(veh, "fuel", tonumber(row.fuel))
 			setElementData(veh, "tax", tonumber(row.tax))
 			setElementData(veh, "carshop_price", tonumber(row.carshop_price))
-			setElementData(veh, "carshop_tax", tonumber(row.carshop_tax))
+			setElementData(veh, "carshop_tax", tonumber(row.custom_tax or row.carshop_tax))
+			setElementData(veh, "info", {
+				brand=tostring(row.custom_brand or row.carshop_brand),
+				model=tostring(row.custom_model or row.custom_model),
+				year=tostring(row.custom_year or row.custom_year),
+			})
 			setVehicleLocked(veh, tonumber(row.lock) == 1)
 			setVehicleEngineState(veh, tonumber(row.engine) == 1)
-			for property,value in pairs(fromJSON(row.carshop_handling or "[ [ ] ]") or {}) do
+			setVehicleColor(veh, unpack(split(row.color, ",")))
+			for property,value in pairs(fromJSON((row.custom_handling or row.carshop_handling) or "[ [ ] ]") or {}) do
 				setVehicleHandling(veh,property,value)
 			end
-			if row.handling then
-				-- eğer aracın özel handı varsa önce handı sıfırla ve sonra özel handı yükle
-				setVehicleHandling(veh, false) 
-				for property,value in pairs(fromJSON(row.handling or "[ [ ] ]") or {}) do
-					setVehicleHandling(veh,property,value)
-				end
+			for slot, upgrade in ipairs(fromJSON(row.upgrades or "[ [ ] ]") or {}) do addVehicleUpgrade(veh, upgrade) end
+			
+			
+			
+			
+			
+			for column, value in pairs(row) do
+				-- eğer loadtype start ise, noSql_columns olanları cache gönder. çünkü cache reslenmiş ise bu veriler kaybolmuş olacaktır.
+				if loadtype =="start" and noSql_columns[column] then
+					cache:setVehicleData(dbid, column, value, true)
+					
+				-- eğer loadtype create ise, tüm verileri cache gönder ve noSql_columns olanlar içinde argüman gönder.	
+				elseif loadtype =="create" then
+					cache:setVehicleData(dbid, column, value, noSql_columns[column])
+				end	
 			end
 		else
 			_print("! VEHICLES FAILED CREATE VEHICLE "..dbid)
@@ -75,10 +120,10 @@ function loadOneVehicle(dbid,row)
 			function(qh)
 				local res, rows, err = dbPoll(qh, 0)
 				if rows > 0 then
-					loadOneVehicle(res[1].id,res[1])
+					loadOneVehicle(res[1].id,res[1],"create")
 				end
 			end,
-		conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", dbid)
+		conn, query_sql.." WHERE v.id=? LIMIT 1", dbid)
 	end
 end
 
@@ -94,28 +139,10 @@ function makeVehicle(libID, owner, job)
             local rx, ry, rz = getElementRotation(targetPlayer)
 			x = x + (( math.cos(math.rad(rz))) * 5)
 			y = y + (( math.sin(math.rad(rz))) * 5)
-            local position = ""..x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz..""
+            local position = x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz
             exports.items:giveItem(targetPlayer, 2, nextID)
             dbExec(conn, "INSERT INTO vehicles SET id='"..(nextID).."', library_id='"..(libID).."', owner='"..(pdbid).."', job='"..(tonumber(job)).."', pos='"..(position).."',  plate='"..(tostring(plate)).."'")
-			dbQuery(
-                function(qh)
-                    local res, rows = dbPoll(qh, -1)
-                    if res then
-                        if rows > 0 then
-                            local dbid = tonumber(res[1].id)
-                            for index, row in ipairs(res) do
-                                for column, value in pairs(row) do
-                                    --carshop columnlarını cache ekleme
-                                    if column:sub(1,7) ~= "carshop" then
-                                        cache:setVehicleData(dbid, column, value)
-                                    end	
-                                end
-                            end
-                            loadOneVehicle(dbid,res[1])
-                        end
-                    end
-                end,
-            conn, "SELECT v.*,vl.price AS carshop_price,vl.gta AS carshop_gta,vl.tax AS carshop_tax,vl.handling AS carshop_handling FROM vehicles v LEFT JOIN vehicles_library vl ON v.library_id = vl.id WHERE v.id=? LIMIT 1", nextID)
+			loadOneVehicle(nextID)
             return true
         else
             return false

@@ -12,6 +12,7 @@
 
     <export function="makeVehicle" type="server"/>
     <export function="deleteVehicle" type="server"/>
+    <export function="reloadVehicle" type="server"/>
 
     <file src="assets/engine.wav"/>
     <file src="assets/lock.wav"/>
