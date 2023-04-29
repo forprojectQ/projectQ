@@ -66,6 +66,13 @@ commands = {
             {player}, conn, "SELECT * FROM vehicles_library")
         end,
     },
+	{
+        command = "editveh",
+        access = 5,
+        func = function(player)
+            triggerEvent("editveh.openwindow",player)
+        end,
+    },
     {
         command = "makeveh",
         access = 5,

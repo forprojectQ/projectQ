@@ -23,7 +23,7 @@ local ipairs = ipairs
 -- Araba load oldukdan sonra veya oluşturuldukdan sonra cacheye gönderilcek fakat sql işlenmicek column isimleri
 local noSql_columns = {
 	["carshop_price"]=true,["carshop_gta"]=true,["carshop_tax"]=true,["carshop_handling"]=true,["carshop_brand"]=true,["carshop_model"]=true,["carshop_year"]=true,
-	["custom_brand"]=true,["custom_model"]=true,["custom_year"]=true,["custom_tax"]=true,["custom_handling"]=true,
+	["custom_price"]=true,["custom_brand"]=true,["custom_model"]=true,["custom_year"]=true,["custom_tax"]=true,["custom_handling"]=true,["custom_notes"]=true,
 }
 
 local query_sql = [[
@@ -36,11 +36,13 @@ local query_sql = [[
 		vl.model AS carshop_model,
 		vl.year AS carshop_year,
 		vl.handling AS carshop_handling,
+		vc.price AS custom_price,
 		vc.brand AS custom_brand,
 		vc.model AS custom_model,
 		vc.year AS custom_year,
 		vc.tax AS custom_tax,		
-		vc.handling AS custom_handling	
+		vc.handling AS custom_handling,	
+		vc.notes AS custom_notes
 	FROM 
 		vehicles v 
 	LEFT JOIN vehicles_library vl ON 
@@ -81,12 +83,14 @@ function loadOneVehicle(dbid,row,loadtype)
 			setElementData(veh, "dbid", dbid)
 			setElementData(veh, "fuel", tonumber(row.fuel))
 			setElementData(veh, "tax", tonumber(row.tax))
-			setElementData(veh, "carshop_price", tonumber(row.carshop_price))
+			setElementData(veh, "carshop_price", tonumber(row.custom_price or row.carshop_price))
 			setElementData(veh, "carshop_tax", tonumber(row.custom_tax or row.carshop_tax))
 			setElementData(veh, "info", {
+				library_id = row.library_id,
 				brand=tostring(row.custom_brand or row.carshop_brand),
-				model=tostring(row.custom_model or row.custom_model),
-				year=tostring(row.custom_year or row.custom_year),
+				model=tostring(row.custom_model or row.carshop_model),
+				year=tonumber(row.custom_year or row.carshop_year),
+				notes=row.custom_notes and tostring(row.custom_notes) or nil
 			})
 			setVehicleLocked(veh, tonumber(row.lock) == 1)
 			setVehicleEngineState(veh, tonumber(row.engine) == 1)
@@ -169,12 +173,13 @@ function deleteVehicle(vehID)
     end
 end
 
-function reloadVehicle(vehID)
-    if tonumber(vehID) then
-        
-    else
-        return false
-    end
+function isVehicleHasCustomRecord(dbid)
+	for column,v in pairs(noSql_columns) do
+		if column:sub(1,6) == "custom" then
+			if cache:getVehicleData(dbid,column) then return true end
+		end
+	end
+	return false
 end
 
 function startEnterVehicle(player)

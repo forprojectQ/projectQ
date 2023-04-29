@@ -6,4 +6,7 @@
 
     <script src="handling/client.lua" type="client" cache="false"/>
     <script src="handling/server.lua" type="server"/>
+	
+	<script src="editveh/client.lua" type="client" cache="false"/>
+    <script src="editveh/server.lua" type="server"/>
 </meta>
