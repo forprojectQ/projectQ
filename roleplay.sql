@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2023-04-28 16:32:57
+Date: 2023-05-01 07:26:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -59,7 +59,7 @@ CREATE TABLE `characters` (
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '63', '59', '0', '131', '0');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '2', '93', '1000', '38', '28', '0', '131', '0');
 
 -- ----------------------------
 -- Table structure for `items`
@@ -110,12 +110,12 @@ CREATE TABLE `vehicles` (
 -- ----------------------------
 -- Records of vehicles
 -- ----------------------------
-INSERT INTO `vehicles` VALUES ('13', '1', '100', '0', '0', '8.5634580278042,8.7875766467764,3.1096496582031,0,0,0,0,100.23803710938', 'AOF-865', '0,0,0', null, '1', '0', '1', '0', '1');
-INSERT INTO `vehicles` VALUES ('14', '1', '100', '0', '0', '8.0699133685011,-2.7380825766116,3.1171875,0,0,0,0,206.74113464355', 'JXV-728', '0,0,0', null, '1', '0', '1', '0', '1');
-INSERT INTO `vehicles` VALUES ('15', '1', '100', '0', '0', '27.784453625541,-13.538959302451,3.1171875,0,0,0,0,255.99908447266', 'SNH-114', '0,0,0', null, '1', '0', '1', '0', '1');
-INSERT INTO `vehicles` VALUES ('16', '1', '100', '0', '0', '34.089652932674,5.7571424293423,3.1171875,0,0,0,0,18.201873779297', 'DEZ-521', '0,0,0', null, '1', '0', '1', '0', '1');
-INSERT INTO `vehicles` VALUES ('17', '1', '100', '0', '0', '21.632355946983,-6.9611503467267,3.1171875,0,0,0,0,332.96499633789', 'AJN-666', '0,0,0', null, '1', '0', '1', '0', '1');
-INSERT INTO `vehicles` VALUES ('18', '1', '100', '0', '0', '49.476451372852,-31.174437523343,1.1405982971191,0,0,0,0,58.582733154297', 'ERL-416', '0,0,0', null, '1', '0', '1', '0', '1');
+INSERT INTO `vehicles` VALUES ('13', '1', '100', '120', '0', '8.5634580278042,8.7875766467764,3.1096496582031,0,0,0,0,100.23803710938', 'AOF-865', '0,0,0', null, '0', '0', '1', '1', '1');
+INSERT INTO `vehicles` VALUES ('14', '1', '100', '120', '0', '11.4794921875,-9.2978515625,2.8405292034149,0,0,359.89013671875,359.99450683594,207.32299804688', 'JXV-728', '0,0,0', 'false', '0', '0', '1', '1', '1');
+INSERT INTO `vehicles` VALUES ('15', '1', '100', '120', '0', '27.784453625541,-13.538959302451,3.1171875,0,0,0,0,255.99908447266', 'SNH-114', '0,0,0', null, '1', '0', '1', '0', '1');
+INSERT INTO `vehicles` VALUES ('16', '1', '100', '120', '0', '34.089652932674,5.7571424293423,3.1171875,0,0,0,0,18.201873779297', 'DEZ-521', '0,0,0', null, '1', '0', '1', '0', '1');
+INSERT INTO `vehicles` VALUES ('17', '1', '100', '120', '0', '21.632355946983,-6.9611503467267,3.1171875,0,0,0,0,332.96499633789', 'AJN-666', '0,0,0', null, '1', '0', '1', '0', '1');
+INSERT INTO `vehicles` VALUES ('18', '1', '100', '120', '0', '49.476451372852,-31.174437523343,1.1405982971191,0,0,0,0,58.582733154297', 'ERL-416', '0,0,0', null, '1', '0', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `vehicles_custom`
@@ -128,12 +128,15 @@ CREATE TABLE `vehicles_custom` (
   `year` int(11) DEFAULT NULL,
   `tax` int(11) DEFAULT NULL,
   `handling` text DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of vehicles_custom
 -- ----------------------------
+INSERT INTO `vehicles_custom` VALUES ('14', null, null, null, null, '[ { \"suspensionLowerLimit\": -0.2000000029802322, \"engineInertia\": 5, \"suspensionHighSpeedDamping\": 0, \"collisionDamageMultiplier\": 0.6000000238418579, \"suspensionDamping\": 0.1500000059604645, \"seatOffsetDistance\": 0.25, \"headLight\": \"small\", \"dragCoeff\": 2.400000095367432, \"centerOfMass\": [ 0, 0.1000000014901161, -0.1000000014901161 ], \"steeringLock\": 30, \"suspensionUpperLimit\": 0.2800000011920929, \"suspensionAntiDiveMultiplier\": 0.300000011920929, \"turnMass\": 3400, \"brakeBias\": 0.5, \"tractionLoss\": 0.800000011920929, \"monetary\": 35000, \"ABS\": false, \"suspensionFrontRearBias\": 0.5, \"percentSubmerged\": 75, \"tractionBias\": 0.5, \"numberOfGears\": 5, \"suspensionForceLevel\": 1.200000047683716, \"animGroup\": 0, \"engineAcceleration\": 25, \"maxVelocity\": 275, \"mass\": 1400, \"driveType\": \"awd\", \"modelFlags\": 10240, \"brakeDeceleration\": 10, \"handlingFlags\": 67108866, \"tractionMultiplier\": 0.800000011920929, \"engineType\": \"petrol\", \"tailLight\": \"small\" } ]', null, null);
 
 -- ----------------------------
 -- Table structure for `vehicles_library`
