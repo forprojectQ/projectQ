@@ -32,6 +32,9 @@ function spawn(dbid)
     local hunger = cache:getCharacterData(dbid, "hunger")
     local thirst = cache:getCharacterData(dbid, "thirst")
     local money = cache:getCharacterData(dbid, "money")
+    local hp = cache:getCharacterData(dbid, "health")
+    local arm = cache:getCharacterData(dbid, "armor")
+    local dead = cache:getCharacterData(dbid, "dead") or 0
     source:setData("money", tonumber(money))
     source:setData("hunger", tonumber(hunger))
     source:setData("thirst", tonumber(thirst))
@@ -43,6 +46,11 @@ function spawn(dbid)
     source.model = tonumber(characterModel)
     source.name = tostring(characterName)
     source.walkingStyle = walk
+    source.health = hp
+    source.armor = arm
+    if dead == 1 then
+        source.health = 0
+    end
     triggerEvent("load.items.server", source)
 end
 addEvent("auth.spawn.character", true)
@@ -95,7 +103,7 @@ function loginStep(player)
                     data[i][2] = cache:getCharacterData(dbid, "name")
                     data[i][3] = cache:getCharacterData(dbid, "gender")
                     data[i][4] = getZoneName(x, y, z)
-                    data[i][5] = cache:getCharacterData(dbid, "dead")
+                    data[i][5] = cache:getCharacterData(dbid, "active")
                 end
             end
             triggerClientEvent(player, "auth.login.step", player, data)

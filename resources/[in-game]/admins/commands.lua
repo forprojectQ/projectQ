@@ -84,7 +84,7 @@ commands = {
                     player:outputChat("[!]#ffffff Bir hata meydana geldi, girdiğiniz argümanları doğrulayın.", 235, 180, 132, true)
                 end
             else
-                player:outputChat("[!]#ffffff /"..(command).." [Kütüphane ID] [Sahip ID] [Meslek (0 = Şahıs Aracı)]", 235, 180, 132, true)
+                player:outputChat("[!]#ffffff /makeveh [Kütüphane ID] [Sahip ID] [Meslek (0 = Şahıs Aracı)]", 235, 180, 132, true)
             end
         end,
     },
@@ -99,7 +99,7 @@ commands = {
                     player:outputChat("[!]#ffffff Geçersiz araç ID, daha sonra tekrar deneyiniz.", 235, 180, 132, true)
                 end
             else
-                player:outputChat("[!]#ffffff /"..(command).." [ID]", 235, 180, 132, true)
+                player:outputChat("[!]#ffffff /delveh [ID]", 235, 180, 132, true)
             end
         end,
     },
@@ -108,6 +108,69 @@ commands = {
         access = 7,
         func = function(player, args)
 
+        end,
+    },
+    {
+        command = "sethp",
+        access = 2,
+        func = function(player, args)
+            if args[1] and tonumber(args[2]) then --// Target, hp value
+                local targetPlayer, targetPlayerName = exports.global:findPlayer(args[1])
+                if targetPlayer then
+                    if tonumber(args[2]) > 100 then
+                        args[2] = 100
+                    end
+                    player:outputChat("[!]#ffffff "..targetPlayer.name.." isimli oyuncunun canını: %"..args[2].." olarak değiştirdiniz.", 235, 180, 132, true)
+                    targetPlayer:outputChat("[!]#ffffff "..player.name.." isimli yetkili canınızı: %"..args[2].." olarak değiştirdi.", 235, 180, 132, true)
+                    targetPlayer.health = args[2]
+                else
+                    player:outputChat("[!]#ffffff Oyuncu bulunamadı veya giriş yapmamış.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /sethp [ID] [Değer]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "setarmor",
+        access = 2,
+        func = function(player, args)
+            if args[1] and tonumber(args[2]) then --// Target, arm value
+                local targetPlayer, targetPlayerName = exports.global:findPlayer(args[1])
+                if targetPlayer then
+                    if tonumber(args[2]) > 100 then
+                        args[2] = 100
+                    end
+                    player:outputChat("[!]#ffffff "..targetPlayer.name.." isimli oyuncunun zırhını: %"..args[2].." olarak değiştirdiniz.", 235, 180, 132, true)
+                    targetPlayer:outputChat("[!]#ffffff "..player.name.." isimli yetkili zırhınızı: %"..args[2].." olarak değiştirdi.", 235, 180, 132, true)
+                    targetPlayer.armor = args[2]
+                else
+                    player:outputChat("[!]#ffffff Oyuncu bulunamadı veya giriş yapmamış.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /setarmor [ID] [Değer]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "revive",
+        access = 4,
+        func = function(player, args)
+            if args[1] then
+                local targetPlayer, targetPlayerName = exports.global:findPlayer(args[1])
+                if targetPlayer then
+                    if exports.essantials:respawnPlayer(targetPlayer) then
+                        player:outputChat("[!]#ffffff "..targetPlayer.name.." isimli oyuncuyu kaldırdınız.", 235, 180, 132, true)
+                        targetPlayer:outputChat("[!]#ffffff "..player.name.." isimli yetkili sizi kaldırdı.", 235, 180, 132, true)
+                    else
+                        player:outputChat("[!]#ffffff "..targetPlayer.name.." baygın değil.", 235, 180, 132, true)
+                    end
+                else
+                    player:outputChat("[!]#ffffff Oyuncu bulunamadı veya giriş yapmamış.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /revive [ID]", 235, 180, 132, true)
+            end
         end,
     },
 }

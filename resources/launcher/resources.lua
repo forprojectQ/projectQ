@@ -26,14 +26,23 @@ local resources = {
     launcher:new("cursor", 11),
     launcher:new("living", 12),
     launcher:new("vehicles", 13),
+    launcher:new("essantials", 14),
 }
 
+local loaded = 0
 local max = #resources
 local delay = 0
 
-function launcher:launch(state)
+addEventHandler ("onPlayerConnect", getRootElement(), function()
+    if max ~= loaded then
+        cancelEvent(true, "Tüm sistemler başlatılmamış, lütfen biraz bekleyin.")
+    end
+end)
+
+function launcher:launch()
     setTimer(function()
-        _print("Resource "..self.name.." stated. "..state.."/"..max.."")
+        loaded = loaded + 1
+        _print("Resource "..self.name.." started. "..loaded.."/"..max.."")
         Resource.getFromName(self.name):start()
     end, delay * 1000, 1)
 end
@@ -41,6 +50,6 @@ end
 table.sort(resources, function(a,b) return a.priority < b.priority end)
 
 for index, resource in ipairs(resources) do
-    resource:launch(index, delay)
+    resource:launch()
     delay = delay + 2
 end

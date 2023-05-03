@@ -332,7 +332,7 @@ function account:render()
                             --// STATE
                             local icon
                             local color
-                            if value[5] == 1 then
+                            if value[5] == 0 then
                                 icon = self.icons.skull
                                 color = tocolor(226,67,67)
                             else
@@ -343,7 +343,7 @@ function account:render()
                             --// LOCATION
                             dxDrawText(string.sub(value[4], 1, 10), self.screen.x/2+100, self.screen.y/2-60+newY, nil, nil, tocolor(225,225,225), 1, self.robotoB)
                             --// SPAWN
-                            if value[5] == 1 then
+                            if value[5] == 0 then
                                 dxDrawText(self.icons.login, self.screen.x/2+175+width, self.screen.y/2-60+newY, nil, nil, tocolor(125,125,125,200), 1, self.awesome)
                             else
                                 local width = dxGetTextWidth(self.icons.login, 1, self.awesome)
