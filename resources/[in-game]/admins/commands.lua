@@ -1,4 +1,5 @@
 local conn = exports.mysql:getConn()
+local cache = exports.cache
 
 commands = {
     {
@@ -170,6 +171,113 @@ commands = {
                 end
             else
                 player:outputChat("[!]#ffffff /revive [ID]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "setvehcolor",
+        access = 4,
+        func = function(player, args)
+            if tonumber(args[1]) and tonumber(args[2]) and tonumber(args[3]) and tonumber(args[4]) then --// vehicle, r, g, b
+                local vehicle = exports.global:findVehicle(args[1])
+                if vehicle then
+                    local dbid = vehicle:getData("dbid")
+                    local r, g, b = args[2], args[3], args[4]
+                    local color = ""..(r)..","..(g)..","..(b)..""
+                    vehicle:setColor(r, g, b)
+                    cache:setVehicleData(dbid, "color", color)
+                else
+                    player:outputChat("[!]#ffffff Araç bulunamadı, lütfen ID kontrol edin.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /setvehcolor [Araç ID] [R, G, B]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "setvehplate",
+        access = 4,
+        func = function(player, args)
+            if tonumber(args[1]) and args[2] then --// vehicle, plate
+                local vehicle = exports.global:findVehicle(args[1])
+                if vehicle then
+                    local dbid = vehicle:getData("dbid")
+                    local newPlate = args[2]
+                    vehicle:setPlateText(newPlate)
+                    cache:setVehicleData(dbid, "plate", newPlate)
+                else
+                    player:outputChat("[!]#ffffff Araç bulunamadı, lütfen ID kontrol edin.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /setvehplate [Araç ID] [Plaka]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "getcar",
+        access = 1,
+        func = function(player, args)
+            if tonumber(args[1]) then --// vehicle
+                local vehicle = exports.global:findVehicle(args[1])
+                if vehicle then
+                    local dbid = vehicle:getData("dbid")
+                    local x, y, z = player.position.x, player.position.y, player.position.z
+                    local int, dim = player.interior, player.dimension
+                    local rx, ry, rz = player.rotation.x, player.rotation.y, player.rotation.z
+                    x = x + (( math.cos(math.rad(rz))) * 5)
+			        y = y + (( math.sin(math.rad(rz))) * 5)
+                    local position = x..","..y..","..z..","..int..","..dim..","..rx..","..ry..","..rz..""
+                    vehicle:setPosition(x, y, z)
+                    vehicle:setInterior(int)
+                    vehicle:setDimension(dim)
+                    vehicle:setRotation(rx, ry, rz)
+                    cache:setVehicleData(dbid, "pos", position)
+                else
+                    player:outputChat("[!]#ffffff Araç bulunamadı, lütfen ID kontrol edin.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /getcar [Araç ID]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "fixveh",
+        access = 1,
+        func = function(player, args)
+            if tonumber(args[1]) then --// vehicle
+                local vehicle = exports.global:findVehicle(args[1])
+                if vehicle then
+                    vehicle:fix()
+                    player:outputChat("[!]#ffffff Araç tamir edildi.", 235, 180, 132, true)
+                else
+                    player:outputChat("[!]#ffffff Araç bulunamadı, lütfen ID kontrol edin.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /fixveh [Araç ID]", 235, 180, 132, true)
+            end
+        end,
+    },
+    {
+        command = "fuelveh",
+        access = 1,
+        func = function(player, args)
+            if tonumber(args[1]) and tonumber(args[2]) then --// vehicle, new fuel
+                local vehicle = exports.global:findVehicle(args[1])
+                if vehicle then
+                    local dbid = vehicle:getData("dbid")
+                    if tonumber(args[2]) <= 0 then
+                        args[2] = 0
+                    elseif tonumber(args[2]) >= 100 then
+                        args[2] = 100
+                    end
+                    vehicle:setData("fuel", args[2])
+                    cache:setVehicleData(dbid, "fuel", args[2])
+                    player:outputChat("[!]#ffffff Aracın benzinini %"..args[2].." olarak ayarladınız.", 235, 180, 132, true)
+                else
+                    player:outputChat("[!]#ffffff Araç bulunamadı, lütfen ID kontrol edin.", 235, 180, 132, true)
+                end
+            else
+                player:outputChat("[!]#ffffff /fixveh [Araç ID] [%Benzin]", 235, 180, 132, true)
             end
         end,
     },

@@ -41,6 +41,7 @@ addEventHandler("death.damaged", root, function()
     local dbid = source:getData("dbid")
     cache:setCharacterData(dbid, "injured", 1)
     source:setData("injured", 1)
+    triggerClientEvent(source, "death.injure", source)
 end)
 
 addEvent("death.injured", true)

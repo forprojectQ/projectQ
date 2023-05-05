@@ -7,8 +7,6 @@ addEvent("editveh.openwindow", true)
 addEvent("editveh.saveCustoms", true)
 addEvent("editveh.resetCustoms", true)
 
-
-
 addEventHandler("editveh.openwindow", root, function()
     local vehicle = source.vehicle
 	if not isElement(vehicle) then
@@ -25,8 +23,6 @@ addEventHandler("editveh.openwindow", root, function()
 	triggerClientEvent(source,"editveh.openwindow",source,info)
 end)
 
-
-
 addEventHandler("editveh.saveCustoms",root,function(dbid,info)
 	if exports.vehicles:isVehicleHasCustomRecord(dbid) then
 		dbExec(conn,"UPDATE vehicles_custom SET brand=?,model=?,year=?,tax=?,notes=?,price=? WHERE id=?",info.brand,info.model,info.year,info.tax,info.notes,info.price,dbid)
@@ -39,4 +35,3 @@ addEventHandler("editveh.resetCustoms",root,function(dbid)
 	dbExec(conn,"DELETE from vehicles_custom WHERE id=?",dbid)
 	exports.vehicles:reloadVehicle(dbid)
 end)
-
