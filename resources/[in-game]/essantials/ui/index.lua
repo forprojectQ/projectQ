@@ -1,10 +1,10 @@
 local ui = class("UI")
 
 function ui:init()
-    triggerServerEvent("death.check", localPlayer)
-
     self:loadAssets()
     self:registerEvents()
+
+    addEventHandler("onClientRender", root, self._renderFunction, true, "low-9999")
 end
 
 function ui:loadAssets()
@@ -12,10 +12,10 @@ function ui:loadAssets()
 
     self.fonts = {
         awesome = exports.fonts:getFont("AwesomeSolid", 45),
+        awesome2 = exports.fonts:getFont("AwesomeSolid", 20),
         robotoB = exports.fonts:getFont("RobotoB", 10),
         roboto = exports.fonts:getFont("Roboto", 11)
     }
-
 end
 
 function ui:registerEvents()
@@ -41,10 +41,22 @@ function ui:render()
     if not localPlayer:getData("online") then
         return
     end
-    dxDrawRectangle(0, 0, screen.x, screen.y, tocolor(20, 20, 20))
-    dxDrawText("", screen.x/2, screen.y/2-100, nil, nil, tocolor(225, 225, 225, self.alpha), 1, self.fonts.awesome)
-    dxDrawText("Bayıldınız, tekrar ayaklanmak için kalan", screen.x/2-75, screen.y/2-15, nil, nil, tocolor(225, 225, 225, 225), 1, self.fonts.robotoB)
-    dxDrawText(""..self.counter.." saniye", screen.x/2, screen.y/2+5, nil, nil, tocolor(225, 178, 84, 225), 1, self.fonts.roboto)
+
+    if self.active then
+        dxDrawRectangle(0, 0, screen.x, screen.y, tocolor(20, 20, 20))
+        dxDrawText("", screen.x/2, screen.y/2-100, nil, nil, tocolor(225, 225, 225, self.alpha), 1, self.fonts.awesome)
+        dxDrawText("Bayıldınız, tekrar ayaklanmak için kalan", screen.x/2-75, screen.y/2-15, nil, nil, tocolor(225, 225, 225, 225), 1, self.fonts.robotoB)
+        dxDrawText(""..self.counter.." saniye", screen.x/2, screen.y/2+5, nil, nil, tocolor(225, 178, 84, 225), 1, self.fonts.roboto)
+    else
+        local injured = localPlayer:getData("injured") or 0
+        if injured == 1 then
+            dxDrawText("", screen.x/2-1, screen.y-100, nil, nil, tocolor(0, 0, 0), 1, self.fonts.awesome2)
+            dxDrawText("", screen.x/2+1, screen.y-100, nil, nil, tocolor(0, 0, 0), 1, self.fonts.awesome2)
+            dxDrawText("", screen.x/2, screen.y-100-1, nil, nil, tocolor(0, 0, 0), 1, self.fonts.awesome2)
+            dxDrawText("", screen.x/2, screen.y-100+1, nil, nil, tocolor(0, 0, 0), 1, self.fonts.awesome2)
+            dxDrawText("", screen.x/2, screen.y-100, nil, nil, tocolor(200, 200, 200, 200), 1, self.fonts.awesome2)
+        end
+    end
 end
 
 function ui:death()
@@ -56,7 +68,6 @@ function ui:death()
     self.alpha = 225
     showChat(false)
     showCursor(true)
-    addEventHandler("onClientRender", root, self._renderFunction, true, "low-9999")
     self.timer = Timer(function()
         if self.counter <= 0 then
             triggerServerEvent("death.spawn", localPlayer)
@@ -75,7 +86,6 @@ function ui:finish()
     self.active = false
     showChat(true)
     showCursor(false)
-    removeEventHandler("onClientRender", root, self._renderFunction)
     if self.timer.valid then
         self.timer:destroy()
     end

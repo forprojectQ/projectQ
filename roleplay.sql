@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-05-03 14:29:19
+Date: 2023-05-05 10:25:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,6 +31,7 @@ CREATE TABLE `accounts` (
 -- ----------------------------
 -- Records of accounts
 -- ----------------------------
+INSERT INTO `accounts` VALUES ('1', 'test', 'test', '8', '9005638F97DC1640DD35331F4076AA12', '3');
 
 -- ----------------------------
 -- Table structure for `characters`
@@ -55,12 +56,14 @@ CREATE TABLE `characters` (
   `walk` int(11) NOT NULL DEFAULT '128',
   `job` int(11) NOT NULL DEFAULT '0',
   `active` int(1) NOT NULL DEFAULT '1',
+  `injured` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '99', '99', '0', '100', '0', '128', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for `items`

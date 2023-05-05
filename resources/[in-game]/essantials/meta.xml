@@ -2,6 +2,7 @@
     <oop>true</oop>
     <script src="libs/classlib.lua" type="client" cache="false"/>
     <script src="ui/index.lua" type="client" cache="false"/>
+    <script src="client.lua" type="client" cache="false"/>
     <script src="server.lua" type="server"/>
     <export function="respawnPlayer" type="server"/>
 </meta>

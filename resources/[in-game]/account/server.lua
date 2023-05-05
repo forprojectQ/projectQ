@@ -34,7 +34,6 @@ function spawn(dbid)
     local money = cache:getCharacterData(dbid, "money")
     local hp = cache:getCharacterData(dbid, "health")
     local arm = cache:getCharacterData(dbid, "armor")
-    local dead = cache:getCharacterData(dbid, "dead") or 0
     source:setData("money", tonumber(money))
     source:setData("hunger", tonumber(hunger))
     source:setData("thirst", tonumber(thirst))
@@ -48,9 +47,7 @@ function spawn(dbid)
     source.walkingStyle = walk
     source.health = hp
     source.armor = arm
-    if dead == 1 then
-        source.health = 0
-    end
+    triggerEvent("death.check", source)
     triggerEvent("load.items.server", source)
 end
 addEvent("auth.spawn.character", true)
