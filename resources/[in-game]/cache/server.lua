@@ -44,61 +44,65 @@ function All:init()
 	end)
 
     --// set, get, remove and clear functions
-
+	
+	function getID(target)
+		return isElement(target) and target:getData("dbid") or target
+	end
+	
     --// ACCOUNTS
     function getAccountData(target, key)
-        return tables_cache["accounts"]:get(target, key)
+        return tables_cache["accounts"]:get(getID(target), key)
     end
     function setAccountData(target, key, value, noSql)
-        return tables_cache["accounts"]:set(target, key, value, noSql)
+        return tables_cache["accounts"]:set(getID(target), key, value, noSql)
     end
     function removeAccountData(target, key)
-        return tables_cache["accounts"]:remove(target, key)
+        return tables_cache["accounts"]:remove(getID(target), key)
     end
     function clearAccountAllData(target)
-        return tables_cache["accounts"]:clear(target)
+        return tables_cache["accounts"]:clear(getID(target))
     end
 
     --// CHARACTERS
     function getCharacterData(target, key)
-        return tables_cache["characters"]:get(target, key)
+        return tables_cache["characters"]:get(getID(target), key)
     end
     function setCharacterData(target, key, value, noSql)
-        return tables_cache["characters"]:set(target, key, value, noSql)
+        return tables_cache["characters"]:set(getID(target), key, value, noSql)
     end
     function removeCharacterData(target, key)
-        return tables_cache["characters"]:remove(target, key)
+        return tables_cache["characters"]:remove(getID(target), key)
     end
     function clearCharacterAllData(target)
-        return tables_cache["characters"]:clear(target)
+        return tables_cache["characters"]:clear(getID(target))
     end
 
     --// INTERIORS
     function getInteriorData(taget, key)
-        return tables_cache["interiors"]:get(target, key)
+        return tables_cache["interiors"]:get(getID(target), key)
     end
     function setInteriorData(target, key, value, noSql)
-        return tables_cache["interiors"]:set(target, key, value, noSql)
+        return tables_cache["interiors"]:set(getID(target), key, value, noSql)
     end
     function removeInteriorData(target, key)
-        return tables_cache["interiors"]:remove(target, key)
+        return tables_cache["interiors"]:remove(getID(target), key)
     end
     function clearInteriorAllData(target)
-        return tables_cache["interiors"]:clear(target)
+        return tables_cache["interiors"]:clear(getID(target))
     end
 
     --// VEHICLES
     function getVehicleData(target, key)
-        return tables_cache["vehicles"]:get(target, key)
+        return tables_cache["vehicles"]:get(getID(target), key)
     end
     function setVehicleData(target, key, value, noSql)
-        return tables_cache["vehicles"]:set(target, key, value, noSql)
+        return tables_cache["vehicles"]:set(getID(target), key, value, noSql)
     end
     function removeVehicleData(target, key)
-        return tables_cache["vehicles"]:remove(target, key)
+        return tables_cache["vehicles"]:remove(getID(target), key)
     end
     function clearVehicleAllData(target)
-        return tables_cache["vehicles"]:clear(target)
+        return tables_cache["vehicles"]:clear(getID(target))
     end
 
 end
