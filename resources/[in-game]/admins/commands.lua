@@ -31,6 +31,40 @@ commands = {
         end,
     },
     {
+        command = "aduty",
+        access = 2,
+        func = function(player, args)
+            local duty = player:getData("adminduty") or 0
+            local username = exports.cache:getAccountData(player:getData("account.id"), "name") or "nil"
+            if duty == 0 then
+                player:setData("adminduty", 1)
+                player:outputChat("[ADM] Yetkili görevine başladınız.", 175, 55, 55)
+                exports.global:sendMessageToAdmins("'"..player.name:gsub("_", " ").." ("..username..")' Yetkili görevine başladı.")
+            else
+                player:setData("adminduty", 0)
+                player:outputChat("[ADM] Yetkili görevinizi sonlandırdınız.", 175, 55, 55)
+                exports.global:sendMessageToAdmins("'"..player.name:gsub("_", " ").." ("..username..")' Yetkili görevini sonlandırdı.")
+            end
+        end,
+    },
+    {
+        command = "gduty",
+        access = 1,
+        func = function(player, args)
+            local duty = player:getData("gmduty") or 0
+            local username = exports.cache:getAccountData(player:getData("account.id"), "name") or "nil"
+            if duty == 0 then
+                player:setData("gmduty", 1)
+                player:outputChat("[SUP] Rehber görevine başladınız.", 55, 175, 55)
+                exports.global:sendMessageToSupporters("'"..player.name:gsub("_", " ").." ("..username..")' Rehber görevine başladı.")
+            else
+                player:setData("gmduty", 0)
+                player:outputChat("[SUP] Rehber görevinizi sonlandırdınız.", 55, 175, 55)
+                exports.global:sendMessageToSupporters("'"..player.name:gsub("_", " ").." ("..username..")' Rehber görevini sonlandırdı.")
+            end
+        end,
+    },
+    {
         command = "gotopos,setxyz",
         -- admin leveli 8 ve 8'den büyük kişiler kullanabilir.
         access = 8,

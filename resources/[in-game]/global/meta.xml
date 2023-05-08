@@ -6,7 +6,10 @@
     <script src="s_player.lua" type="server"/>
     <script src="s_vehicle.lua" type="server"/>
     
-    <export function="sendLocalText" type="server"/>
+    <export function="sendMessageToSupporters" type="server"/>
+    <export function="sendMessageToAdmins" type="server"/>
+    <export function="sendLocalICText" type="server"/>
+    <export function="sendLocalOOCText" type="server"/>
     <export function="sendLocalMeAction" type="server"/>
     <export function="sendLocalDoAction" type="server"/>
     <export function="findPlayer" type="server"/>

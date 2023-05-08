@@ -20,7 +20,7 @@ local function getDistanceColor(player, target, type)
     end
 end
 
-function sendLocalText(source, message)
+function sendLocalICText(source, message)
     local x, y, z = source.position.x, source.position.y, source.position.z
     local vehicle = source.vehicle
     for _, player in ipairs(Element.getWithinRange(x, y, z, 20, "player")) do
@@ -38,6 +38,23 @@ function sendLocalText(source, message)
                 end
             else
                 player:outputChat(""..source.name:gsub("_", " ").." diyor ki: "..message.."", r, g, b)
+            end
+        end
+    end
+end
+
+function sendLocalOOCText(source, message)
+    local x, y, z = source.position.x, source.position.y, source.position.z
+    local adminDuty = source:getData("adminduty") or 0
+    local supporterDuty = source:getData("gmduty") or 0
+    for _, player in ipairs(Element.getWithinRange(x, y, z, 20, "player")) do
+        if player:getData("online") then
+            if adminDuty > 0 then
+                player:outputChat("[OOC] #AF3737"..source.name:gsub("_", " ")..": #C4FFFF"..message.."", 196, 255, 255, true)
+            elseif supporterDuty > 0 then
+                player:outputChat("[OOC] #37AF37"..source.name:gsub("_", " ")..": #C4FFFF"..message.."", 196, 255, 255, true)
+            else
+                player:outputChat("[OOC] "..source.name:gsub("_", " ")..": "..message.."", 196, 255, 255, true)
             end
         end
     end
@@ -85,6 +102,26 @@ function sendLocalDoAction(source, message)
             else
                 player:outputChat(""..message.." ("..source.name:gsub("_", " ")..")", r, g, b)
             end
+        end
+    end
+end
+
+function sendMessageToAdmins(message)
+    for _, admin in ipairs(Element.getAllByType("player")) do
+        local level = exports.cache:getAccountData(admin:getData("account.id"), "admin") or 0
+        local duty = admin:getData("adminduty") or 0
+        if level >= 2 and duty > 0 then
+            admin:outputChat("[ADM] "..message.."", 175, 55, 55, true)
+        end
+    end
+end
+
+function sendMessageToSupporters(message)
+    for _, supporter in ipairs(Element.getAllByType("player")) do
+        local level = exports.cache:getAccountData(supporter:getData("account.id"), "admin") or 0
+        local duty = supporter:getData("gmduty") or 0
+        if level >= 1 and duty > 0 then
+            supporter:outputChat("[SUP] "..message.."", 55, 175, 55, true)
         end
     end
 end

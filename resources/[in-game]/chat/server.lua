@@ -13,7 +13,7 @@ addEventHandler("onPlayerChat", root,
                 if keyWords[message] then
                     exports.global:sendLocalMeAction(source,  keyWords[message])
                 else
-                    exports.global:sendLocalText(source, message)
+                    exports.global:sendLocalICText(source, message)
                 end
             elseif messageType == 1 then
                 exports.global:sendLocalMeAction(source, message)
@@ -66,6 +66,38 @@ addCommandHandler("pm",
     end, false, false
 )
 
+addCommandHandler("a",
+    function(player, command, ...)
+        local level = exports.cache:getAccountData(player:getData("account.id"), "admin") or 0
+        local username = exports.cache:getAccountData(player:getData("account.id"), "name") or "nil"
+        if level >= 2 and (...) then
+            local message = table.concat({...}, " ")
+            for _, admin in ipairs(Element.getAllByType("player")) do
+                local level = exports.cache:getAccountData(admin:getData("account.id"), "admin") or 0
+                if level >= 2 then
+                    admin:outputChat("[Yetkili Sohbet] "..player.name:gsub("_", " ").." ("..username..") : "..message.." ", 225, 85, 85)
+                end
+            end
+        end
+    end, false, false
+)
+
+addCommandHandler("g",
+    function(player, command, ...)
+        local level = exports.cache:getAccountData(player:getData("account.id"), "admin") or 0
+        local username = exports.cache:getAccountData(player:getData("account.id"), "name") or "nil"
+        if level >= 1 and (...) then
+            local message = table.concat({...}, " ")
+            for _, supporter in ipairs(Element.getAllByType("player")) do
+                local level = exports.cache:getAccountData(supporter:getData("account.id"), "admin") or 0
+                if level >= 1 then
+                    supporter:outputChat("[Rehber Sohbet] "..player.name:gsub("_", " ").." ("..username..") : "..message.." ", 125, 225, 125)
+                end
+            end
+        end
+    end, false, false
+)
+
 function quickReply(player, command, ...)
     if player:getData("online") then
         if (...) then
@@ -87,7 +119,8 @@ addCommandHandler("quickreply", quickReply)
 
 function localOOC(player, command, ...)
     if player:getData("online") then
-        --// yoruldum :(
+        local message = table.concat({...}, " ")
+        exports.global:sendLocalOOCText(player, message)
     end
 end
 addCommandHandler("b", localOOC, false, false)

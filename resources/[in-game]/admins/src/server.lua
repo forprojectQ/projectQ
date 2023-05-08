@@ -24,7 +24,7 @@ function process()
     for index, value in ipairs(commands) do
         local cmd = split(value.command, ",")
         for _, command in ipairs(cmd) do
-            addCommandHandler(command, command_function)
+            addCommandHandler(command, command_function, false, false)
         end
     end
 end
