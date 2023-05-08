@@ -2,9 +2,13 @@
 <meta>
     <oop>true</oop>
     
+    <script src="s_chat.lua" type="server"/>
     <script src="s_player.lua" type="server"/>
     <script src="s_vehicle.lua" type="server"/>
     
+    <export function="sendLocalText" type="server"/>
+    <export function="sendLocalMeAction" type="server"/>
+    <export function="sendLocalDoAction" type="server"/>
     <export function="findPlayer" type="server"/>
     <export function="findVehicle" type="server"/>
     <export function="createRandomPlateText" type="server"/>

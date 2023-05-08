@@ -27,6 +27,7 @@ local resources = {
     launcher:new("living", 12),
     launcher:new("vehicles", 13),
     launcher:new("essantials", 14),
+    launcher:new("chat", 15),
 }
 
 local loaded = 0
