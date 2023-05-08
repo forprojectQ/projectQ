@@ -13,6 +13,9 @@ end)
 
 addEventHandler("onClientPlayerDamage", localPlayer, function()
     if localPlayer:getData("injured") == 0 then
-        triggerServerEvent("death.damaged", localPlayer)
+        local chance = math.random(1, 4) --// %25 yaralanma şansı
+        if chance == 1 then
+            triggerServerEvent("death.damaged", localPlayer)
+        end
     end
 end)
