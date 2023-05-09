@@ -16,12 +16,33 @@ bindKey("m", "down", function()
     end
 end)
 
+gui_cursor_types={
+    ["gui-edit"]="text",
+    ["gui-memo"]="text",
+    ["gui-button"]="hand",
+    ["gui-checkbox"]="hand",
+}
+
+local active_gui = nil
+addEventHandler("onClientMouseEnter",root,function()
+    local type = getElementType(source)
+    if gui_cursor_types[type] then
+        active_gui,cursor=true,gui_cursor_types[type]
+    end    
+end)
+addEventHandler("onClientMouseLeave",root,function()
+    local type = getElementType(source)
+    if gui_cursor_types[type] then
+        active_gui,cursor=nil,"arrow"
+    end  
+end)
+
 addEventHandler("onClientRender", root, function()
     if (isCursorShowing()) then
         local cursorX, cursorY = getCursorPosition()
         cursorX, cursorY = cursorX * screen.x, cursorY * screen.y
         dxDrawImage(cursorX, cursorY, 32, 32, "assets/"..(cursor or "arrow")..".png", 0, 0, 0, tocolor(255, 255, 255, 255), true)
-        if cursor ~= "arrow" then
+        if cursor ~= "arrow" and not active_gui then
             cursor = "arrow"
         end
     end

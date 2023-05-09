@@ -1,8 +1,21 @@
 local conn = exports.mysql:getConn()
+local cache = exports.cache
+
+
+function getSqlText(t)
+    local sql = ""
+    for key,v in pairs(t) do
+        sql = sql..key.."='"..(v).."',"
+    end  
+    return sql:sub(1,-2) 
+end    
 
 addEvent("vehicle.library.edit", true)
-addEventHandler("vehicle.library.edit", root, function(id, brand, model, year, price, tax, gta, isEnabled)
-    local query = dbExec(conn, "UPDATE vehicles_library SET brand='"..(brand).."', model='"..(model).."', year='"..(year).."', price='"..(price).."', tax='"..(tax).."', gta='"..(gta).."', enabled='"..(isEnabled).."' WHERE id=?", id)
+addEventHandler("vehicle.library.edit", root, function(id, info)
+    local sql = getSqlText(info)
+    local sql = sql..",updatedby='"..(cache:getAccountData(source,"id")).."',updatedate=current_timestamp()"
+    local query = dbExec(conn, "UPDATE vehicles_library SET "..sql.." WHERE id=?", id)
+
     if query then
         source:outputChat("[!]#ffffff Araç veri tabanına başarılı bir şekilde kaydedildi.", 111, 72, 201, true)
         source:outputChat("[!]#ffffff Değişikler araçlara işlendi.", 111, 72, 201, true)
@@ -21,8 +34,10 @@ addEventHandler("vehicle.library.edit", root, function(id, brand, model, year, p
 end)
 
 addEvent("vehicle.library.create", true)
-addEventHandler("vehicle.library.create", root, function(brand, model, year, price, tax, gta, isEnabled)
-    local query = dbExec(conn, "INSERT INTO vehicles_library SET brand='"..(brand).."', model='"..(model).."', year='"..(year).."', price='"..(price).."', tax='"..(tax).."', gta='"..(gta).."', enabled='"..isEnabled.."'")
+addEventHandler("vehicle.library.create", root, function(info)
+    local sql = getSqlText(info)
+    local sql = sql..",updatedby='"..(cache:getAccountData(source,"id")).."',updatedate=current_timestamp()"
+    local query = dbExec(conn, "INSERT INTO vehicles_library SET "..sql)   
     if query then
         source:outputChat("[!]#ffffff Araç veri tabanına başarılı bir şekilde kaydedildi.", 111, 72, 201, true)
     else
