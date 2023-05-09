@@ -10,8 +10,9 @@ dbQuery(
             Async:foreach(results, function(row)
                 if factions[row.faction_id] == nil then
                     factions[row.faction_id] = {name = row.faction_name, type = tonumber(row.faction_type), balance = tonumber(row.faction_balance)}
+                    factions_rank[row.faction_id]={}
                 end
-                table.insert(factions_rank, {id = tonumber(row.id), faction_id = tonumber(row.faction_id), name = row.rank_name})
+                table.insert(factions_rank[row.faction_id], {id = tonumber(row.id), faction_id = tonumber(row.faction_id), name = row.rank_name})
             end, function()
                 print("! ALL FACTIONS LOADED")
             end)
@@ -27,11 +28,7 @@ addEventHandler("factions.get.server", root, function()
     if fact_id > 0 then
         local res = factions[fact_id]
         fact_info = {id = fact_id, name = res.name, type = res.type, balance = res.balance}
-        for index, value in ipairs(factions_rank) do
-            if tonumber(value.faction_id) == fact_id then
-                table.insert(rank_info, {id = value.id, name = value.name})
-            end
-        end
+        rank_info=factions_rank[fact_id]
         triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info)
     end
 end)

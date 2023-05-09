@@ -18,10 +18,4 @@ addEventHandler("play.effectPM", root,
     end
 )
 
-addCommandHandler("clearchat",
-	function()
-		for i = 1, 50 do
-			outputChatBox(" ")
-		end
-	end, false, false
-)
+addCommandHandler("clearchat",clearChatBox)
