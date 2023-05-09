@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-05-05 10:25:58
+Date: 2023-05-09 15:51:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,13 +57,51 @@ CREATE TABLE `characters` (
   `job` int(11) NOT NULL DEFAULT '0',
   `active` int(1) NOT NULL DEFAULT '1',
   `injured` int(1) NOT NULL DEFAULT '0',
+  `faction` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '99', '99', '0', '100', '0', '128', '0', '1', '1');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '90', '94', '0', '100', '0', '128', '0', '1', '1', '1');
+
+-- ----------------------------
+-- Table structure for `factions`
+-- ----------------------------
+DROP TABLE IF EXISTS `factions`;
+CREATE TABLE `factions` (
+  `id` int(11) NOT NULL,
+  `name` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `type` int(3) NOT NULL DEFAULT '2',
+  `balance` bigint(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of factions
+-- ----------------------------
+INSERT INTO `factions` VALUES ('1', 'testfact', '2', '0');
+INSERT INTO `factions` VALUES ('2', 'testfact2', '1', '0');
+
+-- ----------------------------
+-- Table structure for `factions_rank`
+-- ----------------------------
+DROP TABLE IF EXISTS `factions_rank`;
+CREATE TABLE `factions_rank` (
+  `id` int(11) NOT NULL,
+  `faction_id` int(11) DEFAULT NULL,
+  `name` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of factions_rank
+-- ----------------------------
+INSERT INTO `factions_rank` VALUES ('1', '1', 'testrank');
+INSERT INTO `factions_rank` VALUES ('2', '1', 'testrank2');
+INSERT INTO `factions_rank` VALUES ('3', '1', 'testrank3');
+INSERT INTO `factions_rank` VALUES ('4', '1', 'testrank4');
 
 -- ----------------------------
 -- Table structure for `items`

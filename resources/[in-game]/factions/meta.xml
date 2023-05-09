@@ -1,0 +1,10 @@
+<meta>
+    <oop>true</oop>
+
+    <script src="libs/async.lua" type="shared"/>
+    <script src="libs/class.lua" type="client" cache="false"/>
+
+    <script src="shared.lua" type="shared"/>
+    <script src="ui/index.lua" type="client" cache="false"/>
+    <script src="server.lua" type="server"/>
+</meta>
