@@ -1,25 +1,23 @@
 local conn = exports.mysql:getConn()
 local cache = exports.cache
+
 local factions = {}
 local factions_rank = {}
-
-addEventHandler("onResourceStart", root, function()
-    dbQuery(
-        function(qh)
-            local results = dbPoll(qh, -1)
-            if results then
-                Async:foreach(results, function(row)
-                    if factions[row.faction_id] == nil then
-                        factions[row.faction_id] = {name = row.faction_name, type = tonumber(row.faction_type), balance = tonumber(row.faction_balance)}
-                    end
-                    table.insert(factions_rank, {id = tonumber(row.id), faction_id = tonumber(row.faction_id), name = row.rank_name})
-                end, function()
-                    print("! FACTIONS LOADED ALL")
-                end)
-            end
-        end,
-    conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.balance as faction_balance, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
-end)
+dbQuery(
+    function(qh)
+        local results = dbPoll(qh, -1)
+        if results then
+            Async:foreach(results, function(row)
+                if factions[row.faction_id] == nil then
+                    factions[row.faction_id] = {name = row.faction_name, type = tonumber(row.faction_type), balance = tonumber(row.faction_balance)}
+                end
+                table.insert(factions_rank, {id = tonumber(row.id), faction_id = tonumber(row.faction_id), name = row.rank_name})
+            end, function()
+                print("! ALL FACTIONS LOADED")
+            end)
+        end
+    end,
+conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.balance as faction_balance, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
 
 addEvent("factions.get.server", true)
 addEventHandler("factions.get.server", root, function()

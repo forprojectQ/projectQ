@@ -16,6 +16,11 @@ end
 function ui:menu()
     local x, y, w, h = screen.x/2-600/2, screen.y/2-400/2, 600, 400
     dxDrawRoundedRectangle(x, y, w, h, 10, tocolor(15, 15, 15))
+    if not self.loaded then
+        --// yükleniyor
+        return
+    end
+
 end
 
 function ui:start()
@@ -23,8 +28,7 @@ function ui:start()
         if self.display then
             self:stop()
         else
-            self.display = true
-            self.loaded = false
+            self.display, self.loaded = true, false
             showCursor(true)
             addEventHandler("onClientRender", root, self._functions.menu, true, "low-9999")
             triggerServerEvent("factions.get.server", localPlayer)
