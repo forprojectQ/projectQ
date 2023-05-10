@@ -98,7 +98,7 @@ commands = {
                         triggerClientEvent(thePlayer, "vehicle.library", thePlayer, results)
                     end
                 end,
-            {player}, conn, "SELECT * FROM vehicles_library")
+            {player}, conn, "SELECT v.*,a.name AS updatedbyname FROM vehicles_library v LEFT JOIN accounts a ON v.updatedby = a.id")
         end,
     },
 	{
