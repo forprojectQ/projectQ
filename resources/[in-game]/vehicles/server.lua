@@ -23,7 +23,9 @@ local ipairs = ipairs
 -- Araba load oldukdan sonra veya oluşturuldukdan sonra cacheye gönderilcek fakat sql işlenmicek column isimleri
 local noSql_columns = {
 	["carshop_price"]=true,["carshop_gta"]=true,["carshop_tax"]=true,["carshop_handling"]=true,["carshop_brand"]=true,["carshop_model"]=true,["carshop_year"]=true,
+	["carshop_doortype"]=true,["carshop_fueltype"]=true,["carshop_tanksize"]=true,
 	["custom_price"]=true,["custom_brand"]=true,["custom_model"]=true,["custom_year"]=true,["custom_tax"]=true,["custom_handling"]=true,["custom_notes"]=true,
+	["custom_doortype"]=true,["custom_fueltype"]=true,["custom_tanksize"]=true,
 }
 
 local query_sql = [[
@@ -36,13 +38,19 @@ local query_sql = [[
 		vl.model AS carshop_model,
 		vl.year AS carshop_year,
 		vl.handling AS carshop_handling,
+		vl.doortype AS carshop_doortype,
+		vl.fueltype AS carshop_fueltype,
+		vl.tanksize AS carshop_tanksize,
 		vc.price AS custom_price,
 		vc.brand AS custom_brand,
 		vc.model AS custom_model,
 		vc.year AS custom_year,
 		vc.tax AS custom_tax,		
 		vc.handling AS custom_handling,	
-		vc.notes AS custom_notes
+		vc.notes AS custom_notes,
+		vc.doortype AS custom_doortype,
+		vc.fueltype AS custom_fueltype,
+		vc.tanksize AS custom_tanksize
 	FROM 
 		vehicles v 
 	LEFT JOIN vehicles_library vl ON 
@@ -90,7 +98,10 @@ function loadOneVehicle(dbid,row,loadtype)
 				brand=tostring(row.custom_brand or row.carshop_brand),
 				model=tostring(row.custom_model or row.carshop_model),
 				year=tonumber(row.custom_year or row.carshop_year),
-				notes=row.custom_notes and tostring(row.custom_notes) or nil
+				notes=row.custom_notes and tostring(row.custom_notes) or nil,
+				doortype = tonumber(row.custom_doortype or row.carshop_doortype),
+				fueltype = tonumber(row.custom_fueltype or row.carshop_fueltype),
+				tanksize = tonumber(row.custom_tanksize or row.carshop_tanksize),
 			})
 			setVehicleLocked(veh, tonumber(row.lock) == 1)
 			setVehicleEngineState(veh, tonumber(row.engine) == 1)
@@ -184,8 +195,8 @@ end
 
 function startEnterVehicle(player)
     local vehicle = source
-    local playerJob = cache:getCharacterData(getElementData(player, "dbid"), "job") or 0
-    local vehicleJob = cache:getVehicleData(getElementData(vehicle, "dbid"), "job") or 0
+    local playerJob = cache:getCharacterData(player, "job") or 0
+    local vehicleJob = cache:getVehicleData(vehicle, "job") or 0
     if vehicleJob > 0 then
         if playerJob ~= vehicleJob then
             outputChatBox("[!]#ffffff Bu aracı kullanabilmek için meslekte olmalısınız.", player, 235, 180, 132, true)
@@ -196,9 +207,8 @@ end
 addEventHandler("onVehicleStartEnter", getRootElement(), startEnterVehicle)
 
 function enterVehicle(player, seat)
-    local dbid = getElementData(source, "dbid")
     if seat == 0 then
-        local engine = cache:getVehicleData(dbid, "engine") or 0
+        local engine = cache:getVehicleData(source, "engine") or 0
         if tonumber(engine) == 0 then
             setVehicleEngineState(source, false)
         end
@@ -207,13 +217,12 @@ end
 addEventHandler("onVehicleEnter", getRootElement(), enterVehicle)
 
 function exitVehicle(player, seat)
-    local dbid = getElementData(source, "dbid")
     if seat == 0 then
         local x, y, z = getElementPosition(source)
         local interior, dimension = getElementInterior(source), getElementDimension(source)
         local rx, ry, rz = getElementRotation(source)
         local position = ""..x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz..""
-        cache:setVehicleData(dbid, "pos", position)
+        cache:setVehicleData(source, "pos", position)
     end
 end
 addEventHandler("onVehicleExit", getRootElement(), exitVehicle)
@@ -271,8 +280,7 @@ addEvent("vehicle.toggle.windows", true)
 addEventHandler("vehicle.toggle.windows", root, toggleVehicleWindows)
 
 function toggleVehicleLights(vehicle)
-    local dbid = getElementData(vehicle, "dbid")
-    local engine = cache:getVehicleData(dbid, "engine") or 0
+    local engine = cache:getVehicleData(vehicle, "engine") or 0
     if engine == 1 then
         if getVehicleOverrideLights(vehicle) ~= 2 then
             setVehicleOverrideLights(vehicle, 2)

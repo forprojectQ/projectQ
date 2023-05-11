@@ -27,7 +27,7 @@ local active_gui = nil
 addEventHandler("onClientMouseEnter",root,function()
     local type = getElementType(source)
     if gui_cursor_types[type] then
-        active_gui,cursor=true,gui_cursor_types[type]
+        active_gui,cursor=source,gui_cursor_types[type]
     end    
 end)
 addEventHandler("onClientMouseLeave",root,function()
@@ -42,7 +42,7 @@ addEventHandler("onClientRender", root, function()
         local cursorX, cursorY = getCursorPosition()
         cursorX, cursorY = cursorX * screen.x, cursorY * screen.y
         dxDrawImage(cursorX, cursorY, 32, 32, "assets/"..(cursor or "arrow")..".png", 0, 0, 0, tocolor(255, 255, 255, 255), true)
-        if cursor ~= "arrow" and not active_gui then
+        if cursor ~= "arrow" and not isElement(active_gui) then
             cursor = "arrow"
         end
     end

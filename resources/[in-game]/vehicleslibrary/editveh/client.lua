@@ -6,7 +6,7 @@ function editVehWindowOpen(info)
     local_info = info
     if isElement(editVehWindow) then editVehWindow:destroy() end
 	
-	local pg,pu = 425,400
+	local pg,pu = 425,470
 	local x,y = (screen.x-pg)/2,(screen.y-pu)/2
 	
     editVehWindow = GuiWindow(x,y, pg,pu , "Araç Özellikleri - #"..(info.id), false)
@@ -21,7 +21,7 @@ function editVehWindowOpen(info)
 	
 	modelLbl = GuiLabel(10,25+(55*2),200,20,"Model:",false,editVehWindow):setFont("default-bold-small")
 	modelEdit = GuiEdit(10,25+(65*2),200,30,info.model,false,editVehWindow)
-	
+
 	yilLbl = GuiLabel(220,25,200,20,"Yıl:",false,editVehWindow):setFont("default-bold-small")
 	yilEdit = GuiEdit(220,25+20,200,30,info.year,false,editVehWindow) yilEdit:setProperty("ValidationString", "[0-9]*")
 	
@@ -30,6 +30,23 @@ function editVehWindowOpen(info)
 	
 	vergiLbl = GuiLabel(220,25+(55*2),200,20,"Vergi:",false,editVehWindow):setFont("default-bold-small")
 	vergiEdit = GuiEdit(220,25+(65*2),200,30,info.tax,false,editVehWindow) vergiEdit:setProperty("ValidationString", "[0-9]*")
+	
+	depoLbl = GuiLabel(220,25+(55*3),200,20,"Depo Limiti:",false,editVehWindow):setFont("default-bold-small")
+	depoEdit = GuiEdit(220,25+(62*3),200,30,info.tanksize,false,editVehWindow)
+	
+	doorTypeLbl = GuiLabel(10,25+(55*3),200,20,"Kapı Tipi:",false,editVehWindow):setFont("default-bold-small")
+    doorTypeCombo = GuiComboBox(10,25+(60*3),200,75,"Standart",false,editVehWindow)
+    for i,v in ipairs({"Kelebek","Makas"}) do
+        doorTypeCombo:addItem(v)
+    end 
+	doorTypeCombo:setSelected(info.doortype or -1)
+	
+    fuelTypeLbl = GuiLabel(10,25+(52*4),200,20,"Yakıt Tipi:",false,editVehWindow):setFont("default-bold-small")
+    fuelTypeCombo = GuiComboBox(10,25+(56*4),200,75,"Dizel",false,editVehWindow)
+    for i,v in ipairs({"Benzin","LPG"}) do
+        fuelTypeCombo:addItem(v)
+    end 
+	fuelTypeCombo:setSelected(info.fueltype or -1)
 	
 	notlarLbl = GuiLabel(10,pu-180,pg-20,20,"Notlar:",false,editVehWindow):setFont("default-bold-small")
 	notlarMemo = GuiMemo(10,pu-160,pg-20,120,info.notes or "",false,editVehWindow)
@@ -62,6 +79,9 @@ addEventHandler("onClientGUIClick", resourceRoot, function()
 			price = tonumber(ucretEdit:getText()) or "NULL",
 			tax = tonumber(vergiEdit:getText()) or "NULL",
 			notes = checkText(notlarMemo:getText()),
+			doortype = doorTypeCombo:getSelected() == -1 and "NULL" or doorTypeCombo:getSelected(),
+			fueltype = fuelTypeCombo:getSelected() == -1 and "NULL" or fuelTypeCombo:getSelected(),
+			tanksize = checkText(depoEdit:getText())
 		}
 		triggerServerEvent("editveh.saveCustoms",resourceRoot,local_info.id,info)
 		editVehWindowClose()

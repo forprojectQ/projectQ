@@ -25,9 +25,9 @@ end)
 
 addEventHandler("editveh.saveCustoms",root,function(dbid,info)
 	if exports.vehicles:isVehicleHasCustomRecord(dbid) then
-		dbExec(conn,"UPDATE vehicles_custom SET brand=?,model=?,year=?,tax=?,notes=?,price=? WHERE id=?",info.brand,info.model,info.year,info.tax,info.notes,info.price,dbid)
+		dbExec(conn,"UPDATE vehicles_custom SET brand=?,model=?,year=?,tax=?,notes=?,price=?,doortype=?,fueltype=?,tanksize=? WHERE id=?",info.brand,info.model,info.year,info.tax,info.notes,info.price,info.doortype,info.fueltype,info.tanksize,dbid)
 	else
-		dbExec(conn,"INSERT vehicles_custom SET brand=?,model=?,year=?,tax=?,notes=?,price=?,id=?",info.brand,info.model,info.year,info.tax,info.notes,info.price,dbid)
+		dbExec(conn,"INSERT vehicles_custom SET brand=?,model=?,year=?,tax=?,notes=?,price=?,doortype=?,fueltype=?,tanksize=?,id=?",info.brand,info.model,info.year,info.tax,info.notes,info.price,info.doortype,info.fueltype,info.tanksize,dbid)
 	end	
 	exports.vehicles:reloadVehicle(dbid)
 end)
