@@ -88,7 +88,7 @@ function loadOneVehicle(dbid,row,loadtype)
             setElementData(veh, "window", 0)
 			setElementData(veh, "dbid", dbid)
 			setElementData(veh, "fuel", tonumber(row.fuel))
-			-- draw işlemi yaparken; odometer=string.format("%.3f", (odometer/1000)).." km"
+			-- draw işlemi yaparken; odometer=string.format("%.3f", (odometer/100)).." km"
 			setElementData(veh, "odometer", tonumber(row.odometer or 0)) 
 			setElementData(veh, "tax", tonumber(row.tax))
 			setElementData(veh, "carshop_price", tonumber(row.custom_price or row.carshop_price))

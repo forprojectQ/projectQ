@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2023-05-10 13:45:57
+Date: 2023-05-12 02:50:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,13 +20,13 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
-  `name` text CHARACTER SET latin1 DEFAULT NULL,
-  `password` text CHARACTER SET latin1 DEFAULT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `password` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `admin` int(11) NOT NULL DEFAULT 0,
-  `serial` text CHARACTER SET latin1 DEFAULT NULL,
+  `serial` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `limit` int(11) NOT NULL DEFAULT 3,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of accounts
@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS `characters`;
 CREATE TABLE `characters` (
   `id` int(11) NOT NULL,
   `account` int(11) NOT NULL DEFAULT 0,
-  `name` text CHARACTER SET latin1 DEFAULT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `pos` varchar(255) NOT NULL DEFAULT '0,0,5,0,0',
   `age` int(11) NOT NULL DEFAULT 18,
   `height` int(11) NOT NULL DEFAULT 175,
@@ -59,12 +59,12 @@ CREATE TABLE `characters` (
   `injured` int(1) NOT NULL DEFAULT 0,
   `faction` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '46', '49', '0', '100', '0', '128', '0', '1', '0', '1');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '27', '25', '0', '100', '0', '128', '0', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `factions`
@@ -76,7 +76,7 @@ CREATE TABLE `factions` (
   `type` int(3) NOT NULL DEFAULT 2,
   `balance` bigint(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of factions
@@ -93,7 +93,7 @@ CREATE TABLE `factions_rank` (
   `faction_id` int(11) DEFAULT NULL,
   `name` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of factions_rank
@@ -115,11 +115,12 @@ CREATE TABLE `items` (
   `value` text DEFAULT NULL,
   `count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of items
 -- ----------------------------
+INSERT INTO `items` VALUES ('1', '1', '1', '2', '1', '1');
 
 -- ----------------------------
 -- Table structure for `vehicles`
@@ -129,6 +130,7 @@ CREATE TABLE `vehicles` (
   `id` int(11) NOT NULL,
   `library_id` int(11) DEFAULT NULL,
   `fuel` int(11) NOT NULL DEFAULT 100,
+  `odometer` int(11) DEFAULT NULL,
   `tax` int(11) NOT NULL DEFAULT 0,
   `job` int(11) DEFAULT NULL,
   `pos` varchar(255) NOT NULL DEFAULT '0,0,5,0,0,0,0,90',
@@ -141,7 +143,7 @@ CREATE TABLE `vehicles` (
   `engine` int(11) NOT NULL DEFAULT 0,
   `enabled` int(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of vehicles
@@ -160,8 +162,11 @@ CREATE TABLE `vehicles_custom` (
   `handling` text DEFAULT NULL,
   `notes` text DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
+  `doortype` int(11) DEFAULT NULL,
+  `fueltype` int(11) DEFAULT NULL,
+  `tanksize` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of vehicles_custom
@@ -190,7 +195,7 @@ CREATE TABLE `vehicles_library` (
   `updatedby` int(11) DEFAULT NULL,
   `updatedate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- ----------------------------
 -- Records of vehicles_library
