@@ -2,21 +2,22 @@ local tonumber = tonumber
 local ipairs = ipairs
 local cache = exports.cache
 
+-- arabanın motoru açık olduğu sürece benzini azalt ve verileri kaydet.
 function refueling()
     for _, vehicle in ipairs(getElementsByType("vehicle")) do
-        local dbid = getElementData(vehicle, "dbid")
-        if cache:getVehicleData(dbid, "job") == 0 then return end
-        if cache:getVehicleData(dbid, "engine") == 1 then
+        if  cache:getVehicleData(vehicle, "job") == 0 and cache:getVehicleData(vehicle, "engine") == 1 then
             local fuel = getElementData(vehicle, "fuel")
+            local odometer = getElementData(vehicle, "odometer")
             if fuel <= 0 then
                 setVehicleEngineState(vehicle, false)
-                cache:setVehicleData(dbid, "engine", 0)
+                cache:setVehicleData(vehicle, "engine", 0)
                 return
             end
             local new = fuel - 1
             setElementData(vehicle, "fuel", new)
-            cache:setVehicleData(dbid, "fuel", new)
+            cache:setVehicleData(vehicle, "fuel", new)
+            cache:setVehicleData(vehicle, "odometer", odometer)
         end
     end
 end
-setTimer(refueling, 300000, 0)
+setTimer(refueling, 30000, 0)

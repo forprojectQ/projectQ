@@ -63,11 +63,9 @@ function loadAlllVehicle()
 	dbQuery(function(qh)
 		local res = dbPoll(qh, 0)
 		Async:foreach(res, function(row)
-            if row.enabled == 1 then
-			    loadOneVehicle(row.id,row,"start")
-            end
+			loadOneVehicle(row.id,row,"start")
 		end)
-	end, conn, query_sql)
+	end, conn, query_sql.." WHERE v.enabled=1")
 end
 addEventHandler("onResourceStart", resourceRoot, loadAlllVehicle)
 
@@ -90,6 +88,8 @@ function loadOneVehicle(dbid,row,loadtype)
             setElementData(veh, "window", 0)
 			setElementData(veh, "dbid", dbid)
 			setElementData(veh, "fuel", tonumber(row.fuel))
+			-- draw işlemi yaparken; odometer=string.format("%.3f", (odometer/1000)).." km"
+			setElementData(veh, "odometer", tonumber(row.odometer or 0)) 
 			setElementData(veh, "tax", tonumber(row.tax))
 			setElementData(veh, "carshop_price", tonumber(row.custom_price or row.carshop_price))
 			setElementData(veh, "carshop_tax", tonumber(row.custom_tax or row.carshop_tax))
