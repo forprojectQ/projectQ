@@ -9,7 +9,7 @@ dbQuery(
         if results then
             Async:foreach(results, function(row)
                 if factions[row.faction_id] == nil then
-                    factions[row.faction_id] = {name = row.faction_name, type = tonumber(row.faction_type), balance = tonumber(row.faction_balance)}
+                    factions[row.faction_id] = {name = row.faction_name, type = tonumber(row.faction_type), balance = tonumber(row.faction_balance), note = tostring(row.note), level = tonumber(level)}
                     factions_rank[row.faction_id]={}
                 end
                 table.insert(factions_rank[row.faction_id], {id = tonumber(row.id), faction_id = tonumber(row.faction_id), name = row.rank_name})

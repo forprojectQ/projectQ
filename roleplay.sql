@@ -72,17 +72,18 @@ INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70
 DROP TABLE IF EXISTS `factions`;
 CREATE TABLE `factions` (
   `id` int(11) NOT NULL,
-  `name` text DEFAULT NULL,
-  `type` int(3) NOT NULL DEFAULT 2,
-  `balance` bigint(11) NOT NULL DEFAULT 0,
+  `name` text,
+  `type` int(3) NOT NULL DEFAULT '2',
+  `balance` bigint(11) NOT NULL DEFAULT '0',
+  `note` text,
+  `level` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of factions
 -- ----------------------------
-INSERT INTO `factions` VALUES ('1', 'testfact', '2', '0');
-INSERT INTO `factions` VALUES ('2', 'testfact2', '1', '0');
+INSERT INTO `factions` VALUES ('1', 'test faction', '2', '0', 'deneme not', '1');
 
 -- ----------------------------
 -- Table structure for `factions_rank`
@@ -91,17 +92,16 @@ DROP TABLE IF EXISTS `factions_rank`;
 CREATE TABLE `factions_rank` (
   `id` int(11) NOT NULL,
   `faction_id` int(11) DEFAULT NULL,
-  `name` text DEFAULT NULL,
+  `name` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of factions_rank
 -- ----------------------------
-INSERT INTO `factions_rank` VALUES ('1', '1', 'testrank');
-INSERT INTO `factions_rank` VALUES ('2', '1', 'testrank2');
+INSERT INTO `factions_rank` VALUES ('0', '1', 'testrank2');
+INSERT INTO `factions_rank` VALUES ('1', '1', 'testrank1');
 INSERT INTO `factions_rank` VALUES ('3', '1', 'testrank3');
-INSERT INTO `factions_rank` VALUES ('4', '1', 'testrank4');
 
 -- ----------------------------
 -- Table structure for `items`
