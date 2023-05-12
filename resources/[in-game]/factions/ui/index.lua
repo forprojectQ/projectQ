@@ -34,36 +34,20 @@ function ui:menu()
         return
     end
 
-    --// SOL TARAF
-    local name = self.faction_info.name
-    if string.len(name) >= 15 then
-        name = ""..string.sub(name,1,15).."\n"..string.sub(name,15,30)
-    end
-
     dxDrawText("", x+15, y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
     dxDrawText("Birlik Arayüzü", x+45, y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.robotoBBig)
-    dxDrawText(name, x+15, y+55, nil, nil, tocolor(125, 125, 125), 1, self.fonts.roboto)
+    dxDrawText(self.faction_info.name, x+15, y+55, 500, 500, tocolor(125, 125, 125), 1, self.fonts.roboto, "left", "top", false, true) 
 
     dxDrawRectangle(x+5, y+120, 180, 2, tocolor(255, 255, 255, 125))
 
     --// SOL TARAF LİSTE
     local newY = 0
     for i=1, #self.options do
-        if self.page == i then
-            if isInBox(x+5, y+140+newY, 180, 50, "hand") then end
-            dxDrawText(self.options[i][1], x+20, y+150+newY, nil, nil, tocolor(88, 101, 242, 200), 1, self.fonts.awesomeSmall)
-            dxDrawText(self.options[i][2], x+55, y+152+newY, nil, nil, tocolor(88, 101, 242, 200), 1, self.fonts.roboto)
-        else
-            if isInBox(x+5, y+140+newY, 180, 50, "hand") then
-                dxDrawText(self.options[i][1], x+20, y+150+newY, nil, nil, tocolor(88, 101, 242, 200), 1, self.fonts.awesomeSmall)
-                dxDrawText(self.options[i][2], x+55, y+152+newY, nil, nil, tocolor(88, 101, 242, 200), 1, self.fonts.roboto)
-                if isClicked() then
-                    self.page = i
-                end
-            else
-                dxDrawText(self.options[i][1], x+20, y+150+newY, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
-                dxDrawText(self.options[i][2], x+55, y+152+newY, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
-            end
+        local isHoveredPage = isInBox(x+5, y+140+newY, 180, 50, "hand")
+        dxDrawText(self.options[i][1], x+20, y+150+newY, nil, nil,(isHoveredPage or self.page==i) and  tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
+        dxDrawText(self.options[i][2], x+55, y+152+newY, nil, nil,(isHoveredPage or self.page==i) and  tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
+        if isHoveredPage and isClicked() then
+            self.page = i
         end
         newY = newY + 50
     end
@@ -123,6 +107,8 @@ function ui:load(faction, ranks)
 end
 
 function ui:loadAssets()
+    assert(loadstring(exports.dxlibrary:loadFunctions()))()
+    
     self.options = {
         [1] = {"", "Birlik Panosu"},
         [2] = {"", "Üye Listesi"},
@@ -131,8 +117,6 @@ function ui:loadAssets()
         [5] = {"", "Birlik Envanteri"},
         [6] = {"", "Birlikten Ayrıl"},
     }
-
-    assert(loadstring(exports.dxlibrary:loadFunctions()))()
 
     self.fonts = {
         awesome = exports.fonts:getFont("AwesomeSolid", 25),
