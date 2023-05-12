@@ -1,4 +1,4 @@
-local ui = class("UI")
+ui = class("UI")
 
 function ui:init()
     self._functions = {
@@ -14,69 +14,48 @@ function ui:init()
 end
 
 function ui:menu()
-    local x, y, w, h = screen.x/2-800/2, screen.y/2-500/2, 800, 500
-
     --// ARKAPLAN
-    dxDrawRoundedRectangle(x-5, y-5, w+10, h+10, 15, tocolor(0, 0, 0, 45))
-    dxDrawRoundedRectangle(x, y, w, h, 15, tocolor(33, 35, 39))
-    dxDrawRoundedRectangle(x+200-10, y+25-10, w-220+20, h-50+20, 12, tocolor(0, 0, 0, 7))
-    dxDrawRoundedRectangle(x+200, y+25, w-220, h-50, 12, tocolor(39, 41, 46))
+    dxDrawRoundedRectangle(self.x-5, self.y-5, self.w+10, self.h+10, 15, tocolor(0, 0, 0, 45))
+    dxDrawRoundedRectangle(self.x, self.y, self.w, self.h, 15, tocolor(33, 35, 39))
+    dxDrawRoundedRectangle(self.x+200-10, self.y+25-10, self.w-220+20, self.h-50+20, 12, tocolor(0, 0, 0, 7))
+    dxDrawRoundedRectangle(self.x+200, self.y+25, self.w-220, self.h-50, 12, tocolor(39, 41, 46))
 
     --// YÜKLEME EKRANI
     if not self.loaded then
         if getTickCount() >= self.finishLoad then
-            dxDrawText("", x+100, y+h/2-25, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesome, "center", "center")
+            dxDrawText("", self.x+100, self.y+self.h/2-25, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesome, "center", "center")
             --// YÜKLENEMEDİ EKRANI ...
             return
         end
         self.loading = self.loading + 10
-        dxDrawText("", x+100, y+h/2-25, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesome, "center", "center", false, false, false, false, false, self.loading)
+        dxDrawText("", self.x+100, self.y+self.h/2-25, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesome, "center", "center", false, false, false, false, false, self.loading)
         return
     end
 
-    dxDrawText("", x+15, y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
-    dxDrawText("Birlik Arayüzü", x+45, y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.robotoBBig)
-    dxDrawText(self.faction_info.name, x+15, y+55, 500, 500, tocolor(125, 125, 125), 1, self.fonts.roboto, "left", "top", false, true) 
+    dxDrawText("", self.x+15, self.y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
+    dxDrawText("Birlik Arayüzü", self.x+45, self.y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.robotoBBig)
+    dxDrawText(self.faction_info.name, self.x+15, self.y+55, 500, 500, tocolor(125, 125, 125), 1, self.fonts.roboto, "left", "top", false, true) 
 
-    dxDrawRectangle(x+5, y+120, 180, 2, tocolor(255, 255, 255, 125))
+    dxDrawRectangle(self.x+5, self.y+120, 180, 2, tocolor(255, 255, 255, 125))
 
     --// SOL TARAF LİSTE
     local newY = 0
     for i=1, #self.options do
-        local isHoveredPage = isInBox(x+5, y+140+newY, 180, 50, "hand")
-        dxDrawText(self.options[i][1], x+20, y+150+newY, nil, nil,(isHoveredPage or self.page==i) and  tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
-        dxDrawText(self.options[i][2], x+55, y+152+newY, nil, nil,(isHoveredPage or self.page==i) and  tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
+        local isHoveredPage = isInBox(self.x+5, self.y+140+newY, 180, 50, "hand")
+        dxDrawText(self.options[i][1], self.x+20, self.y+150+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
+        dxDrawText(self.options[i][2], self.x+55, self.y+152+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
         if isHoveredPage and isClicked() then
             self.page = i
         end
         newY = newY + 50
     end
 
-    --// SAYFALAR
-    if self.page == 1 then
-        --// SAYFA BAŞLIĞI
-        dxDrawText("Birlik Panosu", x+210, y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.robotoBBig)
-        dxDrawText("Lorem İpsum Lorem İpsum Lorem İpsum Lorem İpsum.", x+210, y+50, nil, nil, tocolor(175, 175, 175), 1, self.fonts.robotoSmall)
+    self:refresh()
+end
 
-        --// BİLGİ KUTUCUKLARI ...
-        dxDrawRectangle(x+200+w/2-15, y+25, 185, h-50, tocolor(65, 67, 74))
-        dxDrawRoundedRectangle(x+200+w/2, y+25, 185, h-50, 12, tocolor(65, 67, 74))
-
-        dxDrawRoundedRectangle(x+200+w/2-7, y+45, 185, 60, 8, tocolor(39, 41, 46))
-        dxDrawRectangle(x+200+w/2-7, y+55, 2, 40, tocolor(88, 101, 242, 125))
-
-        dxDrawRoundedRectangle(x+200+w/2-7, y+45+65, 185, 60, 8, tocolor(39, 41, 46))
-        dxDrawRectangle(x+200+w/2-7, y+55+65, 2, 40, tocolor(88, 101, 242, 125))
-
-        dxDrawRoundedRectangle(x+200+w/2-7, y+45+65*2, 185, 60, 8, tocolor(39, 41, 46))
-        dxDrawRectangle(x+200+w/2-7, y+55+65*2, 2, 40, tocolor(88, 101, 242, 125))
-
-    elseif self.page == 2 then
-         --// SAYFA BAŞLIĞI
-        dxDrawRoundedRectangle(x+200, y+25, w-220, 75, 12, tocolor(65, 67, 74))
-        dxDrawRectangle(x+200, y+45, w-220, 75, tocolor(65, 67, 74))
-        dxDrawRectangle(x+200, y+45+75, w-220, 2, tocolor(255, 255, 255, 125))
-
+function ui:refresh()
+    if self.pages[self.page] then
+        self.pages[self.page][1]()
     end
 end
 
@@ -108,7 +87,19 @@ end
 
 function ui:loadAssets()
     assert(loadstring(exports.dxlibrary:loadFunctions()))()
+
+    self.x, self.y, self.w, self.h = screen.x/2-800/2, screen.y/2-500/2, 800, 500
     
+    self.pages = {
+        [1] = {function()
+            self:dashboard()
+        end},
+
+        [2] = {function()
+            self:members()
+        end},
+    }
+
     self.options = {
         [1] = {"", "Birlik Panosu"},
         [2] = {"", "Üye Listesi"},
