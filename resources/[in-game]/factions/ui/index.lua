@@ -44,7 +44,7 @@ function ui:menu()
         local isHoveredPage = isInBox(self.x+5, self.y+140+newY, 180, 50, "hand")
         dxDrawText(self.options[i][1], self.x+20, self.y+150+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
         dxDrawText(self.options[i][2], self.x+55, self.y+152+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
-        if isHoveredPage and isClicked() then
+        if isHoveredPage and isClicked() and self.page ~= i then
             self.page = i
         end
         newY = newY + 50
@@ -79,9 +79,10 @@ function ui:stop()
     removeEventHandler("onClientRender", root, self._functions.menu)
 end
 
-function ui:load(faction, ranks)
+function ui:load(faction, ranks, members)
     self.faction_info = faction
     self.ranks_info = ranks
+    self.members_info = members
     self.loaded = true
 end
 
@@ -98,6 +99,13 @@ function ui:loadAssets()
         [2] = {function()
             self:members()
         end},
+    }
+
+    self.infoBox = {
+        [1] = {"Kasa", "", tocolor(88, 242, 88, 125), ""},
+        [2] = {"Üyeler", "", tocolor(88, 101, 242, 125)},
+        [3] = {"Seviye", "", tocolor(88, 101, 242, 125)},
+        [4] = {"Oluşum", "", tocolor(213, 101, 66)}
     }
 
     self.options = {

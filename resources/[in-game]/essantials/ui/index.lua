@@ -44,7 +44,7 @@ function ui:render()
 
     if self.active then
         dxDrawRectangle(0, 0, screen.x, screen.y, tocolor(20, 20, 20))
-        dxDrawText("", screen.x/2, screen.y/2-100, nil, nil, tocolor(225, 225, 225, self.alpha), 1, self.fonts.awesome)
+        dxDrawText("", screen.x/2, screen.y/2-100, nil, nil, tocolor(225, 225, 225, self.alpha), 1, self.fonts.awesome)
         dxDrawText("Bayıldınız, tekrar ayaklanmak için kalan", screen.x/2-75, screen.y/2-15, nil, nil, tocolor(225, 225, 225, 225), 1, self.fonts.robotoB)
         dxDrawText(""..self.counter.." saniye", screen.x/2, screen.y/2+5, nil, nil, tocolor(225, 178, 84, 225), 1, self.fonts.roboto)
     else
