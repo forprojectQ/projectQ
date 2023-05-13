@@ -245,9 +245,11 @@ function toggleVehicleLock(key)
             if lock == 1 then
                 cache:setVehicleData(dbid, "lock", 0)
                 setVehicleLocked(vehicle, false)
+                exports.global:sendLocalMeAction(source, "sağ elini cebindeki anahtara götürür ve aracın kilidini açar.")
             else
                 cache:setVehicleData(dbid, "lock", 1)
                 setVehicleLocked(vehicle, true)
+                exports.global:sendLocalMeAction(source, "sağ elini cebindeki anahtara götürür ve aracı kilitler.")
             end
             triggerClientEvent("vehicle.effect.3d", root, "assets/lock.wav", vx, vy, vz)
             setPedAnimation(source, "ped", "walk_doorpartial", -1, false, false, false, false)
@@ -272,8 +274,10 @@ function toggleVehicleWindows(vehicle)
     triggerClientEvent("vehicle.effect.3d", root, "assets/window.wav", x, y, z)
     if window == 1 then
         setElementData(vehicle, "window", 0)
+        exports.global:sendLocalMeAction(source, "aracın camlarını açar.")
     else
         setElementData(vehicle, "window", 1)
+        exports.global:sendLocalMeAction(source, "aracın camlarını kapatır.")
     end
 end
 addEvent("vehicle.toggle.windows", true)
@@ -316,11 +320,13 @@ function toggleVehicleEngine(vehicle)
 
     if tonumber(engine) == 0 then
         triggerClientEvent("vehicle.effect.3d", root, "assets/engine.wav", x, y, z)
+        exports.global:sendLocalMeAction(source, "anahtarı cebinden çıkarıp kontağa takar ve motoru çalıştırmayı dener.")
         setTimer(function()
             local chance = math.random(1, 3)
             if chance == 1 then
-                outputChatBox("[!]#ffffff Aracın motorunu çalıştıramadınız.", source, 235, 180, 132, true)
+                exports.global:sendLocalDoAction(source, "aracın motorunu çalıştıramaz.")
             else
+                exports.global:sendLocalDoAction(source, "aracın motoru çalışmıştır.")
                 setVehicleEngineState(vehicle, true)
                 cache:setVehicleData(dbid, "engine", 1)
             end
@@ -329,6 +335,7 @@ function toggleVehicleEngine(vehicle)
         setVehicleOverrideLights(vehicle, 1)
         setVehicleEngineState(vehicle, false)
         cache:setVehicleData(dbid, "engine", 0)
+        exports.global:sendLocalMeAction(source, "aracın motorunu durdurur ve anahtarı cebine atar.")
     end
 end
 addEvent("vehicle.toggle.engine", true)
