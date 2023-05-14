@@ -15,8 +15,8 @@ dbQuery(function(qh)
                 name = row.faction_name,
                 type = tonumber(row.faction_type),
                 balance = tonumber(row.faction_balance),
-                note = tostring(row.note),
-                level = tonumber(row.level)
+                note = tostring(row.faction_note),
+                level = tonumber(row.faction_level)
             }
             factions_rank[fact_id] = {}
         end
@@ -37,7 +37,7 @@ dbQuery(function(qh)
             print("! LOADED "..#factions.." FACTİON")
         end)
     end
-end, conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.balance as faction_balance, f.level as level, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
+end, conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.note as faction_note, f.balance as faction_balance, f.level as faction_level, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
 
 addEvent("factions.get.server", true)
 addEventHandler("factions.get.server", root, function()
@@ -46,7 +46,7 @@ addEventHandler("factions.get.server", root, function()
     local rank_info = {}
     if fact_id > 0 then
         local res = factions[fact_id]
-        fact_info = {id = fact_id, name = res.name, type = res.type, balance = res.balance, level = res.level}
+        fact_info = {id = fact_id, name = res.name, note = res.note, type = res.type, balance = res.balance, level = res.level}
         rank_info=factions_rank[fact_id]
         triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, factions_members[fact_id])
     end

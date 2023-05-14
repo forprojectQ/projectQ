@@ -8,6 +8,13 @@ function ui:getDashboardInfo()
     return self.dashboardInfo
 end
 
+function ui:getDashboardNote()
+    local pages = {unpack(split(self.faction_info.note, "*>"))}
+    if self.sidePage >= 1 and self.sidePage <= #pages then
+        return pages[self.sidePage]
+    end
+end
+
 function ui:dashboard()
     --// SAYFA BAŞLIĞI
     dxDrawText("Birlik Panosu", self.x+210, self.y+30, nil, nil, tocolor(255, 255, 255), 1, self.fonts.robotoBBig)
@@ -15,6 +22,34 @@ function ui:dashboard()
 
     --// BİLGİ ARKAPLANI
     dxDrawCustomRoundedRectangle(12, self.x+200+self.w/2-15, self.y+25, 200, self.h-50, tocolor(65, 67, 74), false, false, true, false, true, false)
+
+    --// NOTLAR KISMI
+    local note = self:getDashboardNote()
+    local width = dxGetTextWidth("", 1, self.fonts.awesomeSmall)
+    local height = dxGetFontHeight(1, self.fonts.awesomeSmall)
+    dxDrawRoundedRectangle(self.x+210, self.y+75, 355, 350, 12, tocolor(15, 15, 15, 75))
+    dxDrawText(note, self.x+220, self.y+85, 800, 550, tocolor(255, 255, 255), 1, self.fonts.robotoSmall, "left", "top", true, true, false, true)
+    if isInBox(self.x+220, self.y+85+355, width, height, "hand") then
+        dxDrawText("", self.x+220, self.y+85+355, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
+        if isClicked() then
+            if self.sidePage > 1 then
+                self.sidePage = self.sidePage - 1
+            end
+        end
+    else
+        dxDrawText("", self.x+220, self.y+85+355, nil, nil, tocolor(255, 255, 255, 150), 1, self.fonts.awesomeSmall)
+    end
+    dxDrawText(self.sidePage, self.x+245, self.y+85+357, nil, nil, tocolor(255, 255, 255, 150), 0.8, self.fonts.awesomeSmall)
+    if isInBox(self.x+270, self.y+85+355, width, height, "hand") then
+        dxDrawText("", self.x+270, self.y+85+355, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
+        if isClicked() then
+            if self.sidePage < 3 then
+                self.sidePage = self.sidePage + 1
+            end
+        end
+    else
+        dxDrawText("", self.x+270, self.y+85+355, nil, nil, tocolor(255, 255, 255, 150), 1, self.fonts.awesomeSmall)
+    end
 
     --// BİLGİ KUTUCUKLARI
     local dashboardInfo = self:getDashboardInfo()

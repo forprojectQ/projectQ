@@ -46,6 +46,7 @@ function ui:menu()
         dxDrawText(self.options[i][2], self.x+55, self.y+152+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
         if isHoveredPage and isClicked() and self.page ~= i then
             self.page = i
+            self.sidePage = 1
         end
         newY = newY + 50
     end
@@ -65,7 +66,7 @@ function ui:start()
             self:stop()
         else
             self.display, self.loaded, self.page = true, false, 1
-            self.loading, self.finishLoad = 0, getTickCount()+3000
+            self.loading, self.finishLoad, self.sidePage = 0, getTickCount()+3000, 1
             showCursor(true)
             addEventHandler("onClientRender", root, self._functions.menu, true, "low-9999")
             triggerServerEvent("factions.get.server", localPlayer)
