@@ -9,9 +9,8 @@ function ui:getDashboardInfo()
 end
 
 function ui:getDashboardNote()
-    local pages = {unpack(split(self.faction_info.note, "*>"))}
-    if self.sidePage >= 1 and self.sidePage <= #pages then
-        return pages[self.sidePage]
+    if self.sidePage >= 1 and self.sidePage <= #self.faction_notes then
+        return self.faction_notes[self.sidePage]
     end
 end
 
@@ -29,6 +28,8 @@ function ui:dashboard()
     local height = dxGetFontHeight(1, self.fonts.awesomeSmall)
     dxDrawRoundedRectangle(self.x+210, self.y+75, 355, 350, 12, tocolor(15, 15, 15, 75))
     dxDrawText(note, self.x+220, self.y+85, 800, 550, tocolor(255, 255, 255), 1, self.fonts.robotoSmall, "left", "top", true, true, false, true)
+    dxDrawText(self.sidePage, self.x+245, self.y+85+357, nil, nil, tocolor(255, 255, 255, 150), 0.8, self.fonts.awesomeSmall)
+    
     if isInBox(self.x+220, self.y+85+355, width, height, "hand") then
         dxDrawText("", self.x+220, self.y+85+355, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
         if isClicked() then
@@ -39,7 +40,7 @@ function ui:dashboard()
     else
         dxDrawText("", self.x+220, self.y+85+355, nil, nil, tocolor(255, 255, 255, 150), 1, self.fonts.awesomeSmall)
     end
-    dxDrawText(self.sidePage, self.x+245, self.y+85+357, nil, nil, tocolor(255, 255, 255, 150), 0.8, self.fonts.awesomeSmall)
+    
     if isInBox(self.x+270, self.y+85+355, width, height, "hand") then
         dxDrawText("", self.x+270, self.y+85+355, nil, nil, tocolor(255, 255, 255), 1, self.fonts.awesomeSmall)
         if isClicked() then

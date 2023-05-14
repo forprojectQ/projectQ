@@ -84,6 +84,7 @@ function ui:load(faction, ranks, members)
     self.faction_info = faction
     self.ranks_info = ranks
     self.members_info = members
+    self.faction_notes = {unpack(split(self.faction_info.note, "*>"))}
     self.loaded = true
 end
 
