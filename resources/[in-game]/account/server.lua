@@ -49,6 +49,7 @@ function spawn(dbid)
     source.armor = arm
     triggerEvent("death.check", source)
     triggerEvent("load.items.server", source)
+    cache:setCharacterData(source, "lastlogin", exports.global:getTimeStamp())
 end
 addEvent("auth.spawn.character", true)
 addEventHandler("auth.spawn.character", root, spawn)
@@ -64,7 +65,7 @@ function createCharacter(name, height, weight, age, gender)
         walk = 131
     end
     local nextID = exports.mysql:getNewID("characters")
-    dbExec(conn, "INSERT INTO characters SET id='"..(nextID).."', account='"..(source:getData('account.id')).."', name='"..(name).."', age='"..(tonumber(age)).."', height='"..(tonumber(height)).."', weight='"..(tonumber(weight)).."', gender='"..(tonumber(gender)).."', model='"..(tonumber(model)).."', walk='"..(tonumber(walk)).."'")
+    dbExec(conn, "INSERT INTO characters SET id='"..(nextID).."', account='"..(source:getData('account.id')).."', name='"..(name).."', age='"..(tonumber(age)).."', height='"..(tonumber(height)).."', weight='"..(tonumber(weight)).."', gender='"..(tonumber(gender)).."', model='"..(tonumber(model)).."', walk='"..(tonumber(walk)).."', lastlogin='"..exports.global:getTimeStamp().."'")
     dbQuery(
         function(qh)
             local res, rows, err = dbPoll(qh, 0)
@@ -118,6 +119,7 @@ function login(username, password)
                 for index, row in ipairs(res) do
                     if row.password == password then
                         player:setData("account.id", tonumber(row.id))
+                        cache:setAccountData(player, "lastlogin", exports.global:getTimeStamp())
                         loginStep(player)
                     else
                         triggerClientEvent(player, "auth.notify", player, ""..username.." hesabının şifresi yanlış, lütfen şifrenizi kontrol edin.")
@@ -153,7 +155,7 @@ function register(username, password, mail)
                             end
                         else
                             local nextID = exports.mysql:getNewID("accounts")
-                            dbExec(conn, "INSERT INTO accounts SET id='"..(nextID).."', name='"..(username).."', password='"..(password).."', serial='"..(player.serial).."'")
+                            dbExec(conn, "INSERT INTO accounts SET id='"..(nextID).."', name='"..(username).."', password='"..(password).."', serial='"..(player.serial).."', lastlogin='"..exports.global:getTimeStamp().."'")
                             dbQuery(
                                 function(qh)
                                     local res, rows, err = dbPoll(qh, 0)

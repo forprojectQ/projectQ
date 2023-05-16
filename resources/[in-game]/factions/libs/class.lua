@@ -3,7 +3,7 @@ function class(name)
     c[0] = {}
     c.__index = c
     c.__type = name
-    c.databaseLoaded = false
+    c.pages = {}
 
     function c:new(...)
         local instance = setmetatable({}, self)

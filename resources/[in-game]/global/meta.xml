@@ -17,4 +17,5 @@
     <export function="findVehicle" type="server"/>
     <export function="createRandomPlateText" type="server"/>
     <export function="formatMoney" type="shared"/>
+    <export function="getTimeStamp" type="shared"/>
 </meta>

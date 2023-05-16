@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80017
 File Encoding         : 65001
 
-Date: 2023-05-14 06:45:31
+Date: 2023-05-16 03:54:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,13 +25,15 @@ CREATE TABLE `accounts` (
   `admin` int(11) NOT NULL DEFAULT '0',
   `serial` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `limit` int(11) NOT NULL DEFAULT '3',
+  `lastlogin` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of accounts
 -- ----------------------------
-INSERT INTO `accounts` VALUES ('1', 'test', 'test', '8', '9005638F97DC1640DD35331F4076AA12', '3');
+INSERT INTO `accounts` VALUES ('0', null, null, '0', null, '3', '2023-05-16 03:33:49');
+INSERT INTO `accounts` VALUES ('1', 'test', 'test', '8', '9005638F97DC1640DD35331F4076AA12', '3', null);
 
 -- ----------------------------
 -- Table structure for `characters`
@@ -58,13 +60,17 @@ CREATE TABLE `characters` (
   `active` int(1) NOT NULL DEFAULT '1',
   `injured` int(1) NOT NULL DEFAULT '0',
   `faction` int(11) NOT NULL DEFAULT '0',
+  `faction_rank` int(11) NOT NULL DEFAULT '0',
+  `lastlogin` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of characters
 -- ----------------------------
-INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '18', '12', '0', '100', '0', '128', '0', '1', '0', '1');
+INSERT INTO `characters` VALUES ('1', '1', 'test', '0,0,5,0,0', '21', '175', '70', '1', '59', '1000', '2', '0', '0', '100', '0', '128', '0', '1', '0', '1', '1', '2023-05-16 03:33:53');
+INSERT INTO `characters` VALUES ('2', '1', 'test2', '0,0,5,0,0', '18', '175', '65', '1', '170', '1000', '100', '100', '0', '100', '0', '128', '0', '1', '0', '1', '3', '2023-05-16 01:27:52');
+INSERT INTO `characters` VALUES ('3', '1', 'test3', '0,0,5,0,0', '18', '175', '65', '1', '170', '1000', '100', '100', '0', '100', '0', '128', '0', '1', '0', '1', '2', '2023-05-16 03:35:21');
 
 -- ----------------------------
 -- Table structure for `factions`

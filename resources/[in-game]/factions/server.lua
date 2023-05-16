@@ -32,7 +32,7 @@ dbQuery(function(qh)
                     if results then
                         factions_members[k] = results
                     end
-                end, conn, "SELECT id, name FROM characters WHERE faction = " .. k)
+                end, conn, "SELECT id, name, faction_rank, lastlogin FROM characters WHERE faction = " .. k)
             end
             print("! LOADED "..#factions.." FACTİON")
         end)
@@ -44,10 +44,15 @@ addEventHandler("factions.get.server", root, function()
     local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
     local fact_info = {}
     local rank_info = {}
+    local member_info = {}
     if fact_id > 0 then
         local res = factions[fact_id]
         fact_info = {id = fact_id, name = res.name, note = res.note, type = res.type, balance = res.balance, level = res.level}
         rank_info=factions_rank[fact_id]
-        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, factions_members[fact_id])
+        for k,v in pairs(factions_members[fact_id]) do
+            local app = exports.global:findPlayer(v.id)
+            table.insert(member_info, {id = v.id, rank = v.faction_rank, name = v.name, lastlogin = v.lastlogin, online = (app and true or false)})
+        end
+        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info)
     end
 end)
