@@ -56,3 +56,31 @@ addEventHandler("factions.get.server", root, function()
         triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info)
     end
 end)
+
+addEvent("factions.finance", true)
+addEventHandler("factions.finance", root, function(factionID, amount, app)
+    if tonumber(amount) then
+        if factions[factionID] then
+            if app == "withdraw" then
+                local current = tonumber(factions[factionID].balance)
+                local new = current - tonumber(amount)
+                if new < 0 then
+                    source:outputChat("[!]#FFFFFF Birlik kasasında çekmek istediğiniz kadar nakit bulunmuyor!", 55, 55, 200, true)
+                    return
+                end
+                factions[factionID].balance = new
+                exports.global:giveMoney(source, tonumber(amount))
+                dbExec(conn, "UPDATE factions SET balance='"..(new).."' WHERE id='"..(factionID).."'")
+            elseif app == "deposit" then
+                if exports.global:takeMoney(source, tonumber(amount)) then
+                    local current = tonumber(factions[factionID].balance)
+                    local new = current + tonumber(amount)
+                    factions[factionID].balance = new
+                    dbExec(conn, "UPDATE factions SET balance='"..(new).."' WHERE id='"..(factionID).."'")
+                else
+                    source:outputChat("[!]#FFFFFF Üzerinizde kasya yatırmak için bu kadar nakit bulunmuyor!", 55, 55, 200, true)
+                end
+            end
+        end
+    end
+end)

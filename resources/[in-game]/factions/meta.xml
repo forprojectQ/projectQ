@@ -7,6 +7,7 @@
     <script src="shared.lua" type="shared" />
     <script src="ui/index.lua" type="client" cache="false" />
     <script src="ui/dashboard/index.lua" type="client" cache="false" />
+    <script src="ui/finance/index.lua" type="client" cache="false" />
     <script src="ui/members/index.lua" type="client" cache="false" />
     <script src="server.lua" type="server" />
 </meta>

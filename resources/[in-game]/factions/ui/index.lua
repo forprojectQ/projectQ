@@ -24,7 +24,6 @@ function ui:menu()
     if not self.loaded then
         if getTickCount() >= self.finishLoad then
             dxDrawText("", self.x+100, self.y+self.h/2-25, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.awesome, "center", "center")
-            --// YÜKLENEMEDİ EKRANI ...
             return
         end
         self.loading = self.loading + 10
@@ -45,10 +44,10 @@ function ui:menu()
         dxDrawText(self.options[i][1], self.x+20, self.y+150+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.awesomeSmall)
         dxDrawText(self.options[i][2], self.x+55, self.y+152+newY, nil, nil,(isHoveredPage or self.page==i) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 200), 1, self.fonts.roboto)
         if isHoveredPage and isClicked() and self.page ~= i then
-            self:refresh(self.page, "close")
+            self:call(self.page, "close")
             self.page = i
             self.sidePage = 1
-            self:refresh(self.page, "open")
+            self:call(self.page, "open")
         end
         newY = newY + 50
     end
@@ -57,10 +56,10 @@ function ui:menu()
 end
 
 function ui:render()
-    self:refresh(self.page, "render")
+    self:call(self.page, "render")
 end
 
-function ui:refresh(page, state)
+function ui:call(page, state)
     if self.pages[page] and self.pages[page][state] then
         self.pages[page][state](self)
     end
@@ -71,7 +70,7 @@ function ui:start()
         if self.display then
             self:stop()
         else
-            self.display, self.loaded, self.page = true, false, 0
+            self.display, self.loaded, self.page = true, false, 1
             self.loading, self.finishLoad, self.sidePage = 0, getTickCount()+3000, 1
             showCursor(true)
             addEventHandler("onClientRender", root, self._functions.menu, true, "low-9999")
@@ -80,9 +79,16 @@ function ui:start()
     end
 end
 
+function ui:refresh()
+    self:call(self.page, "close")
+    self.loaded = false
+    self.finishLoad = getTickCount()+3000
+    triggerServerEvent("factions.get.server", localPlayer)
+end
+
 function ui:stop()
     self.display = false
-    self:refresh(self.page, "close")
+    self:call(self.page, "close")
     showCursor(false)
     removeEventHandler("onClientRender", root, self._functions.menu)
 end
@@ -92,8 +98,7 @@ function ui:load(faction, ranks, members)
     self.ranks_info = ranks
     self.members_info = members
     self.loaded = true
-    self.page = 1
-    self:refresh(self.page, "open")
+    self:call(self.page, "open")
 end
 
 function ui:loadAssets()

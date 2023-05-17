@@ -7,6 +7,8 @@
     <script src="s_player.lua" type="server"/>
     <script src="s_vehicle.lua" type="server"/>
     
+    <export function="takeMoney" type="server"/>
+    <export function="giveMoney" type="server"/>
     <export function="sendMessageToSupporters" type="server"/>
     <export function="sendMessageToAdmins" type="server"/>
     <export function="sendLocalICText" type="server"/>
