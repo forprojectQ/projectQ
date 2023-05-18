@@ -25,7 +25,7 @@ function takeMoney(player, amount)
             return false
         end
         player:setData("money", new)
-        exports.cache:setCharacterData("money", new)
+        exports.cache:setCharacterData(player, "money", new)
         return true
     else
         print("! takeMoney: amount is not a number")

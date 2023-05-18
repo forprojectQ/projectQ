@@ -19,7 +19,6 @@ local cache = exports.cache
 local _print = outputDebugString
 local ipairs = ipairs
 
-
 -- Araba load oldukdan sonra veya oluşturuldukdan sonra cacheye gönderilcek fakat sql işlenmicek column isimleri
 local noSql_columns = {
 	["carshop_price"]=true,["carshop_gta"]=true,["carshop_tax"]=true,["carshop_handling"]=true,["carshop_brand"]=true,["carshop_model"]=true,["carshop_year"]=true,
@@ -110,11 +109,7 @@ function loadOneVehicle(dbid,row,loadtype)
 				setVehicleHandling(veh,property,value)
 			end
 			for slot, upgrade in ipairs(fromJSON(row.upgrades or "[ [ ] ]") or {}) do addVehicleUpgrade(veh, upgrade) end
-			
-			
-			
-			
-			
+
 			for column, value in pairs(row) do
 				-- eğer loadtype start ise, noSql_columns olanları cache gönder. çünkü cache reslenmiş ise bu veriler kaybolmuş olacaktır.
 				if loadtype =="start" and noSql_columns[column] then
@@ -303,10 +298,18 @@ function toggleVehicleEngine(vehicle)
     local fuel = getElementData(vehicle, "fuel")
     local job = cache:getVehicleData(dbid, "job")
     local interest = cache:getVehicleData(dbid, "interest") or 0
+    local faction = cache:getVehicleData(dbid, "faction") or 0
 
     if job == 0 then
-        if not exports.items:hasItem(source, 2, dbid) then
-            return
+        if faction == 0 then
+            if not exports.items:hasItem(source, 2, dbid) then
+                return
+            end
+        else
+            local pFaction = cache:getCharacterData(source, "faction") or 0
+            if pFaction ~= faction then
+                return
+            end
         end
         if interest == 1 then
             outputChatBox("[!]#ffffff Aracınız faize bağlanmış.", source, 235, 180, 132, true)

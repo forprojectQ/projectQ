@@ -146,6 +146,7 @@ CREATE TABLE `vehicles` (
   `lock` int(11) NOT NULL DEFAULT '1',
   `interest` int(11) NOT NULL DEFAULT '0',
   `owner` int(11) DEFAULT NULL,
+  `faction` int(11) DEFAULT NULL,
   `engine` int(11) NOT NULL DEFAULT '0',
   `enabled` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)

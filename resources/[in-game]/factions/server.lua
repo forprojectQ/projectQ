@@ -45,15 +45,21 @@ addEventHandler("factions.get.server", root, function()
     local fact_info = {}
     local rank_info = {}
     local member_info = {}
+    local vehicle_info = {}
     if fact_id > 0 then
         local res = factions[fact_id]
         fact_info = {id = fact_id, name = res.name, note = res.note, type = res.type, balance = res.balance, level = res.level}
         rank_info=factions_rank[fact_id]
-        for k,v in pairs(factions_members[fact_id]) do
+        for k, v in pairs(factions_members[fact_id]) do
             local app = exports.global:findPlayer(v.id)
             table.insert(member_info, {id = v.id, rank = v.faction_rank, name = v.name, lastlogin = v.lastlogin, online = (app and true or false)})
         end
-        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info)
+        for _, vehicle in ipairs(Element.getAllByType("vehicle")) do
+            if cache:getVehicleData(vehicle, "faction") == fact_id then
+                table.insert(vehicle_info, {id = vehicle:getData("dbid"), plate = vehicle.plateText})
+            end
+        end
+        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info, vehicle_info)
     end
 end)
 

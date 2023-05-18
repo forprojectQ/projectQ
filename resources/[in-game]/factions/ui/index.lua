@@ -93,10 +93,11 @@ function ui:stop()
     removeEventHandler("onClientRender", root, self._functions.menu)
 end
 
-function ui:load(faction, ranks, members)
+function ui:load(faction, ranks, members, vehicles)
     self.faction_info = faction
     self.ranks_info = ranks
     self.members_info = members
+    self.vehicles_info = vehicles
     self.loaded = true
     self:call(self.page, "open")
 end
@@ -121,6 +122,7 @@ function ui:loadAssets()
         roboto = exports.fonts:getFont("Roboto", 11),
         robotoSmall = exports.fonts:getFont("Roboto", 10),
         robotoB = exports.fonts:getFont("RobotoB", 11),
+        robotoBSmall = exports.fonts:getFont("RobotoB", 9),
         robotoBBig = exports.fonts:getFont("RobotoB", 14),
     }
 end

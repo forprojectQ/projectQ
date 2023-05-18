@@ -1,24 +1,20 @@
 --// FİNANS SAYFASI
 ui.pages[3] = {
     open = function(self)
-        self.text = ""
-        self.alpha = 0
+        self.text, self.alpha = "", 0
+
         self.financeFunctions = {
             write = function(key)
-                if tonumber(key) then
-                    if string.len(self.text) > 15 then return end 
-                    self.text = self.text..key
+                if tonumber(key) and string.len(self.text) <= 15 then
+                    self.text = self.text .. key
                 end
             end,
 
             textRectangle = function()
-                if self.alpha == 125 then
-                    self.alpha = 0
-                else
-                    self.alpha = 125
-                end
+                self.alpha = self.alpha == 125 and 0 or 125
             end,
         }
+
         self.financeOptions = {
             {"", "Kasaya Para Yatır"},
             {"", "Kasadan Para Çek"},
@@ -30,10 +26,7 @@ ui.pages[3] = {
     close = function(self)
         self.timer:destroy()
         removeEventHandler("onClientCharacter", root, self.financeFunctions.write)
-        self.alpha = nil
-        self.text = nil
-        self.financeFunctions = nil
-        self.financeOptions = nil
+        self.alpha, self.text, self.financeFunctions, self.financeOptions = nil, nil, nil, nil
         collectgarbage("collect")
     end,
 
