@@ -93,11 +93,12 @@ function ui:stop()
     removeEventHandler("onClientRender", root, self._functions.menu)
 end
 
-function ui:load(faction, ranks, members, vehicles)
+function ui:load(faction, ranks, members, vehicles, interiors)
     self.faction_info = faction
     self.ranks_info = ranks
     self.members_info = members
     self.vehicles_info = vehicles
+    self.interiors_info = interiors
     self.loaded = true
     self:call(self.page, "open")
 end

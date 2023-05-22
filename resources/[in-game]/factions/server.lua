@@ -39,6 +39,16 @@ dbQuery(function(qh)
     end
 end, conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.note as faction_note, f.balance as faction_balance, f.level as faction_level, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
 
+function sendFactionAnnouncement(faction, message)
+    if tonumber(faction) then
+        for _, member in ipairs(Element.getAllByType("player")) do
+            if cache:getVehicleData(member, "faction") == faction then
+                member:outputChat("[BİRLİK] "..message.."", 191, 134, 70)
+            end
+        end
+    end
+end
+
 addEvent("factions.get.server", true)
 addEventHandler("factions.get.server", root, function()
     local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
@@ -46,20 +56,26 @@ addEventHandler("factions.get.server", root, function()
     local rank_info = {}
     local member_info = {}
     local vehicle_info = {}
+    local interior_info = {}
+
     if fact_id > 0 then
         local res = factions[fact_id]
+
         fact_info = {id = fact_id, name = res.name, note = res.note, type = res.type, balance = res.balance, level = res.level}
         rank_info=factions_rank[fact_id]
+
         for k, v in pairs(factions_members[fact_id]) do
             local app = exports.global:findPlayer(v.id)
             table.insert(member_info, {id = v.id, rank = v.faction_rank, name = v.name, lastlogin = v.lastlogin, online = (app and true or false)})
         end
+
         for _, vehicle in ipairs(Element.getAllByType("vehicle")) do
             if cache:getVehicleData(vehicle, "faction") == fact_id then
                 table.insert(vehicle_info, {id = vehicle:getData("dbid"), plate = vehicle.plateText})
             end
         end
-        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info, vehicle_info)
+        
+        triggerClientEvent(source, "factions.load.client", source, fact_info, rank_info, member_info, vehicle_info, interior_info)
     end
 end)
 
@@ -88,5 +104,41 @@ addEventHandler("factions.finance", root, function(factionID, amount, app)
                 end
             end
         end
+    end
+end)
+
+local respawnDelay = {}
+
+addEvent("factions.respawn", true)
+addEventHandler("factions.respawn", root, function(app)
+    if respawnDelay[source] then
+        source:outputChat("[!]#FFFFFF Bu işlemi bu kadar sık gerçekleştiremezsiniz.", 55, 55, 200, true)
+        return
+    end
+
+    respawnDelay[source] = Timer(function(player)
+        respawnDelay[player] = nil
+        collectgarbage("collect")
+    end, 30000, 1, source)
+
+    local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
+
+    if tonumber(app) then
+        local vehicle = exports.global:findVehicle(app)
+        if vehicle and not vehicle.controller then
+            vehicle:respawn()
+            source:outputChat("[!]#FFFFFF Aracı respawnladınız.", 55, 55, 200, true)
+            sendFactionAnnouncement(fact_id, ""..source.name..", #"..app.." ID birlik aracını respawnladı.")
+        else
+            source:outputChat("[!]#FFFFFF Birlik aracı şu anda birisi tarafından kullanılıyor.", 55, 55, 200, true)
+        end
+    else
+        for _, vehicle in ipairs(Element.getAllByType("vehicle")) do
+            if cache:getVehicleData(vehicle, "faction") == fact_id and not vehicle.controller then
+                vehicle:respawn()
+            end
+        end
+        source:outputChat("[!]#FFFFFF Tüm birlik araçlarını respawnladınız.", 55, 55, 200, true)
+        sendFactionAnnouncement(fact_id, ""..source.name..", tüm birlik araçlarını respawnladı.")
     end
 end)

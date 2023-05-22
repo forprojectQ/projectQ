@@ -218,6 +218,7 @@ function exitVehicle(player, seat)
         local rx, ry, rz = getElementRotation(source)
         local position = ""..x..","..y..","..z..","..interior..","..dimension..","..rx..","..ry..","..rz..""
         cache:setVehicleData(source, "pos", position)
+        setVehicleRespawnPosition(source, x, y, z, rx, ry, rz)
     end
 end
 addEventHandler("onVehicleExit", getRootElement(), exitVehicle)
@@ -324,14 +325,14 @@ function toggleVehicleEngine(vehicle)
     if tonumber(engine) == 0 then
         triggerClientEvent("vehicle.effect.3d", root, "assets/engine.wav", x, y, z)
         exports.global:sendLocalMeAction(source, "anahtarı cebinden çıkarıp kontağa takar ve motoru çalıştırmayı dener.")
-        setTimer(function()
+        setTimer(function(thePlayer, theVehicle)
             local chance = math.random(1, 3)
             if chance == 1 then
-                exports.global:sendLocalDoAction(source, "aracın motorunu çalıştıramaz.")
+                exports.global:sendLocalDoAction(thePlayer, "aracın motorunu çalıştıramaz.")
             else
-                exports.global:sendLocalDoAction(source, "aracın motoru çalışmıştır.")
-                setVehicleEngineState(vehicle, true)
-                cache:setVehicleData(dbid, "engine", 1)
+                exports.global:sendLocalDoAction(thePlayer, "aracın motoru çalışmıştır.")
+                setVehicleEngineState(theVehicle, true)
+                cache:setVehicleData(theVehicle, "engine", 1)
             end
         end, 1500, 1, source, vehicle)
     else

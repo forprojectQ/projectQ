@@ -2,7 +2,7 @@
 ui.pages[1] = {
     open = function(self)
         self.infoBox = {
-            [1] = {"Kasa", "", tocolor(88, 242, 88, 125), ""},
+            [1] = {"Kasa", "", tocolor(88, 242, 88, 125)},
             [2] = {"Üyeler", "", tocolor(88, 101, 242, 125)},
             [3] = {"Seviye", "", tocolor(88, 101, 242, 125)},
             [4] = {"Oluşum", "", tocolor(213, 101, 66)}
