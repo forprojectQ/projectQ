@@ -32,7 +32,7 @@ dbQuery(function(qh)
                     if results then
                         factions_members[k] = results
                     end
-                end, conn, "SELECT id, name, faction_rank, lastlogin FROM characters WHERE faction = " .. k)
+                end, conn, "SELECT id, name, faction_rank, faction_lead, lastlogin FROM characters WHERE faction = " .. k)
             end
             print("! LOADED "..#factions.." FACTİON")
         end)
@@ -52,6 +52,7 @@ end
 addEvent("factions.get.server", true)
 addEventHandler("factions.get.server", root, function()
     local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
+
     local fact_info = {}
     local rank_info = {}
     local member_info = {}
@@ -66,7 +67,7 @@ addEventHandler("factions.get.server", root, function()
 
         for k, v in pairs(factions_members[fact_id]) do
             local app = exports.global:findPlayer(v.id)
-            table.insert(member_info, {id = v.id, rank = v.faction_rank, name = v.name, lastlogin = v.lastlogin, online = (app and true or false)})
+            table.insert(member_info, {id = v.id, rank = v.faction_rank, name = v.name, lead = v.faction_lead, lastlogin = v.lastlogin, online = (app and true or false)})
         end
 
         for _, vehicle in ipairs(Element.getAllByType("vehicle")) do

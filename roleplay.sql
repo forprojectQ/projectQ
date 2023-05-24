@@ -61,6 +61,7 @@ CREATE TABLE `characters` (
   `injured` int(1) NOT NULL DEFAULT '0',
   `faction` int(11) NOT NULL DEFAULT '0',
   `faction_rank` int(11) NOT NULL DEFAULT '0',
+  `faction_lead` int(1) NOT NULL DEFAULT '0',
   `lastlogin` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
