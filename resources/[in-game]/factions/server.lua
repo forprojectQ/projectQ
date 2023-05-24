@@ -42,7 +42,7 @@ end, conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction
 function sendFactionAnnouncement(faction, message)
     if tonumber(faction) then
         for _, member in ipairs(Element.getAllByType("player")) do
-            if cache:getVehicleData(member, "faction") == faction then
+            if cache:getCharacterData(member, "faction") == faction then
                 member:outputChat("[BİRLİK] "..message.."", 191, 134, 70)
             end
         end
