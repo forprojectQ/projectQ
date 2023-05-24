@@ -69,7 +69,7 @@ ui.pages[5] = {
         local isHovered = isInBox(newX2+130, self.y+55+newY, 30, 30, "hand")
         dxDrawText("", newX2+140, self.y+65+newY, nil, nil, (isHovered) and tocolor(88, 101, 242, 125) or tocolor(255, 255, 255, 125), 1, self.fonts.awesomeSmall)
         if isHovered and isClicked() then
-            triggerServerEvent("factions.respawn", localPlayer, "all")
+            triggerServerEvent("factions.vehicle", localPlayer, "respawn", "all")
         end
 
         --// SEÇENEKLER,
@@ -102,7 +102,13 @@ ui.pages[5] = {
                     local isHovered = isInBox(self.x + 530, self.y + 163 + newY, 25, 25, "hand")
                     dxDrawText("", self.x + 535, self.y + 167 + newY, nil, nil, (isHovered) and tocolor(88, 101, 242, 200) or tocolor(255, 255, 255, 150), 0.8, self.fonts.awesomeSmall)
                     if isHovered and isClicked() then
-                        triggerServerEvent("factions.respawn", localPlayer, self.vehicles_info[i].id)
+                        triggerServerEvent("factions.vehicle", localPlayer, "respawn", self.vehicles_info[i].id)
+                    end
+                    local isHovered = isInBox(self.x + 500, self.y + 163 + newY, 25, 25, "hand")
+                    dxDrawText("", self.x + 510, self.y + 167 + newY, nil, nil, (isHovered) and tocolor(188, 75, 75, 200) or tocolor(255, 255, 255, 150), 0.8, self.fonts.awesomeSmall)
+                    if isHovered and isClicked() then
+                        triggerServerEvent("factions.vehicle", localPlayer, "remove", self.vehicles_info[i].id)
+                        self:refresh()
                     end
                     newY = newY + 30
                 end

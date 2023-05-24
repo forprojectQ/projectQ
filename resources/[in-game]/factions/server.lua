@@ -109,36 +109,50 @@ end)
 
 local respawnDelay = {}
 
-addEvent("factions.respawn", true)
-addEventHandler("factions.respawn", root, function(app)
-    if respawnDelay[source] then
-        source:outputChat("[!]#FFFFFF Bu işlemi bu kadar sık gerçekleştiremezsiniz.", 55, 55, 200, true)
-        return
-    end
-
-    respawnDelay[source] = Timer(function(player)
-        respawnDelay[player] = nil
-        collectgarbage("collect")
-    end, 30000, 1, source)
-
+addEvent("factions.vehicle", true)
+addEventHandler("factions.vehicle", root, function(app, val)
     local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
 
-    if tonumber(app) then
-        local vehicle = exports.global:findVehicle(app)
-        if vehicle and not vehicle.controller then
-            vehicle:respawn()
-            source:outputChat("[!]#FFFFFF Aracı respawnladınız.", 55, 55, 200, true)
-            sendFactionAnnouncement(fact_id, ""..source.name..", #"..app.." ID birlik aracını respawnladı.")
-        else
-            source:outputChat("[!]#FFFFFF Birlik aracı şu anda birisi tarafından kullanılıyor.", 55, 55, 200, true)
+    if app == "respawn" then
+        if respawnDelay[source] then
+            source:outputChat("[!]#FFFFFF Bu işlemi bu kadar sık gerçekleştiremezsiniz.", 55, 55, 200, true)
+            return
         end
-    else
-        for _, vehicle in ipairs(Element.getAllByType("vehicle")) do
-            if cache:getVehicleData(vehicle, "faction") == fact_id and not vehicle.controller then
+
+        respawnDelay[source] = Timer(function(player)
+            respawnDelay[player] = nil
+            collectgarbage("collect")
+        end, 30000, 1, source)
+
+        if tonumber(val) then
+            local vehicle = exports.global:findVehicle(val)
+            if vehicle and not vehicle.controller then
                 vehicle:respawn()
+                source:outputChat("[!]#FFFFFF Aracı respawnladınız.", 55, 55, 200, true)
+                sendFactionAnnouncement(fact_id, ""..source.name..", #"..val.." ID birlik aracını respawnladı.")
+            else
+                source:outputChat("[!]#FFFFFF Birlik aracı şu anda birisi tarafından kullanılıyor.", 55, 55, 200, true)
             end
+        else
+            for _, vehicle in ipairs(Element.getAllByType("vehicle")) do
+                if cache:getVehicleData(vehicle, "faction") == fact_id and not vehicle.controller then
+                    vehicle:respawn()
+                end
+            end
+            source:outputChat("[!]#FFFFFF Tüm birlik araçlarını respawnladınız.", 55, 55, 200, true)
+            sendFactionAnnouncement(fact_id, ""..source.name..", tüm birlik araçlarını respawnladı.")
         end
-        source:outputChat("[!]#FFFFFF Tüm birlik araçlarını respawnladınız.", 55, 55, 200, true)
-        sendFactionAnnouncement(fact_id, ""..source.name..", tüm birlik araçlarını respawnladı.")
+    elseif app == "remove" then
+        local vehicle = exports.global:findVehicle(val)
+        if vehicle then
+            if cache:getVehicleData(vehicle, "faction") == fact_id then
+                cache:setVehicleData(vehicle, "faction", 0)
+                sendFactionAnnouncement(fact_id, ""..source.name..", #"..val.." ID aracı birlikten çıkardı.")
+            else
+                source:outputChat("[!]#FFFFFF Araç zaten bu birliğe ait değil.", 55, 55, 200, true)
+            end
+        else
+            source:outputChat("[!]#FFFFFF Bir sorun oluştu, daha sonra tekrar deneyin.", 55, 55, 200, true)
+        end
     end
 end)
