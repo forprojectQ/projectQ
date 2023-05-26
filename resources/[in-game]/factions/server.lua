@@ -49,6 +49,48 @@ function sendFactionAnnouncement(faction, message)
     end
 end
 
+function deleteFaction(fact_id)
+    if tonumber(fact_id) and factions[fact_id] then
+        local query = dbExec(conn, "DELETE FROM factions WHERE id = " .. fact_id)
+        if query then
+            factions[fact_id] = nil
+            factions_rank[fact_id] = nil
+            factions_members[fact_id] = nil
+            dbExec(conn, "DELETE FROM factions_rank WHERE faction_id = " .. fact_id)
+            collectgarbage("collect")
+        end
+    end
+end
+
+addEvent("factions.quit", true)
+addEventHandler("factions.quit", root, function()
+    local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
+    local dbid = tonumber(source:getData("dbid"))
+
+    sendFactionAnnouncement(fact_id, ""..source.name..", birlikten ayrıldı!")
+
+    cache:setCharacterData(source, "faction", 0)
+    cache:setCharacterData(source, "faction_rank", 0)
+    cache:setCharacterData(source, "faction_lead", 0)
+
+    local memberToRemove = nil
+    for index, member in ipairs(factions_members[fact_id]) do
+        if member.id == dbid then
+            memberToRemove = index
+            break
+        end
+    end
+
+    if memberToRemove then
+        table.remove(factions_members[fact_id], memberToRemove)
+    end
+
+    if #factions_members[fact_id] <= 0 then
+        --// üye kalmadıysa birlik siliniyor.
+        deleteFaction(fact_id)
+    end
+end)
+
 addEvent("factions.get.server", true)
 addEventHandler("factions.get.server", root, function()
     local fact_id = tonumber(cache:getCharacterData(source, "faction")) or 0
