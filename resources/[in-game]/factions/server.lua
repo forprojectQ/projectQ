@@ -1,16 +1,31 @@
 local conn = exports.mysql:getConn()
 local cache = exports.cache
-
 local factions = {}
 local factions_rank = {}
 local factions_members = {}
 
-dbQuery(function(qh)
-    local results = dbPoll(qh, -1)
-    if results then
-        Async:foreach(results, function(row)
+local query_sql = [[
+    SELECT
+        f.id as faction_id,
+        f.name as faction_name,
+        f.type as faction_type,
+        f.note as faction_note,
+        f.balance as faction_balance,
+        f.level as faction_level,
+        r.id,
+        r.name as rank_name
+    FROM
+        factions f
+    LEFT JOIN factions_rank r ON 
+        f.id = r.faction_id
+]]
+
+local function processResults(results)
+    if not results then return end
+    Async:foreach(results, function(row)
         local fact_id = tonumber(row.faction_id)
-        if factions[fact_id] == nil then
+        if not factions[fact_id] then
+            --// BİRLİK YÜKLEME
             factions[fact_id] = {
                 name = row.faction_name,
                 type = tonumber(row.faction_type),
@@ -20,24 +35,29 @@ dbQuery(function(qh)
             }
             factions_rank[fact_id] = {}
         end
+        --// BİRLİĞE RÜTBELERİ YÜKLEME
         table.insert(factions_rank[fact_id], {
             id = tonumber(row.id),
             faction_id = tonumber(fact_id),
             name = row.rank_name
         })
-        end, function()
-            for k, faction in pairs(factions) do
-                dbQuery(function(qh)
-                    local results = dbPoll(qh, -1)
-                    if results then
-                        factions_members[k] = results
-                    end
-                end, conn, "SELECT id, name, faction_rank, faction_lead, lastlogin FROM characters WHERE faction = " .. k)
+    end)
+end
+
+dbQuery(function(qh)
+    local results = dbPoll(qh, -1)
+    processResults(results)
+    --// BİRLİK ÜYELERİ YÜKLEME
+    for k, faction in pairs(factions) do
+        dbQuery(function(qh)
+            local results = dbPoll(qh, -1)
+            if results then
+                factions_members[k] = results
             end
-            print("! LOADED "..#factions.." FACTİON")
-        end)
+        end, conn, "SELECT id, name, faction_rank, faction_lead, lastlogin FROM characters WHERE faction = " .. k)
     end
-end, conn, "SELECT f.id as faction_id, f.name as faction_name, f.type as faction_type, f.note as faction_note, f.balance as faction_balance, f.level as faction_level, r.id, r.name as rank_name FROM factions f LEFT JOIN factions_rank r ON f.id = r.faction_id")
+    print("! LOADED "..#factions.." FACTION")
+end, conn, query_sql)
 
 function sendFactionAnnouncement(faction, message)
     if tonumber(faction) then

@@ -95,7 +95,6 @@ ui.pages[5] = {
 
             if #self.selectedTable > 0 then
                 for i = self.currentRow + 1, math.min(self.currentRow + self.maxRow, #self.selectedTable) do
-                    local index = i - self.currentRow
                     dxDrawRectangle(self.x + 210, self.y + 160 + newY, 350, 30, i % 2 == 0 and listColor2 or listColor)
                     dxDrawText(self.vehicles_info[i].id, self.x + 225, self.y + 165 + newY, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.robotoSmall)
                     dxDrawText(self.vehicles_info[i].plate, self.x + 335, self.y + 165 + newY, nil, nil, tocolor(255, 255, 255, 200), 1, self.fonts.robotoSmall)

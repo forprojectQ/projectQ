@@ -18,9 +18,7 @@ ui.pages[1] = {
     end,
 
     close = function(self)
-        self.infoBox = nil
-        self.faction_notes = nil
-        self.dashboardInfo = nil
+        self.infoBox, self.faction_notes, self.dashboardInfo = nil, nil, nil
         collectgarbage("collect")
     end,
 

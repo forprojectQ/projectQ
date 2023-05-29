@@ -14,7 +14,6 @@ ui.pages[6] = {
 
         dxDrawText("", self.x+465, self.y+125, nil, nil, tocolor(255, 255, 255, 150), 1, self.fonts.awesomeSmall)
 
-
         if isInBox(self.x+445, self.y+240, 65, 65, "hand") then
             dxDrawText("", self.x+455, self.y+250, nil, nil, tocolor(88, 101, 242, 200), 1, self.fonts.awesome)
             if isClicked() then
