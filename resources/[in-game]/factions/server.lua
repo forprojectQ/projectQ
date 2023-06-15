@@ -12,8 +12,9 @@ local query_sql = [[
         f.note as faction_note,
         f.balance as faction_balance,
         f.level as faction_level,
-        r.id,
-        r.name as rank_name
+        r.id as rank_id,
+        r.name as rank_name,
+        r.permissions as rank_permissions
     FROM
         factions f
     LEFT JOIN factions_rank r ON 
@@ -37,9 +38,10 @@ local function processResults(results)
         end
         --// BİRLİĞE RÜTBELERİ YÜKLEME
         table.insert(factions_rank[fact_id], {
-            id = tonumber(row.id),
+            id = tonumber(row.rank_id),
             faction_id = tonumber(fact_id),
-            name = row.rank_name
+            name = row.rank_name,
+			permissions = split(row.rank_permissions or "",",")
         })
     end)
 end
@@ -218,4 +220,23 @@ addEventHandler("factions.vehicle", root, function(app, val)
             source:outputChat("[!]#FFFFFF Bir sorun oluştu, daha sonra tekrar deneyin.", 55, 55, 200, true)
         end
     end
+end)
+
+
+addEvent("factions.updateRankPermissions", true)
+addEventHandler("factions.updateRankPermissions", root, function(rank_id, rank_perms)
+	local fact_id = tonumber(cache:getCharacterData(client, "faction"))
+	if fact_id == 0 then return end
+	local rank_index = false
+	for i,v in ipairs(factions_rank[fact_id]) do
+		if v.id == rank_id then
+			rank_index = i
+		end
+	end
+	if not rank_index then client:outputChat("[!]#FFFFFF Seçtiğin rank bulunamadı.", 55, 55, 200, true) return end
+	local rank = factions_rank[fact_id][rank_index]
+	factions_rank[fact_id][rank_index].permissions=rank_perms
+	sendFactionAnnouncement(fact_id, ""..client.name..", "..rank.name.." isimli rankın izinlerini güncelledi.")
+	client:outputChat("[!]#FFFFFF "..rank.name.." isimli rankın izinlerini güncellediniz.", 55, 55, 200, true)
+	dbExec(conn, "UPDATE factions_rank SET permissions=? WHERE id=?",table.concat(rank_perms,","),rank.id)
 end)

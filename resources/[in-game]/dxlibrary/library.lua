@@ -35,6 +35,7 @@ _functions = [[
         dxDrawRectangle(x, y + radius, radius, height - diameter, color)
         dxDrawRectangle(x + width - radius, y + radius, radius, height - diameter, color)
         dxDrawRectangle(x + radius, y + radius, width - diameter, height - diameter, tocolor(0, 0, 0, 0))
+		return isInBox(x, y, width, height)
     end
 
     function dxDrawCustomRoundedRectangle(radius,x,y,w,h,color,postGUI,subPixel,noTL,noTR,noBL,noBR)

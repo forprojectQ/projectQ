@@ -1,11 +1,11 @@
 permissions = {
-    [1] = "Üyeleri Yönet",
-    [2] = "Maaşları Düzenle",
-    [3] = "Birlik Kasası Yönetimi",
-    [4] = "Kayıtları Görüntüle",
-    [5] = "Birlik Envanter Yönetimi",
-    [6] = "Rütbe Yetkilerini Düzenle",
-    [7] = "Birlik Notunu Düzenle"
+	{"Üyeleri Yönet","manage_members"},
+	{"Maaşları Düzenle","manage_payouts"},
+	{"Birlik Kasası Yönetimi","manage_bank"},
+	{"Kayıtları Görüntüle","show_logs"},
+	{"Birlik Envanter Yönetimi","manage_inventory"},
+	{"Rütbe Yetkilerini Düzenle","manage_ranks"},
+	{"Birlik Notunu Düzenle","manage_note"},
 }
 
 types = {
@@ -20,4 +20,11 @@ end
 
 function getTypeName(ID)
     return types[ID] or "null"
+end
+
+function hasPermission(perm_table,permission)
+	for i,v in ipairs(perm_table) do
+		if v==permission then return true end
+	end
+	return false
 end
