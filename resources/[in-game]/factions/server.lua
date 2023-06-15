@@ -231,6 +231,7 @@ addEventHandler("factions.updateRankPermissions", root, function(rank_id, rank_p
 	for i,v in ipairs(factions_rank[fact_id]) do
 		if v.id == rank_id then
 			rank_index = i
+			break
 		end
 	end
 	if not rank_index then client:outputChat("[!]#FFFFFF Seçtiğin rank bulunamadı.", 55, 55, 200, true) return end
