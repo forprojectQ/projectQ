@@ -5,7 +5,7 @@ commands = {
     {
         command = "ornekhesapkomut",
         --// bu komutu kullanabilecek hesap isimleri
-        account = "chavo",
+        account = "mahlukat,bekiroj,chavo",
         func = function(player, args)
             iprint(player)
         end,
@@ -13,7 +13,7 @@ commands = {
     {
         command = "ornekserialkomut",
         -- bu komutu kullanabilecek serial adresleri
-        serial = "440AF39FCF3DF926DEDC056F8749F1A2",
+        serial = "31E905B109F9F8F359BB2DE44BA66742,B5D767EFFB542805FE49564D79C68A54,440AF39FCF3DF926DEDC056F8749F1A2",
         func = function(player, args)
             iprint(player)
         end,
