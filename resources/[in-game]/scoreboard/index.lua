@@ -79,7 +79,7 @@ function ui:render()
 
     dxDrawRoundedRectangle(x, y, w, h, 5, tocolor(30, 30, 30, 255))
     dxDrawRectangle(x+80, y+10, 2, 50, tocolor(255, 255, 255, 50))
-    dxDrawText("SIERRA ROLEPLAY", x+90, y, nil, nil, tocolor(255, 255, 255, 170), 1, self.fonts.oswald)
+    dxDrawText("projectQ ROLEPLAY", x+90, y, nil, nil, tocolor(255, 255, 255, 170), 1, self.fonts.oswald)
     dxDrawText("Write You'r History ...", x+91, y+35, nil, nil, tocolor(255, 255, 255, 140), 1, self.fonts.roboto)
     dxDrawText("", x+20, y+15, nil, nil, tocolor(255, 255, 255, 140), 1, self.fonts.awesome2)
 
