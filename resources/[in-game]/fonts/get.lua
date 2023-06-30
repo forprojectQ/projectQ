@@ -10,6 +10,8 @@ function fonts:new()
     obj.list = {
         ['RobotoB'] = 'assets/RobotoB.ttf',
         ['Roboto'] = 'assets/Roboto.ttf',
+        ['Raleway'] = 'assets/Raleway.ttf',
+        ['Oswald'] = 'assets/Oswald.ttf',
         ['AwesomeSolid'] = 'assets/FontAwesomeSolid.otf',
         ['AwesomeRegular'] = 'assets/FontAwesomeRegular.otf'
     }

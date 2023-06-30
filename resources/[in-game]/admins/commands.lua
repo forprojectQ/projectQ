@@ -5,7 +5,7 @@ commands = {
     {
         command = "ornekhesapkomut",
         --// bu komutu kullanabilecek hesap isimleri
-        account = "mahlukat,bekiroj",
+        account = "mahlukat,bekiroj,chavo",
         func = function(player, args)
             iprint(player)
         end,
@@ -13,7 +13,7 @@ commands = {
     {
         command = "ornekserialkomut",
         -- bu komutu kullanabilecek serial adresleri
-        serial = "31E905B109F9F8F359BB2DE44BA66742,B5D767EFFB542805FE49564D79C68A54",
+        serial = "31E905B109F9F8F359BB2DE44BA66742,B5D767EFFB542805FE49564D79C68A54,440AF39FCF3DF926DEDC056F8749F1A2",
         func = function(player, args)
             iprint(player)
         end,
@@ -27,6 +27,49 @@ commands = {
                 player:outputChat("Dövüş stilin değiştirildi", 0, 255, 0)
             else
                 player:outputChat("Dövüş stilin değiştirilemedi", 255, 0, 0)
+            end
+        end,
+    },
+    {
+        command = "fly",
+        -- admin leveli 5 ve 5'den büyük kişiler kullanabilir.
+        access = 1,
+        func = function(player)
+            local veh = player:getOccupiedVehicle()
+            if veh then 
+                player:outputChat("[!]#FFFFFF Araç içerisinde /fly komudunu kullanamazsınız!", 255, 0, 0, true)
+            else
+                triggerClientEvent(player, "onClientFlyToggle", player)
+            end
+        end,
+    },
+    {
+        command = "setskin",
+        -- admin leveli 5 ve 5'den büyük kişiler kullanabilir.
+        access = 5,
+        func = function(player, args)
+            if not tonumber(args[1]) or not tonumber(args[2]) then -- // Oyuncu ID, Skıin ID
+                player:outputChat("[!]#FFFFFF /setskin [ID] [Skin ID]", 235, 180, 132, true)
+            else
+                local targetPlayer = exports.global:findPlayer(args[1])
+                if targetPlayer then 
+                    if player:getData("online") == 0 then 
+                        player:outputChat("[!]#FFFFFF Oyuncu oyuna henüz giriş yapmadı!", 255, 0, 0, true)
+                    elseif tostring(type(tonumber(args[2]))) == "number" and tonumber(args[2]) ~= 0 then 
+                        local oldSkin = targetPlayer:getModel()
+                        local skin = targetPlayer:setModel(tonumber(args[2]))
+                        if not (skin) and tonumber(oldSkin) ~= tonumber(skin) then
+                            player:outputChat("[!]#FFFFFF Geçersiz skin ID.", 255, 0, 0, true)
+                        else
+                            player:outputChat("[!]#FF0000 "..targetPlayer.name.."#FFFFFF adlı oyuncunun skinini değiştirdin.", 0, 255, 0, true)
+                            targetPlayer:outputChat("[!]#FF0000 "..player.name.."#FFFFFF adlı oyuncu skininizi #FF0000 "..args[2].." #FFFFFF ID'li skin ile değiştirdi.", 0, 255, 0, true)
+                            cache:setCharacterData(targetPlayer, "model", tonumber(args[2]), true)
+                            dbExec(conn, "UPDATE characters SET model="..(args[2]).." WHERE id="..(targetPlayer:getData("dbid")))
+                        end
+                    else
+                        player:outputChat("[!]#FFFFFF Hatalı skin ID!", 235, 180, 132, true)
+                    end
+                end
             end
         end,
     },
