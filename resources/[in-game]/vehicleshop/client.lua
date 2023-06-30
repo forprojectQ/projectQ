@@ -102,7 +102,7 @@ function ui:render()
             if isInBox(self.x-15, self.y+470, 120, 35, "hand") then 
                 dxDrawRoundedRectangle(self.x-15, self.y+470, 120, 35, 2, tocolor(0, 128, 0, 200))
                 if getKeyState("mouse1") and isClicked() then 
-                    triggerServerEvent("vehicle.buy", localPlayer, self.gtaID, self.price, self.selectedModel, self.model, self.vehlibID, self.tax)
+                    triggerServerEvent("vehicle.buy", localPlayer, self.price, self.selectedModel, self.vehlibID)
                     showCursor(false)
                 end
             else
