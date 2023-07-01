@@ -59,6 +59,6 @@ function ui:render()
         dxDrawRectangle(xPos - 1, y - 1, iconWidth + 2, iconHeight + 2, tocolor(15, 15, 15))
         dxDrawRectangle(xPos, y, stats[i].value, iconHeight, stats[i].color)
     end
-    dxDrawText("CÜZDAN: #E2E2E2"..exports.global:formatMoney(localPlayer:getData("money")).."#008000₺", x+245, y-20, nil, nil, tocolor(35, 35, 35, 255), 1, self.fonts.roboto, "left", "center", false, false, false, true, false)
+    dxDrawShadowedText(""..exports.global:formatMoney(localPlayer:getData("money")).."#005000₺", x+280, y-35, 100, 25, tocolor(175, 175, 175, 220), 1, self.fonts.roboto, "left", "top", false, false, false, true, false)
 end
 ui:new()
